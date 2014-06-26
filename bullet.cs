@@ -7,14 +7,11 @@ public class bullet : MonoBehaviour {
 	// @param direction 角度
 	// @param speed 速さ
 	// @param rotationTrigger(bool)  rotate image
-	public void Create(float direction, float speed, bool rotationTrigger) {
-		Vector2 v;
+	public void Create(Vector2 v, float direction, float speed, bool rotationTrigger) {
 		//Rotate image
 		if(rotationTrigger) this.transform.Rotate (0,0,direction - 90);
-		
-		v.x = Mathf.Cos (Mathf.Deg2Rad * direction) * speed;
-		v.y = Mathf.Sin (Mathf.Deg2Rad * direction) * speed;
-		rigidbody2D.velocity = v;
+
+		rigidbody2D.velocity = v.normalized * speed;
 	}
 	
 	//if bullet go out of screen, delete it

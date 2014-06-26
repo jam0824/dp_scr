@@ -4,7 +4,7 @@ using System.Collections;
 public class player : MonoBehaviour {
 
 	public GameObject prefab;
-	private int speed = 200;
+	private int speed = 100;
 	private float moveOffset = 0.04f;
 	private float shotDelay = 0.05f;
 
@@ -37,6 +37,8 @@ public class player : MonoBehaviour {
 			}
 			else{
 				this.rigidbody2D.AddForce(nVec * speed);
+				//this.rigidbody2D.AddForce(nVec * speed);
+				//this.rigidbody2D.velocity = nVec;
 			}
 			
 		}
