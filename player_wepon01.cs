@@ -12,13 +12,12 @@ public class player_wepon01 : MonoBehaviour {
 
 		v.x = Mathf.Cos (Mathf.Deg2Rad * direction) * speed;
 		v.y = Mathf.Sin (Mathf.Deg2Rad * direction) * speed;
-		rigidbody2D.velocity = v;
+		GetComponent<Rigidbody2D>().velocity = v;
 	}
 
 	//if bullet go out of screen, delete it
 	void OnTriggerEnter2D(Collider2D c){
-		int layer = LayerMask.NameToLayer ("delete_area");
-		if(c.gameObject.layer == layer){
+		if(c.gameObject.tag == "delete_area"){
 			Destroy(gameObject);
 		}
 	}
