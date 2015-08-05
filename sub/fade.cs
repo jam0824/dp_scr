@@ -5,13 +5,13 @@ using UnityEngine.UI;
 public class fade : MonoBehaviour {
 
 		public int type = 0;	//0 : fadein / 1: fadeout / 2: keep
-		float v = 0.02f;
+		public float v = 0.02f;
 
-		public int gameCount = 0;
+		int gameCount = 0;
 
-		float r = 0.0f;
-		float g = 0.0f;
-		float b = 0.0f;
+		public float r = 0.0f;
+		public float g = 0.0f;
+		public float b = 0.0f;
 
 		Image image;
 		// Use this for initialization

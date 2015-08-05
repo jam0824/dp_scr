@@ -24,14 +24,13 @@ public class bullet : MonoBehaviour {
 		
 		//if bullet go out of screen, delete it
 		void OnTriggerEnter2D(Collider2D c){
-			int layer = LayerMask.NameToLayer ("delete_area");
-			if(c.gameObject.layer == layer){
-				Destroy(gameObject);
-			}
+				if(c.gameObject.tag == "delete_area"){
+						Destroy(gameObject);
+				}
 		}
 
 		void delete(){
 				GameObject explosion = Instantiate (prefab, this.transform.position, this.transform.rotation) as GameObject;
-				Destroy(gameObject);
+				Destroy(this.gameObject);
 		}
 }

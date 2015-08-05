@@ -9,6 +9,7 @@ public class Boss : MonoBehaviour {
 		const int gameFPS = 60;
 
 		public List<GameObject> gurdSkills;
+		public GameObject gurdSkillBG;
 		public int MAX_HP = 0;
 		public int HP = 0;
 		public int gameFrame = 0;
@@ -42,11 +43,13 @@ public class Boss : MonoBehaviour {
 
 		}
 
+		//******************************************************************************
 		//最初の移動
 		void startingMoving(){
 				transform.Translate (0, -0.01f, 0);
 				if(transform.position.y <= START_POSISION_Y){
 						activeGurdSkill = makeGurdSkill (0);
+						makeGurdSkillBG ();
 						setStartPosition = true;
 				}
 		}
@@ -60,7 +63,18 @@ public class Boss : MonoBehaviour {
 				transform.position = new Vector3(-0.4f + Mathf.Cos (frame * sideFloatTime )/ sideSwingTime
 						, 1 + Mathf.Sin (frame * floatTime )/ swingTime,transform.position.z);
 		}
+		//******************************************************************************
+		/// <summary>
+		/// ボスを倒した後
+		/// </summary>
+		void defeatedBoss(){
+				isDefeated = true;
+				deleteGurdSkill (activeGurdSkill);
+				deleteGurdSkillBG ();
+				gameManager.finishGame ();
+		}
 
+		//******************************************************************************
 		/// <summary>
 		/// Makes the gurd skill.
 		/// </summary>
@@ -84,6 +98,35 @@ public class Boss : MonoBehaviour {
 				Destroy (gs);
 		}
 
+		// /////////////////////////////////////////////
+		/// <summary>
+		/// 弾幕時背景作成。
+		/// </summary>
+		void makeGurdSkillBG(){
+				float y = 0.0f;
+				float v = 30.0f;
+				int num = 2;
+				Vector3 pos = new Vector3 (0.0f, y, 0.0f);
+
+				for(int i = 0; i < num; i++){
+						GameObject prefab = Instantiate (gurdSkillBG) as GameObject;
+						prefab.transform.position = pos;
+						if (i % 2 == 1) {
+								prefab.transform.Rotate (180.0f,0.0f,0.0f);
+						}
+						pos.y += v;
+				}
+
+		}
+
+		void deleteGurdSkillBG(){
+				GameObject[] bg = GameObject.FindGameObjectsWithTag ("gurdSkillBG");
+				foreach(GameObject x in bg){
+						Destroy (x);
+				}
+		}
+
+		//*********************************************************
 		/// <summary>
 		/// ヒットポイントチェック
 		/// </summary>
@@ -93,15 +136,9 @@ public class Boss : MonoBehaviour {
 				}
 		}
 
-		/// <summary>
-		/// ボスを倒した後
-		/// </summary>
-		void defeatedBoss(){
-				isDefeated = true;
-				deleteGurdSkill (activeGurdSkill);
-				gameManager.finishGame ();
-		}
 
+		//**********************************************************
+		//UI系
 		void makeLifeBar(){
 				int x = 0;
 				int y = -40;

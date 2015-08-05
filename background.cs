@@ -3,14 +3,15 @@ using System.Collections;
 
 public class background : MonoBehaviour {
 
-		const float DEFAULT_Y = 18.0f;
-		const float DEFAULT_Z = 23.0f;
+		public float DEFAULT_Y = 18.0f;
+		public float DEFAULT_Z = 23.0f;
 
-		const float RETURN_Y = -8.0f;
-		const float RETURN_Z = -5.0f;
+		public float RETURN_Y = -8.0f;
+		public float RETURN_Z = -5.0f;
 
 
-		private float speed = 0.005f;
+		public float speedY = 0.005f;
+		public float speedZ = 0.005f;
 	
 	// Use this for initialization
 	void Start () {
@@ -20,8 +21,8 @@ public class background : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 				Vector3 pos = this.transform.position;
-				pos.y -= speed;
-				pos.z -= speed;
+				pos.y -= speedY;
+				pos.z -= speedZ;
 				this.transform.position = pos;
 
 				if(this.transform.position.y <= RETURN_Y){
