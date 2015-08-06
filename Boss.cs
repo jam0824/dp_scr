@@ -50,6 +50,7 @@ public class Boss : MonoBehaviour {
 				if(transform.position.y <= START_POSISION_Y){
 						activeGurdSkill = makeGurdSkill (0);
 						makeGurdSkillBG ();
+						gameManager.deleteBG ();
 						setStartPosition = true;
 				}
 		}

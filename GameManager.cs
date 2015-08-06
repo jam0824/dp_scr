@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour {
-
+		const int GAME_FPS = 60;
 		const int START_TIME = 5;
 
 		public int gameFrame = 0;
@@ -34,6 +34,7 @@ public class GameManager : MonoBehaviour {
 
 		bool bossAppearFlag = false;
 		Text scoreText;
+		Text fpsText;
 		SoundManager soundManager;
 
 		BGMplay bgm;
@@ -43,12 +44,14 @@ public class GameManager : MonoBehaviour {
 
 		// Use this for initialization
 		void Start () {
+				Application.targetFrameRate = GAME_FPS;
 				fadeIn ();
 				makeBG ();
 				soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
 				bgm = soundManager.playBGM ("bgm00");
 
 				scoreText = GameObject.Find("score").GetComponent<Text>();
+				fpsText = GameObject.Find("fps").GetComponent<Text>();
 				lifeObjects = initLifeBombUI (lifePrefab, life, 25, -110, 32);
 				bombObjects = initLifeBombUI (bombPrefab, bomb, 25, -142, 32);
 
@@ -70,6 +73,7 @@ public class GameManager : MonoBehaviour {
 						}
 						gameSecond++;
 				}
+				drawFPS ();
 				scoreText.text = string.Format("{0}", score);
 		}
 
@@ -143,7 +147,16 @@ public class GameManager : MonoBehaviour {
 				}
 
 		}
-
+		// ////////////////////////////////////////////////////////////////////
+		/// <summary>
+		/// Deletes the BG
+		/// </summary>
+		public void deleteBG(){
+				GameObject[] bg = GameObject.FindGameObjectsWithTag ("bg");
+				foreach(GameObject x in bg){
+						Destroy (x);
+				}
+		}
 
 		// ////////////////////////////////////////////////////////////////////////////////
 		//ライフ・ボム描画
@@ -217,5 +230,14 @@ public class GameManager : MonoBehaviour {
 
 				RectTransform rt = fadein.GetComponent<RectTransform>();
 				rt.anchoredPosition = new Vector2(0, 0);	//位置変更
+		}
+
+		//*******************************************
+		void drawFPS(){
+				if (Time.frameCount % Application.targetFrameRate == 0)
+				{
+						//fpsText.text = string.Format("{0}", 1 / Time.deltaTime);
+						fpsText.text = "FPS " + (1 / Time.deltaTime).ToString ("N2");
+				}
 		}
 }
