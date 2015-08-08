@@ -27,6 +27,7 @@ public class Boss : MonoBehaviour {
 		GameManager gameManager;
 		List<BossData> bossData = new List<BossData>();
 
+		//ボス行動パターンデータ
 		class BossData{
 				public int sessionNo = 0;
 				public int startHP = 90;
@@ -36,7 +37,7 @@ public class Boss : MonoBehaviour {
 
 
 
-
+		//*******************************************************************************
 		// Use this for initialization
 		void Start () {
 				bossData = fileRead (textAset);
@@ -85,38 +86,47 @@ public class Boss : MonoBehaviour {
 		/// ヒットポイントチェック
 		/// </summary>
 		void checkHP(){
+				//HPがゼロでクリア
 				if (HP <= 0) {
 						defeatedBoss ();
 						return;
 				}
 				//ボム切り替えトリガー
-				Debug.Log ("sessionNo = " + bossData[0].sessionNo);
-				Debug.Log ("Hp = " + bossData[0].startHP);
-				float hp_per = HP * 100 / MAX_HP;
-				Debug.Log ("HP=" + HP + " MAX_HP=" + MAX_HP + " HpPer = " + hp_per);
-				if((hp_per <= bossData[0].startHP) && (sessionNo < bossData[0].sessionNo)){
+				//Debug.Log ("sessionNo = " + bossData[0].sessionNo);
+				//Debug.Log ("Hp = " + bossData[0].startHP);
+				if(((HP * 100 / MAX_HP) <= bossData[0].startHP) && (sessionNo < bossData[0].sessionNo)){
 						sessionNo = bossData [0].sessionNo;
 						changeBomb (bossData[0]);
 						bossData.RemoveAt (0);	//上から順に実行。実行された行は削除
 				}
 		}
 
+		/// <summary>
+		/// データからボム作成
+		/// </summary>
+		/// <param name="data">Data.</param>
 		void changeBomb(BossData data){
-				//ガードスキル発動中なら削除
-				GameObject gs = GameObject.FindWithTag ("gurdSkill");
-				if (gs != null) {
-						deleteGurdSkill (gs);
-						deleteGurdSkillBG ();
+				//弾幕発動中なら削除
+				if (activeGurdSkill != null) {
+						if (activeGurdSkill.tag == "gurdSkill") {
+								deleteGurdSkill (activeGurdSkill);
+								gameManager.makeBG ();	//通常背景復帰
+								deleteGurdSkillBG ();	//弾幕背景削除
+						} else {
+								deleteGurdSkill (activeGurdSkill);
+						}
 				}
 
 				switch(data.patternName){
+				//弾幕時
 				case "bomb":
 						activeGurdSkill = makeGurdSkill (data.bombNo);
 						makeGurdSkillBG ();
 						gameManager.deleteBG ();
 						break;
+				//通常
 				case "normal":
-						activeGurdSkill = makeGurdSkill (data.bombNo);
+						activeGurdSkill = makeNormalSkill (data.bombNo);
 						break;
 				}
 		}
@@ -143,6 +153,21 @@ public class Boss : MonoBehaviour {
 				pos.x += 0.6f;
 				pos.y += 0.5f;
 				GameObject gs = Instantiate (gurdSkills[gurdSkillNumber], pos, this.transform.rotation) as GameObject;
+				gs.transform.parent = this.transform;	//Bossオブジェクト親にする
+
+				return gs;
+		}
+		//******************************************************************************
+		/// <summary>
+		/// Makes the gurd skill.
+		/// </summary>
+		/// <returns>The gurd skill.</returns>
+		/// <param name="gurdSkillNumber">Gurd skill number.</param>
+		GameObject makeNormalSkill(int normalSkillNumber){
+				Vector3 pos = this.transform.position;
+				pos.x += 0.6f;
+				pos.y += 0.5f;
+				GameObject gs = Instantiate (normalSkills[normalSkillNumber], pos, this.transform.rotation) as GameObject;
 				gs.transform.parent = this.transform;	//Bossオブジェクト親にする
 
 				return gs;
