@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 
 public class Boss : MonoBehaviour {
 
@@ -9,20 +10,36 @@ public class Boss : MonoBehaviour {
 		const int gameFPS = 60;
 
 		public List<GameObject> gurdSkills;
+		public List<GameObject> normalSkills;
 		public GameObject gurdSkillBG;
 		public int MAX_HP = 0;
 		public int HP = 0;
 		public int gameFrame = 0;
 		public GameObject lifebarPrefab;
+		public TextAsset textAset;
+
 		bool setStartPosition = false;
 		bool isDefeated = false;
 
+		int sessionNo = -1;
 		RectTransform lifebar;
 		GameObject activeGurdSkill;
 		GameManager gameManager;
+		List<BossData> bossData = new List<BossData>();
+
+		class BossData{
+				public int sessionNo = 0;
+				public int startHP = 90;
+				public string patternName = "";
+				public int bombNo = 0;
+		}
+
+
+
 
 		// Use this for initialization
 		void Start () {
+				bossData = fileRead (textAset);
 				gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
 				makeLifeBar ();
 		}
@@ -34,10 +51,11 @@ public class Boss : MonoBehaviour {
 						startingMoving ();
 
 				}else{
-						if(HP > 0)
-							movement (gameFrame);
+						if (HP > 0) {
+								movement (gameFrame);
+						}
 				}
-				if(!isDefeated) checkHP ();
+				if((setStartPosition) && (!isDefeated)) checkHP ();
 				drawLifeBar ();
 				gameFrame++;
 
@@ -48,9 +66,7 @@ public class Boss : MonoBehaviour {
 		void startingMoving(){
 				transform.Translate (0, -0.01f, 0);
 				if(transform.position.y <= START_POSISION_Y){
-						activeGurdSkill = makeGurdSkill (0);
-						makeGurdSkillBG ();
-						gameManager.deleteBG ();
+
 						setStartPosition = true;
 				}
 		}
@@ -64,7 +80,48 @@ public class Boss : MonoBehaviour {
 				transform.position = new Vector3(-0.4f + Mathf.Cos (frame * sideFloatTime )/ sideSwingTime
 						, 1 + Mathf.Sin (frame * floatTime )/ swingTime,transform.position.z);
 		}
-		//******************************************************************************
+		//*********************************************************
+		/// <summary>
+		/// ヒットポイントチェック
+		/// </summary>
+		void checkHP(){
+				if (HP <= 0) {
+						defeatedBoss ();
+						return;
+				}
+				//ボム切り替えトリガー
+				Debug.Log ("sessionNo = " + bossData[0].sessionNo);
+				Debug.Log ("Hp = " + bossData[0].startHP);
+				float hp_per = HP * 100 / MAX_HP;
+				Debug.Log ("HP=" + HP + " MAX_HP=" + MAX_HP + " HpPer = " + hp_per);
+				if((hp_per <= bossData[0].startHP) && (sessionNo < bossData[0].sessionNo)){
+						sessionNo = bossData [0].sessionNo;
+						changeBomb (bossData[0]);
+						bossData.RemoveAt (0);	//上から順に実行。実行された行は削除
+				}
+		}
+
+		void changeBomb(BossData data){
+				//ガードスキル発動中なら削除
+				GameObject gs = GameObject.FindWithTag ("gurdSkill");
+				if (gs != null) {
+						deleteGurdSkill (gs);
+						deleteGurdSkillBG ();
+				}
+
+				switch(data.patternName){
+				case "bomb":
+						activeGurdSkill = makeGurdSkill (data.bombNo);
+						makeGurdSkillBG ();
+						gameManager.deleteBG ();
+						break;
+				case "normal":
+						activeGurdSkill = makeGurdSkill (data.bombNo);
+						break;
+				}
+		}
+
+
 		/// <summary>
 		/// ボスを倒した後
 		/// </summary>
@@ -127,15 +184,7 @@ public class Boss : MonoBehaviour {
 				}
 		}
 
-		//*********************************************************
-		/// <summary>
-		/// ヒットポイントチェック
-		/// </summary>
-		void checkHP(){
-				if (HP <= 0) {
-						defeatedBoss ();
-				}
-		}
+
 
 
 		//**********************************************************
@@ -154,5 +203,25 @@ public class Boss : MonoBehaviour {
 				int w = 400;
 				int h = 23;
 				lifebar.sizeDelta = new Vector2 ((int)Mathf.Floor(w * HP / MAX_HP), h);
+		}
+
+		//**************************************************************
+		//ボスの行動データを読み込む
+		List<BossData> fileRead(TextAsset t){
+				List<BossData> returnValue = new List<BossData>();
+				StringReader reader = new StringReader(t.text);
+
+				while (reader.Peek() > -1) {
+						string line = reader.ReadLine();
+						string[] values = line.Split(',');
+						BossData data = new BossData ();
+						data.sessionNo = int.Parse (values[0]);
+						data.startHP = int.Parse (values[1]);
+						data.patternName = values [2];
+						data.bombNo = int.Parse (values[3]);
+						returnValue.Add (data);
+				}
+
+				return returnValue;
 		}
 }

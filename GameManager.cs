@@ -33,6 +33,7 @@ public class GameManager : MonoBehaviour {
 		public GameObject fadePrefab;
 
 		bool bossAppearFlag = false;
+
 		Text scoreText;
 		Text fpsText;
 		SoundManager soundManager;
