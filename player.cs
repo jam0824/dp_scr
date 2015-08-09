@@ -171,13 +171,15 @@ public class player : MonoBehaviour {
 
 		//******************************************************
 		void Shot(){
-				makeShot (90.0f + Random.value * 5 - 2.5f , 10.0f);
+				makeShot (90.0f + Random.value * 5 - 2.5f , 15.0f);
 				soundManager.playSE ("playerBullet");
 		}
 				
 		//Making one bullet object
 		void makeShot(float direction, float speed){
-			GameObject shot = Instantiate (prefab, this.transform.position, this.transform.rotation) as GameObject;
+				Vector3 pos = this.transform.position;
+				pos.y += 1.0f;
+				GameObject shot = Instantiate (prefab, pos, this.transform.rotation) as GameObject;
 			player_wepon01 s = shot.GetComponent<player_wepon01>();
 			s.Create(direction, speed);
 		}

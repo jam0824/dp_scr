@@ -6,6 +6,7 @@ using System.IO;
 
 public class Boss : MonoBehaviour {
 
+		const int BULLET_MARGIN = 120;
 		const float START_POSISION_Y = 1.0f;
 		const int gameFPS = 60;
 
@@ -21,7 +22,8 @@ public class Boss : MonoBehaviour {
 		bool setStartPosition = false;
 		bool isDefeated = false;
 
-		int sessionNo = -1;
+		int sessionNo = -1;	//現在どこのセッションの行動を行っているか
+		int bulletMargin = 0;	//弾幕発生までのマージン。０以上が設定されていると待ち時間を作る
 		RectTransform lifebar;
 		GameObject activeGurdSkill;
 		GameManager gameManager;
@@ -57,9 +59,19 @@ public class Boss : MonoBehaviour {
 						}
 				}
 				if((setStartPosition) && (!isDefeated)) checkHP ();
+				if (bulletMargin > 0) decMargin ();	//弾幕待ち時間が設定されていたら
 				drawLifeBar ();
 				gameFrame++;
 
+		}
+
+		//*******
+		//次の弾幕までのマージン計算
+		void decMargin(){
+				bulletMargin--;
+				if (bulletMargin == 0) {
+						activeGurdSkill = makeGurdSkill (activeGurdSkill);
+				}
 		}
 
 		//******************************************************************************
@@ -120,13 +132,15 @@ public class Boss : MonoBehaviour {
 				switch(data.patternName){
 				//弾幕時
 				case "bomb":
-						activeGurdSkill = makeGurdSkill (data.bombNo);
+						activeGurdSkill = gurdSkills [data.bombNo];	//弾幕予約
+						bulletMargin = BULLET_MARGIN;
 						makeGurdSkillBG ();
 						gameManager.deleteBG ();
 						break;
 				//通常
 				case "normal":
-						activeGurdSkill = makeNormalSkill (data.bombNo);
+						activeGurdSkill = normalSkills[data.bombNo];//弾幕予約
+						bulletMargin = BULLET_MARGIN;
 						break;
 				}
 		}
@@ -148,26 +162,11 @@ public class Boss : MonoBehaviour {
 		/// </summary>
 		/// <returns>The gurd skill.</returns>
 		/// <param name="gurdSkillNumber">Gurd skill number.</param>
-		GameObject makeGurdSkill(int gurdSkillNumber){
+		GameObject makeGurdSkill(GameObject bullet){
 				Vector3 pos = this.transform.position;
 				pos.x += 0.6f;
 				pos.y += 0.5f;
-				GameObject gs = Instantiate (gurdSkills[gurdSkillNumber], pos, this.transform.rotation) as GameObject;
-				gs.transform.parent = this.transform;	//Bossオブジェクト親にする
-
-				return gs;
-		}
-		//******************************************************************************
-		/// <summary>
-		/// Makes the gurd skill.
-		/// </summary>
-		/// <returns>The gurd skill.</returns>
-		/// <param name="gurdSkillNumber">Gurd skill number.</param>
-		GameObject makeNormalSkill(int normalSkillNumber){
-				Vector3 pos = this.transform.position;
-				pos.x += 0.6f;
-				pos.y += 0.5f;
-				GameObject gs = Instantiate (normalSkills[normalSkillNumber], pos, this.transform.rotation) as GameObject;
+				GameObject gs = Instantiate (bullet, pos, this.transform.rotation) as GameObject;
 				gs.transform.parent = this.transform;	//Bossオブジェクト親にする
 
 				return gs;
