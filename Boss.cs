@@ -25,7 +25,7 @@ public class Boss : MonoBehaviour {
 		int sessionNo = -1;	//現在どこのセッションの行動を行っているか
 		int bulletMargin = 0;	//弾幕発生までのマージン。０以上が設定されていると待ち時間を作る
 		RectTransform lifebar;
-		GameObject activeGurdSkill;
+		GameObject activeGurdSkill = null;
 		GameManager gameManager;
 		List<BossData> bossData = new List<BossData>();
 
@@ -204,6 +204,7 @@ public class Boss : MonoBehaviour {
 		void deleteGurdSkillBG(){
 				GameObject[] bg = GameObject.FindGameObjectsWithTag ("gurdSkillBG");
 				foreach(GameObject x in bg){
+						gameManager.flash ();
 						Destroy (x);
 				}
 		}

@@ -12,6 +12,8 @@ public class background : MonoBehaviour {
 
 		public float speedY = 0.005f;
 		public float speedZ = 0.005f;
+
+
 	
 	// Use this for initialization
 	void Start () {
@@ -32,5 +34,8 @@ public class background : MonoBehaviour {
 				}
 
 
+
 	}
+
+
 }
