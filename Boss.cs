@@ -245,7 +245,11 @@ public class Boss : MonoBehaviour {
 
 				while (reader.Peek() > -1) {
 						string line = reader.ReadLine();
+
 						string[] values = line.Split(',');
+						if ((values [0] == "")||(line.Substring (0, 2) == "//"))
+								continue;
+						
 						BossData data = new BossData ();
 						data.sessionNo = int.Parse (values[0]);
 						data.startHP = int.Parse (values[1]);

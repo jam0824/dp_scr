@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System;
 
 public class FormationManager : MonoBehaviour {
@@ -25,11 +26,12 @@ public class FormationManager : MonoBehaviour {
 		const int OBJECT_LIFE = 3600;	//オブジェクトの寿命
 		public int objectFrame = 0;
 		public GameObject[] enemyPrefab;
+		public TextAsset formationFile;
 		public List<lineData> formationData = new List<lineData>();
 
 		// Use this for initialization
-		public void Create (string dataSource) {
-			init (dataSource);
+		void Start () {
+				init (formationFile);
 		}
 		
 		// Update is called once per frame
@@ -63,21 +65,21 @@ public class FormationManager : MonoBehaviour {
 
 		}
 
-		private void init(string dataSource){
-				string[] tmp = dataSource.Replace("¥n", "n").Split ("n"[0]);
-				Debug.Log ("tmp=" + tmp.Length);
-				for(int i = 0; i < tmp.Length; i++){
-						Debug.Log ("i=" + i);
+		private void init(TextAsset t){
+				StringReader reader = new StringReader(t.text);
+				while (reader.Peek() > -1) {
+						string tmp = reader.ReadLine();
+						Debug.Log (tmp);
 						//ignor to find "//"
-						if(tmp [i].Substring (0, 2) == "//"){
+						if(tmp.Substring (0, 2) == "//"){
 								continue;
 						}
 						//Break to find blank
-						else if(tmp[i] == ""){
+						else if(tmp == ""){
 								break;
 						}
 						//make list
-						lineData line = new lineData (tmp[i]);
+						lineData line = new lineData (tmp);
 						formationData.Add (line);
 				}
 			

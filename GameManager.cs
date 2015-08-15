@@ -30,7 +30,7 @@ public class GameManager : MonoBehaviour {
 		public GameObject fadePrefab;
 
 		public bool bombFlag = false;
-		public GameObject FormationManager;
+		public List<GameObject> formaitonManager = new List<GameObject>();
 
 
 
@@ -85,6 +85,9 @@ public class GameManager : MonoBehaviour {
 						case "Start":
 								makeMsg (startMsgPrefab);	//スタートメッセージ
 								break;
+						case "Formation":
+								makeFormation (scenario[0].getParam());
+								break;
 						case "Boss":
 								bossAppearFlag = true;
 								makeBoss ();
@@ -105,12 +108,9 @@ public class GameManager : MonoBehaviour {
 		}
 
 		//フォーメーション作成
-		void makeFormation(){
-				string dataSource = "//画面左側に真下に進む。自分に向けて１発,,,¥n0,50,0,0¥n120,50,0,0¥n240,50,0,0¥n360,50,0,0¥n480,50,0,0¥n600,50,0,0¥n720,50,0,0¥n840,50,0,0¥n960,50,0,0¥n1080,0,0,9999";
+		void makeFormation(List<string> param){
+				GameObject formation = Instantiate (formaitonManager[int.Parse(param[0])], this.transform.position, this.transform.rotation) as GameObject;
 
-				GameObject formation = Instantiate (FormationManager, this.transform.position, this.transform.rotation) as GameObject;
-				FormationManager s = formation.GetComponent<FormationManager>();
-				s.Create(dataSource);
 		}
 
 		//**********************************************************

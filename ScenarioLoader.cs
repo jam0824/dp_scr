@@ -14,10 +14,10 @@ public class ScenarioLoader : MonoBehaviour {
 
 				while (reader.Peek() > -1) {
 						string line = reader.ReadLine();
-						string[] values = line.Split(',');
-						if (values [0] == "")
-								continue;
 
+						string[] values = line.Split(',');
+						if ((values [0] == "")||(line.Substring (0, 2) == "//"))
+								continue;
 						scenarioBean data = new scenarioBean ();
 						data.setTime (int.Parse(values[0]));
 						data.setCommand (values[1]);
