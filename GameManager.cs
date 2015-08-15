@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 
 public class GameManager : MonoBehaviour {
 		const int GAME_FPS = 60;
@@ -17,35 +18,41 @@ public class GameManager : MonoBehaviour {
 		public int life = 3;
 		public int bomb = 3;
 
+		public TextAsset scenarioFile;
+
 		public GameObject bossPrefab;
 		public GameObject bgPrefab;
-
-
-		public bool bombFlag = false;
-		public GameObject FormationManager;
-
 		public GameObject lifePrefab;
 		public GameObject bombPrefab;
 		public GameObject startMsgPrefab;
 		public GameObject warningMsgPrefab;
-
 		public GameObject flashPrefab;
 		public GameObject fadePrefab;
+
+		public bool bombFlag = false;
+		public GameObject FormationManager;
+
+
 
 		bool bossAppearFlag = false;
 
 		Text scoreText;
 		Text fpsText;
-		SoundManager soundManager;
 
+		SoundManager soundManager;
 		BGMplay bgm;
 
 		List<GameObject> lifeObjects = new List<GameObject>();
 		List<GameObject> bombObjects = new List<GameObject>();
+		List<scenarioBean> scenario = new List<scenarioBean>();
+
 
 		// Use this for initialization
 		void Start () {
 				Application.targetFrameRate = GAME_FPS;
+				ScenarioLoader loader = new ScenarioLoader ();
+				scenario = loader.fileRead (scenarioFile);
+
 				fadeIn ();
 				makeBG ();
 				soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
@@ -56,26 +63,45 @@ public class GameManager : MonoBehaviour {
 				lifeObjects = initLifeBombUI (lifePrefab, life, 25, -110, 32);
 				bombObjects = initLifeBombUI (bombPrefab, bomb, 25, -142, 32);
 
-				makeMsg (startMsgPrefab);	//スタートメッセージ
+
 		}
 		
 		// Update is called once per frame
 		void Update () {
-		
 				gameFrame++;
 				//カウントは１秒で
-				if(gameFrame % frameRate == 0){
-						//一定時間後にフォーメーション作成
-						if((!bossAppearFlag) &&(gameSecond > START_TIME) &&(gameSecond % 10 == 0)){
-								makeFormation ();
-						}
-						else if((!bossAppearFlag) &&(gameSecond > 10)){
-								appearBoss ();
-						}
+				if(Mathf.Floor(gameFrame % frameRate) == 0){
 						gameSecond++;
 				}
+				if(scenario.Count > 0) checkScenario (gameSecond);	//１秒おきにシナリオチェック
 				drawFPS ();
 				scoreText.text = string.Format("{0}", score);
+		}
+
+		//シナリオチェック
+		void checkScenario(int gameSecond){
+				if(gameSecond == scenario[0].getTime()){
+						switch(scenario[0].getCommand()){
+						case "Start":
+								makeMsg (startMsgPrefab);	//スタートメッセージ
+								break;
+						case "Boss":
+								bossAppearFlag = true;
+								makeBoss ();
+								break;
+						case "Warning":
+								makeMsg (warningMsgPrefab);	//ワーニングメッセージ
+								break;
+						case "DeleteBGM":
+								soundManager.deleteBGM (bgm);
+								break;
+						case "PlayBGM":
+								string name = scenario [0].getParam () [0];
+								bgm = soundManager.playBGM (name);
+								break;
+						}
+						scenario.RemoveAt(0);//先頭要素削除。常に先頭を参照
+				}
 		}
 
 		//フォーメーション作成
@@ -87,21 +113,12 @@ public class GameManager : MonoBehaviour {
 				s.Create(dataSource);
 		}
 
-
-		//ボス出現処理
-		void appearBoss(){
-				bossAppearFlag = true;
-				makeMsg (warningMsgPrefab);	//ワーニングメッセージ
-				soundManager.deleteBGM (bgm);
-				bgm = soundManager.playBGM ("bgm01");
-				makeBoss ();
-		}
-				
-
+		//**********************************************************
 		//ボス作成
 		void makeBoss(){
 				GameObject boss = Instantiate (bossPrefab, new Vector3(-0.4f, 5.0f, 0f), this.transform.rotation) as GameObject;
 		}
+		//**********************************************************
 
 		//フラッシュ作成
 		public void flash(){
