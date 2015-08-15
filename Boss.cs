@@ -17,6 +17,7 @@ public class Boss : MonoBehaviour {
 		public int HP = 0;
 		public int gameFrame = 0;
 		public GameObject lifebarPrefab;
+		public GameObject lifebarWakuPrefab;
 		public TextAsset textAset;
 
 		bool setStartPosition = false;
@@ -229,6 +230,12 @@ public class Boss : MonoBehaviour {
 				lifebar = prefab.GetComponent<RectTransform>();
 				lifebar.localScale = new Vector3 (2, 2, 1);	//スケールを元に戻す
 				lifebar.anchoredPosition = new Vector2(x, y);	//位置変更
+
+				GameObject prefabWaku = Instantiate (lifebarWakuPrefab, this.transform.position, this.transform.rotation) as GameObject;
+				prefabWaku.transform.parent = GameObject.Find ("Canvas").transform;	//Canvasを親にする
+				RectTransform waku = prefabWaku.GetComponent<RectTransform>();
+				waku.localScale = new Vector3 (2, 2, 1);	//スケールを元に戻す
+				waku.anchoredPosition = new Vector2(x, y);	//位置変更
 		}
 
 		void drawLifeBar(){

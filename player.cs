@@ -210,9 +210,10 @@ public class player : MonoBehaviour {
 		//if bullet go out of screen, delete it
 		void OnTriggerEnter2D(Collider2D c){
 					switch(c.gameObject.tag){
-					case "e_bullet":	//敵弾
+				case "e_bullet":	//敵弾
 						gameManager.graze++;
 						soundManager.playSE ("graze");
+						gameManager.score += gameManager.grazeScore;
 						break;
 
 					case "power_item1":	//パワーアップアイテム

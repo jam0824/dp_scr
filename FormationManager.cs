@@ -59,7 +59,11 @@ public class FormationManager : MonoBehaviour {
 				if (enemyData.enemyNo == 9999) {
 						delete ();
 				} else {
-						GameObject enemy = Instantiate (enemyPrefab[enemyData.enemyNo], this.transform.position, this.transform.rotation) as GameObject;
+						Vector3 pos = this.transform.position;
+						pos.x += enemyData.x;
+						pos.y += enemyData.y;
+						GameObject enemy = Instantiate (enemyPrefab[enemyData.enemyNo], pos, this.transform.rotation) as GameObject;
+						enemy.GetComponent<enemy> ().initEnemy ("StopAndGo");
 				}
 
 

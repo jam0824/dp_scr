@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour {
 		public int power = 0;
 		public int score = 0;
 		public int graze = 0;
+		public int grazeScore = 10000;
 		public int life = 3;
 		public int bomb = 3;
 
@@ -28,6 +29,7 @@ public class GameManager : MonoBehaviour {
 		public GameObject warningMsgPrefab;
 		public GameObject flashPrefab;
 		public GameObject fadePrefab;
+		public GameObject hitodamaPrefab;
 
 		public bool bombFlag = false;
 		public List<GameObject> formaitonManager = new List<GameObject>();
@@ -72,6 +74,7 @@ public class GameManager : MonoBehaviour {
 				//カウントは１秒で
 				if(Mathf.Floor(gameFrame % frameRate) == 0){
 						gameSecond++;
+						if(!bossAppearFlag) makeHitodama ();
 				}
 				if(scenario.Count > 0) checkScenario (gameSecond);	//１秒おきにシナリオチェック
 				drawFPS ();
@@ -248,6 +251,16 @@ public class GameManager : MonoBehaviour {
 
 				RectTransform rt = fadein.GetComponent<RectTransform>();
 				rt.anchoredPosition = new Vector2(0, 0);	//位置変更
+		}
+
+		//*********************************************
+		//人魂をつくる
+		void makeHitodama(){
+				float speed = (Random.value + 0.1f);
+				Vector3 pos = new Vector3 (Random.value * 6 - 3, Random.value * 6 - 3,0);
+				GameObject hitodama = Instantiate (hitodamaPrefab, pos, this.transform.rotation) as GameObject;
+				Vector2 vec = new Vector2 (0f, 1f).normalized;	//単位ベクトル
+				hitodama.GetComponent<Rigidbody2D>().AddForce(vec * speed);
 		}
 
 		//*******************************************

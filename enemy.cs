@@ -7,7 +7,7 @@ public class enemy : MonoBehaviour {
 		public int HP = 1;
 		public GameObject explosion01;  //Big explosion
 		public GameObject explosion04;  //very small explosion
-		public string MoveMode = "Go right";
+		public string MoveMode = "GoDown";
 		public GameObject itemPrefab;
 		public GameObject subItemPrefab;
 
@@ -25,7 +25,7 @@ public class enemy : MonoBehaviour {
 		// Use this for initialization
 		void Start () {
 			
-				initEnemy (MoveMode);
+				//initEnemy (MoveMode);
 				gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
 				soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
 		}
@@ -34,49 +34,50 @@ public class enemy : MonoBehaviour {
 		void Update () {
 
 			
-			
+				movement (MoveMode);
 		}
 
 
-		private void initEnemy(string mode){
+		public void initEnemy(string mode){
 				Vector2 vec;
 				float speed = 20.0f;
-				Debug.Log (mode);
 				switch(mode){
-				case "Go down":
+				case "GoDown":
 						vec = new Vector2 (0f, -1f).normalized;	//単位ベクトル
 
 						this.GetComponent<Rigidbody2D>().AddForce(vec * speed);	//下に力を加える
 						break;
-				case "Go right":
+				case "GoRight":
 
 						vec = new Vector2 (1f, 0f).normalized;	//単位ベクトル
 						this.GetComponent<Rigidbody2D>().AddForce(vec * speed);
 						break;
-				case "Go left":
+				case "GoLeft":
 						vec = new Vector2 (-1f, 0f).normalized;	//単位ベクトル
 						this.GetComponent<Rigidbody2D>().AddForce(vec * speed);
 						break;
-				case "Bezier" :
-						myBezier = new Bezier( new Vector3( this.transform.position.x, this.transform.position.y, this.transform.position.z), 
-								new Vector3( this.transform.position.x + 1f, this.transform.position.y - 4.0f, 0f ), 
-								new Vector3( this.transform.position.x + 2f, this.transform.position.y - 4.0f, 0f ), 
-								new Vector3( this.transform.position.x + 3f, this.transform.position.y, 0f ) );
+				case "StopAndGo":
+						Debug.Log ("bezier_x=" + transform.position.x);
+						myBezier = new Bezier( new Vector3(transform.position.x, transform.position.y, transform.position.z), 
+								new Vector3( transform.position.x, transform.position.y - 6.0f, 0f ), 
+								new Vector3( transform.position.x, transform.position.y - 3.0f, 0f ), 
+								new Vector3( transform.position.x, transform.position.y, 0f ) );
 						break;
 
 
 				}
-
+				MoveMode = mode;
 		}
 
 		private void movement(string mode){
 				switch(mode){
 
-				case "Bezier" :
+				case "StopAndGo":
+						float v = 0.002f;
 						Vector3 vec = myBezier.GetPointAtTime( t );
 						transform.position = vec;
 
-						t += 0.005f;
+						t += v;
 						if( t > 2f ) t = 0f;
 						break;
 
