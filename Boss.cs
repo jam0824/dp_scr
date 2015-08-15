@@ -27,6 +27,7 @@ public class Boss : MonoBehaviour {
 		RectTransform lifebar;
 		GameObject activeGurdSkill = null;
 		GameManager gameManager;
+		SoundManager soundManager;
 		List<BossData> bossData = new List<BossData>();
 
 		//ボス行動パターンデータ
@@ -44,6 +45,7 @@ public class Boss : MonoBehaviour {
 		void Start () {
 				bossData = fileRead (textAset);
 				gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+				soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
 				makeLifeBar ();
 		}
 		
@@ -104,12 +106,14 @@ public class Boss : MonoBehaviour {
 						return;
 				}
 				//ボム切り替えトリガー
-				//Debug.Log ("sessionNo = " + bossData[0].sessionNo);
-				//Debug.Log ("Hp = " + bossData[0].startHP);
-				if(((HP * 100 / MAX_HP) <= bossData[0].startHP) && (sessionNo < bossData[0].sessionNo)){
-						sessionNo = bossData [0].sessionNo;
-						changeBomb (bossData[0]);
-						bossData.RemoveAt (0);	//上から順に実行。実行された行は削除
+				if(bossData.Count > 0){
+						//Debug.Log ("sessionNo = " + bossData[0].sessionNo);
+						//Debug.Log ("Hp = " + bossData[0].startHP);
+					if(((HP * 100 / MAX_HP) <= bossData[0].startHP) && (sessionNo < bossData[0].sessionNo)){
+							sessionNo = bossData [0].sessionNo;
+							changeBomb (bossData[0]);
+							bossData.RemoveAt (0);	//上から順に実行。実行された行は削除
+					}
 				}
 		}
 
@@ -124,6 +128,7 @@ public class Boss : MonoBehaviour {
 								deleteGurdSkill (activeGurdSkill);
 								gameManager.makeBG ();	//通常背景復帰
 								deleteGurdSkillBG ();	//弾幕背景削除
+								soundManager.playSE ("exp_big");
 						} else {
 								deleteGurdSkill (activeGurdSkill);
 						}
@@ -136,6 +141,7 @@ public class Boss : MonoBehaviour {
 						bulletMargin = BULLET_MARGIN;
 						makeGurdSkillBG ();
 						gameManager.deleteBG ();
+						soundManager.playSE ("danmaku");
 						break;
 				//通常
 				case "normal":
@@ -168,6 +174,7 @@ public class Boss : MonoBehaviour {
 				pos.y += 0.5f;
 				GameObject gs = Instantiate (bullet, pos, this.transform.rotation) as GameObject;
 				gs.transform.parent = this.transform;	//Bossオブジェクト親にする
+
 
 				return gs;
 		}

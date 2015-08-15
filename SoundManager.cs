@@ -18,6 +18,7 @@ public class SoundManager : MonoBehaviour {
 		const int P_BULLET = 3;
 		const int E_BULLET = 4;
 		const int P_DAMAGE = 5;
+		const int DANMAKU = 6;
 
 	
 
@@ -66,6 +67,9 @@ public class SoundManager : MonoBehaviour {
 					case "playerDamage":
 							sePlayScr.sePlay(P_DAMAGE, this, volume);
 							break;
+					case "danmaku":
+						sePlayScr.sePlay(DANMAKU, this, volume);
+						break;
 				}
 
 		}
