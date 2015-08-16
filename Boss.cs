@@ -194,16 +194,18 @@ public class Boss : MonoBehaviour {
 		/// </summary>
 		void makeGurdSkillBG(){
 				float y = 0.0f;
-				float v = 30.0f;
+				float v = 9.0f;
 				int num = 2;
 				Vector3 pos = new Vector3 (0.0f, y, 0.0f);
 
 				for(int i = 0; i < num; i++){
 						GameObject prefab = Instantiate (gurdSkillBG) as GameObject;
 						prefab.transform.position = pos;
+						/*
 						if (i % 2 == 1) {
 								prefab.transform.Rotate (180.0f,0.0f,0.0f);
 						}
+						*/
 						pos.y += v;
 				}
 

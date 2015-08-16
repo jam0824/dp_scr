@@ -2,9 +2,12 @@
 using System.Collections;
 
 public class bullet : MonoBehaviour {
-		public GameManager gameManager;
 		public GameObject prefab;
-		private float bullet_direction;
+		public bool isRotate = false;
+
+
+		GameManager gameManager;
+		float bullet_direction;
 
 
 	// 移動速度を設定
@@ -19,6 +22,9 @@ public class bullet : MonoBehaviour {
 				//もしボムが発動中だったら削除
 				if (gameManager.bombFlag == true) {
 						delete ();
+				}
+				if (isRotate) {
+						transform.Rotate (0,0,1);
 				}
 		}
 		
