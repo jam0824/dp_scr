@@ -6,32 +6,15 @@ using System;
 
 public class FormationManager : MonoBehaviour {
 
-		public class lineData{
-				public int triggerFrame;
-				public float x;
-				public float y;
-				public int enemyNo;
-
-				//コンストラクタ
-				public lineData(string dataSource){
-						Debug.Log("source=" + dataSource);
-						string[] data = dataSource.Split (","[0]);
-						triggerFrame = int.Parse(data[0]);
-						x = float.Parse(data[1]);
-						y = float.Parse(data[2]);
-						enemyNo = int.Parse(data[3]);
-				}
-		}
-
 		const int OBJECT_LIFE = 3600;	//オブジェクトの寿命
 		public int objectFrame = 0;
 		public GameObject[] enemyPrefab;
 		public TextAsset formationFile;
-		public List<lineData> formationData = new List<lineData>();
+		public List<FormationDataBean> formationData = new List<FormationDataBean>();
 
 		// Use this for initialization
 		void Start () {
-				init (formationFile);
+				formationData = init (formationFile);
 		}
 		
 		// Update is called once per frame
@@ -53,7 +36,7 @@ public class FormationManager : MonoBehaviour {
 				}
 		}
 
-		private void makeEnemy(lineData enemyData){
+		private void makeEnemy(FormationDataBean enemyData){
 				Debug.Log ("enemyNo = " + enemyData.enemyNo);
 				//9999を見つけたら削除
 				if (enemyData.enemyNo == 9999) {
@@ -63,17 +46,19 @@ public class FormationManager : MonoBehaviour {
 						pos.x += enemyData.x;
 						pos.y += enemyData.y;
 						GameObject enemy = Instantiate (enemyPrefab[enemyData.enemyNo], pos, this.transform.rotation) as GameObject;
-						enemy.GetComponent<enemy> ().initEnemy ("StopAndGo");
+						enemy.GetComponent<enemy> ().initEnemy (enemyData);
 				}
-
-
 		}
 
-		private void init(TextAsset t){
+		/// <summary>
+		/// 初期化。フォーメーションファイルを読み込む
+		/// </summary>
+		/// <param name="t">T.</param>
+		List<FormationDataBean> init(TextAsset t){
+				List<FormationDataBean> data = new List<FormationDataBean>();
 				StringReader reader = new StringReader(t.text);
 				while (reader.Peek() > -1) {
 						string tmp = reader.ReadLine();
-						Debug.Log (tmp);
 						//ignor to find "//"
 						if(tmp.Substring (0, 2) == "//"){
 								continue;
@@ -83,10 +68,10 @@ public class FormationManager : MonoBehaviour {
 								break;
 						}
 						//make list
-						lineData line = new lineData (tmp);
-						formationData.Add (line);
+						FormationDataBean line = new FormationDataBean (tmp);
+						data.Add (line);
 				}
-			
+				return data;
 		}
 
 		/// <summary>

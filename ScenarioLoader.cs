@@ -23,7 +23,7 @@ public class ScenarioLoader : MonoBehaviour {
 						data.setCommand (values[1]);
 
 						if(values.Length > 2){
-								data.setParam (arrayToList(values));
+								data.setParam (new Common().arrayToList(values,2));
 						}
 								
 						scenarioLine.Add (data);
@@ -37,10 +37,12 @@ public class ScenarioLoader : MonoBehaviour {
 		/// </summary>
 		/// <returns>The to list.</returns>
 		/// <param name="array">Array.</param>
+		/*
 		List<string> arrayToList(string[] array){
 				List<string> stringList = new List<string> ();
 				stringList.AddRange (array);
 				stringList.RemoveRange (0,2);
 				return stringList;
 		}
+		*/
 }

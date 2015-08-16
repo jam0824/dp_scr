@@ -245,6 +245,8 @@ public class GameManager : MonoBehaviour {
 				makeWhiteOut ();
 		}
 
+		//*******************************************
+		//ホワイトアウト
 		void makeWhiteOut(){
 				GameObject fadein = Instantiate (fadePrefab, this.transform.position, this.transform.rotation) as GameObject;
 				fadein.GetComponent<fade> ().Init (1, 180, 255.0f, 255.0f, 255.0f);
