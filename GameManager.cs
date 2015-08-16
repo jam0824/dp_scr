@@ -259,7 +259,7 @@ public class GameManager : MonoBehaviour {
 		//人魂をつくる
 		void makeHitodama(){
 				float speed = (Random.value + 0.1f);
-				Vector3 pos = new Vector3 (Random.value * 6 - 3, Random.value * 6 - 3,0);
+				Vector3 pos = new Vector3 (Random.value * 4 - 2, Random.value * 6 - 3,0);
 				GameObject hitodama = Instantiate (hitodamaPrefab, pos, this.transform.rotation) as GameObject;
 				Vector2 vec = new Vector2 (0f, 1f).normalized;	//単位ベクトル
 				hitodama.GetComponent<Rigidbody2D>().AddForce(vec * speed);
