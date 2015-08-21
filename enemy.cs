@@ -5,6 +5,8 @@ public class enemy : MonoBehaviour {
 
 		const int POWER_MAX = 5;
 		public int HP = 1;
+		public float startBulletTime = 0.0f;
+		public GameObject bulletPrefab;
 		public GameObject explosion01;  //Big explosion
 		public GameObject explosion04;  //very small explosion
 		public GameObject itemPrefab;
@@ -26,6 +28,10 @@ public class enemy : MonoBehaviour {
 				//initEnemy (MoveMode);
 				gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
 				soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
+				//弾を打つ場合指定時間で発射
+				if(startBulletTime != 0){
+						Invoke ("makeBullet", startBulletTime);
+				}
 		}
 		
 		// Update is called once per frame
@@ -80,6 +86,12 @@ public class enemy : MonoBehaviour {
 
 				}
 
+		}
+
+		//弾作成
+		void makeBullet(){
+				GameObject gs = Instantiate (bulletPrefab, this.transform.position, this.transform.rotation) as GameObject;
+				gs.transform.parent = this.transform;	//親にする
 		}
 
 		//アイテム作成
