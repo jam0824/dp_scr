@@ -17,4 +17,16 @@ public class Common : MonoBehaviour {
 				stringList.RemoveRange (0,count);
 				return stringList;
 		}
+
+		/// <summary>
+		/// 単位ベクトルから角度を返す。0~180 / 0~ -180
+		/// </summary>
+		/// <returns>angle.</returns>
+		/// <param name="vec">Vector2</param>
+		public float vectorToAngle(Vector2 vec){
+				float rot = Mathf.Atan2 (vec.y, vec.x) * 180 / Mathf.PI;
+				if(rot > 180) rot-= 360;
+				if(rot <-180) rot+= 360;
+				return rot;
+		}
 }
