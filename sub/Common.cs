@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -28,5 +29,24 @@ public class Common : MonoBehaviour {
 				if(rot > 180) rot-= 360;
 				if(rot <-180) rot+= 360;
 				return rot;
+		}
+
+		/// <summary>
+		/// フェード処理を作成
+		/// </summary>
+		/// <param name="fadePrefab">Fade prefab.</param>
+		/// <param name="basePrefab">Base prefab.</param>
+		/// <param name="type">Type.</param>
+		/// <param name="time">Time.</param>
+		/// <param name="r">The red component.</param>
+		/// <param name="g">The green component.</param>
+		/// <param name="b">The blue component.</param>
+		public GameObject makeFade(GameObject fadePrefab, GameObject basePrefab, int type, int time, float r, float g, float b){
+				GameObject fadein = Instantiate (fadePrefab, basePrefab.transform.position, basePrefab.transform.rotation) as GameObject;
+				fadein.GetComponent<fade> ().Init (type, time, r, g, b);
+
+				RectTransform rt = fadein.GetComponent<RectTransform>();
+				rt.anchoredPosition = new Vector2(0, 0);	//位置変更
+				return fadein;
 		}
 }

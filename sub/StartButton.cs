@@ -19,19 +19,12 @@ public class StartButton : MonoBehaviour {
 		}
 
 		public void changeScene(){
-				makeWhiteIn (1);
-				Debug.Log ("押された");
-				Application.LoadLevel (loadLevel);
+				GameObject fadein = new Common ().makeFade (fadePrefab, this.gameObject, 1, 60, 0.0f, 0.0f, 0.0f);
+				Invoke ("changeLevel", 1f);
 		}
-		//*******************************************
-		//ホワイトイン
-		void makeWhiteIn(int type){
-				int t = 60;
-				GameObject fadein = Instantiate (fadePrefab, this.transform.position, this.transform.rotation) as GameObject;
-				fadein.GetComponent<fade> ().Init (type, 60, 255.0f, 255.0f, 255.0f);
 
-				RectTransform rt = fadein.GetComponent<RectTransform>();
-				rt.anchoredPosition = new Vector2(0, 0);	//位置変更
+		void changeLevel(){
+				Application.LoadLevel (loadLevel);
 		}
 				
 }

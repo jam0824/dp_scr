@@ -55,7 +55,8 @@ public class GameManager : MonoBehaviour {
 				ScenarioLoader loader = new ScenarioLoader ();
 				scenario = loader.fileRead (scenarioFile);
 
-				fadeIn ();
+				//黒→透明のフェード
+				GameObject fadein = new Common ().makeFade (fadePrefab, this.gameObject, 0, 60, 0.0f, 0.0f, 0.0f);
 				makeBG ();
 				soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
 				bgm = soundManager.playBGM ("bgm00");
@@ -126,16 +127,6 @@ public class GameManager : MonoBehaviour {
 		//フラッシュ作成
 		public void flash(){
 				GameObject flash = Instantiate (flashPrefab, this.transform.position, this.transform.rotation) as GameObject;
-		}
-
-		//フェードイン（黒→背景）
-		public void fadeIn(){
-				GameObject fadein = Instantiate (fadePrefab, this.transform.position, this.transform.rotation) as GameObject;
-				fadein.GetComponent<fade> ().Init (0, 60, 0, 0, 0);
-
-				RectTransform rt = fadein.GetComponent<RectTransform>();
-				rt.anchoredPosition = new Vector2(0, 0);	//位置変更
-
 		}
 
 		//ボムオン
@@ -242,7 +233,9 @@ public class GameManager : MonoBehaviour {
 		//ボスを倒したあと
 		public void finishGame(){
 				soundManager.stopBGM (bgm);
-				makeWhiteOut ();
+				//透明→色のフェード
+				GameObject fadein = new Common ().makeFade (fadePrefab, this.gameObject, 1, 180, 255.0f, 255.0f, 255.0f);
+				//makeWhiteOut ();
 		}
 
 		//*******************************************
