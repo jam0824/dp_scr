@@ -23,7 +23,7 @@ public class enemy : MonoBehaviour {
 		SoundManager soundManager;
 
 		Vector3 prevPos = new Vector3 (0,0,0);	//前回位置
-		public string direction = "triggerFront";
+		float stopY = 0;
 
 		// Use this for initialization
 		void Start () {
@@ -51,8 +51,13 @@ public class enemy : MonoBehaviour {
 				switch(data.movement){
 
 				case "Vector":
+						//1番目のx,yのセットをベクトルの方向としてセット
 						vec = new Vector2 (data.bezierParam[0], data.bezierParam[1]).normalized;	//単位ベクトル
 						this.GetComponent<Rigidbody2D>().AddForce(vec * data.speed);
+						//２番目のx,yのyをストップ座標としてセットする。
+						if(data.bezierParam[3] != 0){
+								stopY = data.bezierParam [3];
+						}
 						break;
 				case "GravityRandom":
 						Vector3 pos = transform.position;
@@ -81,11 +86,20 @@ public class enemy : MonoBehaviour {
 						t += data.speed;
 						if( t > 2f ) t = 0f;
 						break;
+
+				case "Vector":
+						//stopYが設定している場合、座標が基準を超えたらストップさせる
+						if((stopY != 0)&&(this.transform.position.y < stopY)){
+								this.GetComponent<Rigidbody2D> ().velocity = Vector3.zero;
+								//this.GetComponent<Rigidbody2D> ().angularVelocity = Vector3.zero;
+								stopY = 0;
+						}
+						break;
 				}
 
 				if(isDirAnime){
-						float x = this.transform.position.x - prevPos.x;
-						float y = this.transform.position.y - prevPos.y;
+						float x = this.transform.position.x - prevPos.x; //xの差分
+						float y = this.transform.position.y - prevPos.y; //yの差分
 						setAnimeTrigger (x, y);
 						prevPos = this.transform.position;
 				}
@@ -101,7 +115,6 @@ public class enemy : MonoBehaviour {
 
 				if((rot >= -45 ) && (rot < 45)){
 						this.GetComponent<Animator>().SetTrigger("rightTrigger");
-						Debug.Log ("ここきちゃだめ");
 				}
 				else if((rot >= 45 ) && (rot < 135)){
 						this.GetComponent<Animator>().SetTrigger("backTrigger");
@@ -141,7 +154,7 @@ public class enemy : MonoBehaviour {
 						HP--;
 						if(HP <= 0) deleteEnemy();
 						Destroy (c.gameObject);
-						GameObject e = Instantiate (explosion04, this.transform.position, this.transform.rotation) as GameObject;
+						GameObject e = Instantiate (explosion04, c.transform.position, this.transform.rotation) as GameObject;
 				}
 				//デリートエリア到着で削除
 				if(c.gameObject.tag == "delete_area"){
