@@ -1,7 +1,9 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
+using MiniJSON;
 
 public class Common : MonoBehaviour {
 
@@ -48,5 +50,71 @@ public class Common : MonoBehaviour {
 				RectTransform rt = fadein.GetComponent<RectTransform>();
 				rt.anchoredPosition = new Vector2(0, 0);	//位置変更
 				return fadein;
+		}
+
+		/// <summary>
+		/// Gets time.
+		/// </summary>
+		/// <returns>date string</returns>
+		public string getDate(){
+				DateTime thisDay = DateTime.Now;
+				return thisDay.ToString("yyyy/MM/dd (ddd) HH:mm:ss");
+		}
+
+		// **************************json系
+		//Jsonを受け取ってdictionaryのListで返す
+		public List<Dictionary<string, string>> decodeJson(string source){
+				IList json = decodeJsonString (source);
+				return decodeIListToDictionary(json);
+		}
+
+		/// <summary>
+		/// jsonをIList形式にする
+		/// </summary>
+		/// <returns>The json string.</returns>
+		/// <param name="source">Source.</param>
+		public IList decodeJsonString(string source){
+				return (IList)Json.Deserialize (source);
+		}
+
+		/// <summary>
+		/// IListからDictionaryに変換する
+		/// </summary>
+		/// <returns>List<dictionary<string,string>></returns>
+		/// <param name="json">Json.</param>
+		public List<Dictionary<string, string>> decodeIListToDictionary(IList json){
+				List<Dictionary<string, string>> dic = new List<Dictionary<string, string>> ();
+				int i = 0;
+				foreach(IDictionary item in json){
+						Dictionary<string, string> d = new Dictionary<string, string> ();
+						//キーをdictionaryに登録する
+						foreach(string key in item.Keys){
+								d.Add (key, (string)item[key]);
+						}
+						dic.Add (d);
+						i++;
+				}
+				return dic;
+		}
+
+		/// <summary>
+		/// Dictionaryのリストをキーを比較してソートする
+		/// </summary>
+		/// <returns>The dictionary list.</returns>
+		/// <param name="source">Source.</param>
+		/// <param name="compairKey">To Compair key.</param>
+		public List<Dictionary<string, string>> sortDictionaryList(List<Dictionary<string, string>> source, string compairKey){
+				Dictionary<string, string> tmp = new Dictionary<string, string> ();
+
+				for(int i = 0; i < source.Count; i++){
+						for(int k = i + 1; k < source.Count; k++){
+								if(int.Parse(source[i][compairKey]) < int.Parse(source[k][compairKey])){
+										tmp = source [i];
+										source [i] = source [k];
+										source [k] = tmp;
+								}
+						}
+				}
+				return source;
 		}
 }

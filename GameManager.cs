@@ -12,12 +12,16 @@ public class GameManager : MonoBehaviour {
 		public int gameSecond = 0;
 		public int frameRate = 60;
 
+		//メトリクス
 		public int power = 0;
 		public int score = 0;
 		public int graze = 0;
-		public int grazeScore = 10000;
+		public int grazeScore = 1000;
 		public int life = 3;
 		public int bomb = 3;
+		public int useBombs = 0;
+		public int defeatEnemies = 0;
+
 
 		public TextAsset scenarioFile;
 
@@ -34,7 +38,7 @@ public class GameManager : MonoBehaviour {
 		public bool bombFlag = false;
 		public List<GameObject> formaitonManager = new List<GameObject>();
 
-
+		bool playingFlag = true;	//本編フラグ。
 
 		bool bossAppearFlag = false;
 
@@ -48,6 +52,10 @@ public class GameManager : MonoBehaviour {
 		List<GameObject> bombObjects = new List<GameObject>();
 		List<scenarioBean> scenario = new List<scenarioBean>();
 
+		void Awake(){
+				//破棄しないようにする
+				DontDestroyOnLoad(this.gameObject);
+		}
 
 		// Use this for initialization
 		void Start () {
@@ -71,6 +79,9 @@ public class GameManager : MonoBehaviour {
 		
 		// Update is called once per frame
 		void Update () {
+				if (!playingFlag)
+						return;
+
 				gameFrame++;
 				//カウントは１秒で
 				if(Mathf.Floor(gameFrame % frameRate) == 0){
@@ -204,6 +215,27 @@ public class GameManager : MonoBehaviour {
 				Destroy (lifeObjects [max - 1]);
 				lifeObjects.RemoveAt (max - 1);
 				life--;
+				//ゲームオーバー
+				if (life == 0) {
+						playingFlag = false;
+						gameOver ();
+				}
+		}
+
+		/// <summary>
+		/// ゲームオーバー
+		/// </summary>
+		public void gameOver(){
+				//透明→色のフェード
+				GameObject fadein = new Common ().makeFade (fadePrefab, this.gameObject, 1, 180, 255.0f, 255.0f, 255.0f);
+				Invoke ("goResult", 3f);
+		}
+
+		/// <summary>
+		/// Result画面に遷移
+		/// </summary>
+		public void goResult(){
+				Application.LoadLevel ("SceneResult");
 		}
 		/// <summary>
 		/// ボムを減らす
@@ -266,4 +298,7 @@ public class GameManager : MonoBehaviour {
 						fpsText.text = "FPS " + (1 / Time.deltaTime).ToString ("N2");
 				}
 		}
+
+
+
 }
