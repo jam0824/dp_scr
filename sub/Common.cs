@@ -62,7 +62,7 @@ public class Common : MonoBehaviour {
 		}
 
 		// **************************json系
-		//Jsonを受け取ってdictionaryのListで返す
+		//Jsonを受け取ってdictionary<string,string>のListで返す
 		public List<Dictionary<string, string>> decodeJson(string source){
 				IList json = decodeJsonString (source);
 				return decodeIListToDictionary(json);
@@ -84,7 +84,6 @@ public class Common : MonoBehaviour {
 		/// <param name="json">Json.</param>
 		public List<Dictionary<string, string>> decodeIListToDictionary(IList json){
 				List<Dictionary<string, string>> dic = new List<Dictionary<string, string>> ();
-				int i = 0;
 				foreach(IDictionary item in json){
 						Dictionary<string, string> d = new Dictionary<string, string> ();
 						//キーをdictionaryに登録する
@@ -92,7 +91,6 @@ public class Common : MonoBehaviour {
 								d.Add (key, (string)item[key]);
 						}
 						dic.Add (d);
-						i++;
 				}
 				return dic;
 		}
@@ -116,5 +114,23 @@ public class Common : MonoBehaviour {
 						}
 				}
 				return source;
+		}
+
+		/// <summary>
+		/// dictionaryのlistをrankまでJSONの文字列に変換する
+		/// </summary>
+		/// <returns>json string</returns>
+		/// <param name="dic">Dic.</param>
+		/// <param name="rank">Rank.</param>
+		public string encodeDictionaryToJson(List<Dictionary<string, string>> dic, int rank){
+				string jsonStr = "[";
+				for(int i = 0; i < rank; i++){
+						jsonStr += Json.Serialize (dic[i]);
+						if (i != rank - 1) {
+								jsonStr += ",";
+						}
+				}
+				jsonStr += "]";
+				return jsonStr;
 		}
 }

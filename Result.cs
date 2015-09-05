@@ -6,8 +6,9 @@ using UnityEngine.UI;
 public class Result : MonoBehaviour {
 
 		public class Status{
+				public string userName = "YOU";
 				public int score = 1234;
-				public int life = 3;
+				public int life = 2;
 				public int graze = 256;
 				public int power = 256;
 				public int enemies = 320;
@@ -17,6 +18,7 @@ public class Result : MonoBehaviour {
 		public GameObject fadePrefab;
 		public GameObject noMissPrefab;
 		public GameObject rankingPrefab;
+		public GameObject enterNamePrefab;
 
 		public Status stat = new Status();
 
@@ -59,7 +61,8 @@ public class Result : MonoBehaviour {
 				//何かボタンが押されたら
 				if (Input.GetButton ("Fire1") || (Input.GetKey (KeyCode.Z)) || (Input.GetMouseButton (0))) {
 						if (mouseFlag) {
-								preMoveToRanking ();
+								//クリックされたら名前入力ボックス作成
+								makeEnterNameBox ();
 								mouseFlag = false;
 						}
 				}
@@ -124,13 +127,29 @@ public class Result : MonoBehaviour {
 				mouseFlag = true;	//クリックを許可
 		}
 
+		//名前入力ボックス作成
+		void makeEnterNameBox(){
+				GameObject enterName = Instantiate (enterNamePrefab, this.transform.position, this.transform.rotation) as GameObject;
+				enterName.transform.parent = GameObject.Find ("Canvas").transform;	//Canvasを親にする
+				enterName.GetComponent<RectTransform>().localScale = new Vector3 (1, 1, 1);	//スケールを元に戻す
+
+				//名前が保存されていたら
+				if (getUserName () != "") {
+						GameObject.Find("InputField").GetComponent<InputField>().text = getUserName ();
+				}
+		}
+
+		string getUserName(){
+					return PlayerPrefs.GetString("UserName", "");
+		}
+
 		void inputMessage(){
 				resultBoxLeft.text = messageLeft;
 				resultBoxRight.text = messageRight;
 		}
 
 		//ランキング画面に移る前のクロフェード
-		void preMoveToRanking(){
+		public void preMoveToRanking(){
 				fadein = new Common ().makeFade (fadePrefab, this.gameObject, 1, 60, 0.0f, 0.0f, 0.0f);
 				Invoke ("changeLevel", 1f);
 		}

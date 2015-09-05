@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
+using MiniJSON;
 
 
 public class RankingLocal : MonoBehaviour {
@@ -18,15 +19,15 @@ public class RankingLocal : MonoBehaviour {
 
 				//自分のデータをリストの最後に追加
 				myScore = GameObject.Find ("ResultBase").GetComponent<Result> ().stat.score;
+				myName = GameObject.Find ("ResultBase").GetComponent<Result> ().stat.userName;
 				dic.Add (makeMyProfile(myName, myScore));
 				//並び替え
 				dic = new Common().sortDictionaryList (dic, "score");
 				//表示
 				redrawMessage (makeMsgLeft(dic, rank), makeMsgRight(dic, rank));
-				//Debug.Log (makeMsgLeft(dic, rank));
-				//Debug.Log (makeMsgRight(dic, rank));
+				//保存
+				savePlayerPrefs (new Common ().encodeDictionaryToJson (dic, rank));
 
-		
 		}
 	
 		// Update is called once per frame
@@ -66,6 +67,12 @@ public class RankingLocal : MonoBehaviour {
 		}
 
 
+		//セーブ
+		void savePlayerPrefs(string json){
+				PlayerPrefs.SetString ("RankingData", json);
+		}
+
+		//ロード
 		string loadPlayerPrefs(){
 				string testJson = "[" +
 						"{\"name\":\"UMR\",\"score\":\"1000000\",\"date\":\"2015/9/4 18:21\"}," +
