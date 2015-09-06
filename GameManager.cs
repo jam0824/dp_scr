@@ -222,21 +222,7 @@ public class GameManager : MonoBehaviour {
 				}
 		}
 
-		/// <summary>
-		/// ゲームオーバー
-		/// </summary>
-		public void gameOver(){
-				//透明→色のフェード
-				GameObject fadein = new Common ().makeFade (fadePrefab, this.gameObject, 1, 180, 255.0f, 255.0f, 255.0f);
-				Invoke ("goResult", 3f);
-		}
 
-		/// <summary>
-		/// Result画面に遷移
-		/// </summary>
-		public void goResult(){
-				Application.LoadLevel ("SceneResult");
-		}
 		/// <summary>
 		/// ボムを減らす
 		/// </summary>
@@ -266,19 +252,11 @@ public class GameManager : MonoBehaviour {
 		public void finishGame(){
 				soundManager.stopBGM (bgm);
 				//透明→色のフェード
-				GameObject fadein = new Common ().makeFade (fadePrefab, this.gameObject, 1, 180, 255.0f, 255.0f, 255.0f);
+				//GameObject fadein = new Common ().makeFade (fadePrefab, this.gameObject, 1, 180, 255.0f, 255.0f, 255.0f);
 				//makeWhiteOut ();
+				gameOver ();
 		}
-
-		//*******************************************
-		//ホワイトアウト
-		void makeWhiteOut(){
-				GameObject fadein = Instantiate (fadePrefab, this.transform.position, this.transform.rotation) as GameObject;
-				fadein.GetComponent<fade> ().Init (1, 180, 255.0f, 255.0f, 255.0f);
-
-				RectTransform rt = fadein.GetComponent<RectTransform>();
-				rt.anchoredPosition = new Vector2(0, 0);	//位置変更
-		}
+				
 
 		//*********************************************
 		//人魂をつくる
@@ -299,6 +277,22 @@ public class GameManager : MonoBehaviour {
 				}
 		}
 
+		//**********************************************************************
+		/// <summary>
+		/// ゲーム終了
+		/// </summary>
+		public void gameOver(){
+				//透明→色のフェード
+				GameObject fadein = new Common ().makeFade (fadePrefab, this.gameObject, 1, 180, 255.0f, 255.0f, 255.0f);
+				Invoke ("goResult", 3f);
+		}
+
+		/// <summary>
+		/// Result画面に遷移
+		/// </summary>
+		public void goResult(){
+				Application.LoadLevel ("SceneResult");
+		}
 
 
 }

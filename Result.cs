@@ -43,6 +43,10 @@ public class Result : MonoBehaviour {
 
 		// Use this for initialization
 		void Start () {
+
+				stat = getStatus ();
+
+
 				GameObject fade = new Common ().makeFade (fadePrefab, this.gameObject, 0, 60, 255.0f, 255.0f, 255.0f);
 				//gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
 				resultBoxLeft = GameObject.Find ("messageLeft").GetComponent<Text> ();
@@ -68,35 +72,31 @@ public class Result : MonoBehaviour {
 				}
 	
 		}
-
+				
 		void redrawLife(){
 				messageLeft += "Life\n100,000 × " + stat.life + "\n";
 				messageRight += "\n= " + string.Format ("{0:#,0}", (100000 * stat.life)) + "\n";
 				stat.score += 100000 * stat.life;
 				inputMessage ();
 		}
-
 		void redrawGraze(){
 				messageLeft += "Graze\n10,000 × " + stat.graze + "\n";
 				messageRight += "\n= " + string.Format ("{0:#,0}", (10000 * stat.graze)) + "\n";
 				stat.score += 10000 * stat.graze;
 				inputMessage ();
 		}
-
 		void redrawPower(){
 				messageLeft += "Power\n5,000 × " + stat.power + "\n";
 				messageRight += "\n= " + string.Format ("{0:#,0}", (5000 * stat.power)) + "\n";
 				stat.score += 5000 * stat.power;
 				inputMessage ();
 		}
-
 		void redrawEnemies(){
 				messageLeft += "Enemy\n5,000 × " + stat.enemies + "\n";
 				messageRight += "\n= " + string.Format ("{0:#,0}", (5000 * stat.power)) + "\n";
 				stat.score += 5000 * stat.enemies;
 				inputMessage ();
 		}
-
 		void redrawUseBombs(){
 				messageLeft += "Use Bombs\n-40,000 × " + stat.useBombs + "\n";
 				messageRight += "\n= " + string.Format ("{0:#,0}", (-40000 * stat.useBombs)) + "\n";
@@ -111,7 +111,6 @@ public class Result : MonoBehaviour {
 				}
 
 		}
-				
 		//ノーミスのボックス作成
 		void makeNoMissBox(){
 				GameObject noMiss = Instantiate (noMissPrefab, this.transform.position, this.transform.rotation) as GameObject;
@@ -120,13 +119,11 @@ public class Result : MonoBehaviour {
 				stat.score += 2000000;
 				Invoke ("redrawTotal", waitTime);
 		}
-
 		//トータルスコア表示
 		void redrawTotal(){
 				resultBoxAll.text = string.Format ("{0:#,0}", stat.score);
 				mouseFlag = true;	//クリックを許可
 		}
-
 		//名前入力ボックス作成
 		void makeEnterNameBox(){
 				GameObject enterName = Instantiate (enterNamePrefab, this.transform.position, this.transform.rotation) as GameObject;
@@ -139,13 +136,19 @@ public class Result : MonoBehaviour {
 				}
 		}
 
-		string getUserName(){
-					return PlayerPrefs.GetString("UserName", "");
-		}
 
-		void inputMessage(){
-				resultBoxLeft.text = messageLeft;
-				resultBoxRight.text = messageRight;
+		//*******************************************************************
+		//ゲームマネージャーからデータ取得
+		Status getStatus(){
+				GameManager gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+				Status data = new Status ();
+				data.score = gameManager.score;
+				data.life = gameManager.life;
+				data.power = gameManager.power;
+				data.graze = gameManager.graze;
+				data.enemies = gameManager.defeatEnemies;
+				data.useBombs = gameManager.useBombs;
+				return data;
 		}
 
 		//ランキング画面に移る前のクロフェード
@@ -153,7 +156,7 @@ public class Result : MonoBehaviour {
 				fadein = new Common ().makeFade (fadePrefab, this.gameObject, 1, 60, 0.0f, 0.0f, 0.0f);
 				Invoke ("changeLevel", 1f);
 		}
-
+		//ランキング遷移
 		void changeLevel(){
 				Destroy (fadein);
 				GameObject ranking = Instantiate (rankingPrefab, this.transform.position, this.transform.rotation) as GameObject;
@@ -161,5 +164,15 @@ public class Result : MonoBehaviour {
 				ranking.GetComponent<RectTransform>().localScale = new Vector3 (1, 1, 1);	//スケールを元に戻す
 				fadein = new Common ().makeFade (fadePrefab, this.gameObject, 0, 60, 0.0f, 0.0f, 0.0f);
 				//Destroy (this.gameObject);
+		}
+
+		//保存されている名前取得
+		string getUserName(){
+				return PlayerPrefs.GetString("UserName", "");
+		}
+		//描画処理
+		void inputMessage(){
+				resultBoxLeft.text = messageLeft;
+				resultBoxRight.text = messageRight;
 		}
 }
