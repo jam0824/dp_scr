@@ -19,7 +19,9 @@ public class RankingLocal : MonoBehaviour {
 
 		// Use this for initialization
 		void Start () {
+				//セーブデータロード
 				string json = loadPlayerPrefs ();
+				//DictionaryのListに変換
 				List<Dictionary<string, string>> dic = new Common().decodeJson(json);
 
 				//自分のデータをリストの最後に追加
@@ -46,6 +48,7 @@ public class RankingLocal : MonoBehaviour {
 				}
 		}
 
+		//メッセージ表示
 		void redrawMessage(string msgLeft, string msgRight){
 				GameObject.Find ("RankingMsgLeft").GetComponent<Text> ().text = msgLeft;
 				GameObject.Find ("RankingMsgRight").GetComponent<Text> ().text = msgRight;
@@ -68,7 +71,7 @@ public class RankingLocal : MonoBehaviour {
 				}
 				return str;
 		}
-
+		//自分のデータをDictionaryにする
 		Dictionary<string, string> makeMyProfile(string name, int score){
 				Dictionary<string, string> dic = new Dictionary<string, string> ();
 				dic.Add ("name", name);

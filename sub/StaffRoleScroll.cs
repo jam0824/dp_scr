@@ -20,6 +20,7 @@ public class StaffRoleScroll : MonoBehaviour {
 	
 		// Update is called once per frame
 		void Update () {
+				//スクロール処理
 				if (rect.position.y < (sizeStaff + 240)) {
 						scroll ();
 				} else {
@@ -39,6 +40,7 @@ public class StaffRoleScroll : MonoBehaviour {
 
 		}
 
+		//スクロール
 		void scroll(){
 				Vector3 pos = rect.position;
 				pos.y += v;
@@ -46,6 +48,7 @@ public class StaffRoleScroll : MonoBehaviour {
 				rect.position = pos;
 		}
 
+		//タイトルに戻る
 		void preChange(){
 				GameObject fadein = new Common ().makeFade (fadePrefab, this.gameObject, 1, 60, 255.0f, 255.0f, 255.0f);
 				Invoke ("changeLevel",1f);

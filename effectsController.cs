@@ -21,6 +21,11 @@ public class effectsController : MonoBehaviour {
 		void bombFlagOff(){
 				gameManager.bombOff ();
 		}
+		void bombAnimationFinish(){
+				bombFlagOff ();
+				Destroy (gameObject);
+		}
+
 
 		void OnAnimationFinish ()
 		{

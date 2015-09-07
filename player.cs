@@ -7,6 +7,7 @@ public class player : MonoBehaviour {
 
 		public GameObject prefab;
 		public GameObject explosion01;
+		public GameObject bombPrefab;
 
 		int speed = 150;
 		float moveOffset = 0.04f;
@@ -50,6 +51,10 @@ public class player : MonoBehaviour {
 		void keyCheck(){
 				if (Input.GetButton ("Fire1") || (Input.GetKey (KeyCode.Z))) {
 						Shot ();
+				}
+				//セカンドボタンでボム
+				if (Input.GetButton ("Fire2") || (Input.GetKey (KeyCode.X)) || (Input.GetMouseButton (1))) {
+						makeBomb ();
 				}
 		}
 
@@ -167,6 +172,16 @@ public class player : MonoBehaviour {
 				}
 
 
+		}
+
+		//******************************************************
+		void makeBomb(){
+				if ((gameManager.bombFlag) || (gameManager.bomb == 0)) {
+						return;
+				}
+				gameManager.decBomb ();
+				gameManager.bombFlag = true;
+				GameObject gs = Instantiate (bombPrefab, new Vector3(0,0,0), this.transform.rotation) as GameObject;
 		}
 
 		//******************************************************

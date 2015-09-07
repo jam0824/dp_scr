@@ -22,12 +22,14 @@ public class enemy : MonoBehaviour {
 		GameManager gameManager;
 		SoundManager soundManager;
 
+		int maxHP = 1;
+
 		Vector3 prevPos = new Vector3 (0,0,0);	//前回位置
 		float stopY = 0;
 
 		// Use this for initialization
 		void Start () {
-			
+				maxHP = HP;
 				//initEnemy (MoveMode);
 				gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
 				soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
@@ -150,11 +152,13 @@ public class enemy : MonoBehaviour {
 
 		//if bullet go out of screen, delete it
 		void OnTriggerEnter2D(Collider2D c){
-				if(c.gameObject.tag == "p_bullet"){
+				if((c.gameObject.tag == "p_bullet") || (c.gameObject.tag == "bomb")){
 						HP--;
 						if(HP <= 0) deleteEnemy();
-						Destroy (c.gameObject);
-						GameObject e = Instantiate (explosion04, c.transform.position, this.transform.rotation) as GameObject;
+						if(c.gameObject.tag == "p_bullet"){
+							Destroy (c.gameObject);
+							GameObject e = Instantiate (explosion04, c.transform.position, this.transform.rotation) as GameObject;
+						}
 				}
 				//デリートエリア到着で削除
 				if(c.gameObject.tag == "delete_area"){
@@ -166,7 +170,11 @@ public class enemy : MonoBehaviour {
 		/// Deletes the enemy.
 		/// </summary>
 		void deleteEnemy(){
-				soundManager.playSE ("exp_small");
+				if (maxHP < 20) {
+						soundManager.playSE ("exp_small");
+				} else {
+						soundManager.playSE ("exp_big");
+				}
 				makeItem (gameManager.power);
 				GameObject e = Instantiate (explosion01, this.transform.position, this.transform.rotation) as GameObject;
 				Destroy(gameObject);

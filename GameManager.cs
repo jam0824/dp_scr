@@ -231,6 +231,7 @@ public class GameManager : MonoBehaviour {
 				Destroy (bombObjects [max - 1]);
 				bombObjects.RemoveAt (max - 1);
 				bomb--;
+				useBombs++;
 		}
 
 
