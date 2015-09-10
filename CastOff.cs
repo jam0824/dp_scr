@@ -86,7 +86,7 @@ public class CastOff : MonoBehaviour {
 
 		void castOffAnimation(){
 				gameManager.flash ();	//フラッシュ作成
-				soundManager.playSE ("exp_big");	//効果音
+				soundManager.playSE ("castOff");	//効果音
 				float w = 2.0f;	//エフェクト発生の幅
 				for(int i = 0; i < 20; i++){
 						Vector3 pos = transform.position;
