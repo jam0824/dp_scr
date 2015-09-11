@@ -29,6 +29,7 @@ public class Boss : MonoBehaviour {
 		GameObject activeGurdSkill = null;
 		GameManager gameManager;
 		SoundManager soundManager;
+		EffectManager effectManager;
 		List<BossData> bossData = new List<BossData>();
 
 		//ボス行動パターンデータ
@@ -47,6 +48,7 @@ public class Boss : MonoBehaviour {
 				bossData = fileRead (textAset);
 				gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
 				soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
+				effectManager = GameObject.Find("EffectManager").GetComponent<EffectManager>();
 				makeLifeBar ();
 		}
 		
@@ -214,7 +216,7 @@ public class Boss : MonoBehaviour {
 		void deleteGurdSkillBG(){
 				GameObject[] bg = GameObject.FindGameObjectsWithTag ("gurdSkillBG");
 				foreach(GameObject x in bg){
-						gameManager.flash ();
+						effectManager.flash ();
 						Destroy (x);
 				}
 		}

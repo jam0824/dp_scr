@@ -20,12 +20,14 @@ public class player : MonoBehaviour {
 
 		GameManager gameManager;
 		SoundManager soundManager;
+		EffectManager effectManager;
 
 		//******************************************************
 		// Use this for initialization
 		void Start () {
 				soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
 				gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+				effectManager = GameObject.Find("EffectManager").GetComponent<EffectManager>();
 		}
 
 		//******************************************************
@@ -204,7 +206,7 @@ public class player : MonoBehaviour {
 		public void Damage(){
 				noDamageCount = NODAMAGE_TIME;	//無敵時間代入
 				soundManager.playSE ("playerDamage");
-				GameObject e = Instantiate (explosion01, this.transform.position, this.transform.rotation) as GameObject;
+				effectManager.makeEffect ("smallExplosion", this.transform.position);
 
 				if (gameManager.life > 0) {
 						//ライフを減らす

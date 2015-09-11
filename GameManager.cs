@@ -31,8 +31,6 @@ public class GameManager : MonoBehaviour {
 		public GameObject bombPrefab;
 		public GameObject startMsgPrefab;
 		public GameObject warningMsgPrefab;
-		public GameObject flashPrefab;
-		public GameObject fadePrefab;
 		public GameObject hitodamaPrefab;
 
 		public bool bombFlag = false;
@@ -46,6 +44,8 @@ public class GameManager : MonoBehaviour {
 		Text fpsText;
 
 		SoundManager soundManager;
+		EffectManager effectManager;
+
 		BGMplay bgm;
 
 		List<GameObject> lifeObjects = new List<GameObject>();
@@ -59,14 +59,17 @@ public class GameManager : MonoBehaviour {
 
 		// Use this for initialization
 		void Start () {
+				effectManager = GameObject.Find("EffectManager").GetComponent<EffectManager>();
+				soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
+
 				Application.targetFrameRate = GAME_FPS;
 				ScenarioLoader loader = new ScenarioLoader ();
 				scenario = loader.fileRead (scenarioFile);
 
 				//黒→透明のフェード
-				GameObject fadein = new Common ().makeFade (fadePrefab, this.gameObject, 0, 60, 0.0f, 0.0f, 0.0f);
+				GameObject fadein = effectManager.makeFade("colorToTrans", 60, 0.0f, 0.0f, 0.0f);
 				makeBG ();
-				soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
+
 				bgm = soundManager.playBGM ("bgm00");
 
 				scoreText = GameObject.Find("score").GetComponent<Text>();
@@ -134,11 +137,6 @@ public class GameManager : MonoBehaviour {
 				GameObject boss = Instantiate (bossPrefab, new Vector3(-0.4f, 5.0f, 0f), this.transform.rotation) as GameObject;
 		}
 		//**********************************************************
-
-		//フラッシュ作成
-		public void flash(){
-				GameObject flash = Instantiate (flashPrefab, this.transform.position, this.transform.rotation) as GameObject;
-		}
 
 		//ボムオン
 		public void bombOn(){
@@ -284,7 +282,7 @@ public class GameManager : MonoBehaviour {
 		/// </summary>
 		public void gameOver(){
 				//透明→色のフェード
-				GameObject fadein = new Common ().makeFade (fadePrefab, this.gameObject, 1, 180, 255.0f, 255.0f, 255.0f);
+				GameObject fadein = effectManager.makeFade("transToColor", 180, 255.0f, 255.0f, 255.0f);
 				Invoke ("goResult", 3f);
 		}
 

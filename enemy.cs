@@ -8,8 +8,6 @@ public class enemy : MonoBehaviour {
 		public bool isDirAnime = false;
 		public float startBulletTime = 0.0f;
 		public GameObject bulletPrefab;
-		public GameObject explosion01;  //Big explosion
-		public GameObject explosion04;  //very small explosion
 		public GameObject itemPrefab;
 		public GameObject subItemPrefab;
 
@@ -21,6 +19,7 @@ public class enemy : MonoBehaviour {
 
 		GameManager gameManager;
 		SoundManager soundManager;
+		EffectManager effectManager;
 
 		int maxHP = 1;
 
@@ -33,6 +32,7 @@ public class enemy : MonoBehaviour {
 				//initEnemy (MoveMode);
 				gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
 				soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
+				effectManager = GameObject.Find("EffectManager").GetComponent<EffectManager>();
 				//弾を打つ場合指定時間で発射
 				if(startBulletTime != 0){
 						Invoke ("makeBullet", startBulletTime);
@@ -156,8 +156,13 @@ public class enemy : MonoBehaviour {
 						HP--;
 						if(HP <= 0) deleteEnemy();
 						if(c.gameObject.tag == "p_bullet"){
-							Destroy (c.gameObject);
-							GameObject e = Instantiate (explosion04, c.transform.position, this.transform.rotation) as GameObject;
+								Destroy (c.gameObject);
+								Vector3 pos = c.transform.position;
+								float v = 0.5f;
+								pos.x += (Random.value * v) - v / 2;
+								pos.y += (Random.value * v) - v / 2;
+								effectManager.makeEffect ("middleExplosion", pos);
+
 						}
 				}
 				//デリートエリア到着で削除
@@ -172,11 +177,13 @@ public class enemy : MonoBehaviour {
 		void deleteEnemy(){
 				if (maxHP < 20) {
 						soundManager.playSE ("exp_small");
+						effectManager.makeEffect ("middleExplosion", this.transform.position);
 				} else {
 						soundManager.playSE ("exp_big");
+						effectManager.makeEffect ("bigExplosion", this.transform.position);
+
 				}
 				makeItem (gameManager.power);
-				GameObject e = Instantiate (explosion01, this.transform.position, this.transform.rotation) as GameObject;
 				Destroy(gameObject);
 		}
 

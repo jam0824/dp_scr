@@ -8,8 +8,6 @@ public class CastOff : MonoBehaviour {
 		SpriteRenderer spriteRenderer;
 		public Sprite afterBreak;
 
-		public GameObject explosionBig;  //Big explosion
-		public GameObject explosionSmall;  //very small explosion
 		public GameObject itemPrefab;
 		public GameObject subItemPrefab;
 
@@ -21,12 +19,14 @@ public class CastOff : MonoBehaviour {
 		GameManager gameManager;
 		Boss bossScript;
 		SoundManager soundManager;
+		EffectManager effectManager;
 
 		// Use this for initialization
 		void Start () {
 				gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
 				bossScript = GameObject.FindWithTag("boss").GetComponent<Boss>();
 				soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
+				effectManager = GameObject.Find("EffectManager").GetComponent<EffectManager>();
 				MaxHP = HP;
 				bossScript.HP += HP;
 				bossScript.MAX_HP += HP;
@@ -54,7 +54,11 @@ public class CastOff : MonoBehaviour {
 								deleteEnemy ();
 						}
 						Destroy (c.gameObject);
-						GameObject e = Instantiate (explosionSmall, c.transform.position, c.transform.rotation) as GameObject;
+						Vector3 pos = c.transform.position;
+						float v = 0.5f;
+						pos.x += (Random.value * v) - v / 2;
+						pos.y += (Random.value * v) - v / 2;
+						effectManager.makeEffect ("middleExplosion", pos);
 				}
 		}
 		/// <summary>
@@ -85,26 +89,27 @@ public class CastOff : MonoBehaviour {
 		}
 
 		void castOffAnimation(){
-				gameManager.flash ();	//フラッシュ作成
+				effectManager.flash ();	//フラッシュ作成
 				soundManager.playSE ("castOff");	//効果音
 				float w = 2.0f;	//エフェクト発生の幅
 				for(int i = 0; i < 20; i++){
 						Vector3 pos = transform.position;
 						pos.x += Random.value * w - 0.5f * w + centerPos.x;
 						pos.y += Random.value - 0.5f + centerPos.y;
-						GameObject e = Instantiate (explosionBig, pos, this.transform.rotation) as GameObject;
+						effectManager.makeEffect ("middleExplosion", pos);
 				}
 
 		}
 
 		void lastBreakAnimation(){
-				gameManager.flash ();	//フラッシュ作成
+				effectManager.flash ();	//フラッシュ作成
 				float w = 2.0f;	//エフェクト発生の幅
 				for(int i = 0; i < 30; i++){
 						Vector3 pos = transform.position;
 						pos.x += Random.value * w - 0.5f * w + centerPos.x;
 						pos.y += Random.value * w - 0.5f * w + centerPos.y;
-						GameObject e = Instantiate (explosionBig, pos, this.transform.rotation) as GameObject;
+						effectManager.makeEffect ("middleExplosion", pos);
+
 				}
 		}
 
