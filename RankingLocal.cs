@@ -7,6 +7,7 @@ using MiniJSON;
 
 public class RankingLocal : MonoBehaviour {
 
+
 		public GameObject fadePrefab;
 		public GameObject staffRolePrefab;
 		GameObject fadein;
@@ -30,11 +31,11 @@ public class RankingLocal : MonoBehaviour {
 				dic.Add (makeMyProfile(myName, myScore));
 				//並び替え
 				dic = new Common().sortDictionaryList (dic, "score");
-				//表示
-				redrawMessage (makeMsgLeft(dic, rank), makeMsgRight(dic, rank));
 				//保存
 				savePlayerPrefs (new Common ().encodeDictionaryToJson (dic, rank));
 
+				//表示
+				redrawMessage (makeMsgLeft(dic, rank), makeMsgRight(dic, rank));
 		}
 	
 		// Update is called once per frame
@@ -130,6 +131,18 @@ public class RankingLocal : MonoBehaviour {
 		//タイトルに戻る
 		void changeLevelTitle(){
 				Application.LoadLevel ("title");
+		}
+
+		//ローカルランキングを書く
+		void showLocalRanking(){
+				//セーブデータロード
+				string json = loadPlayerPrefs ();
+				//DictionaryのListに変換
+				List<Dictionary<string, string>> dic = new Common().decodeJson(json);
+				//並び替え
+				dic = new Common().sortDictionaryList (dic, "score");
+				//表示
+				redrawMessage (makeMsgLeft(dic, rank), makeMsgRight(dic, rank));
 		}
 				
 }

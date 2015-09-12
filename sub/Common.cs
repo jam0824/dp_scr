@@ -133,4 +133,29 @@ public class Common : MonoBehaviour {
 				jsonStr += "]";
 				return jsonStr;
 		}
+
+		//--------------------------------------------------------------------
+		/// <summary>  指定された文字列をMD5でハッシュ化し、文字列として返す
+		/// </summary>
+		/// <param name="srcStr">入力文字列</param>
+		/// <returns>入力文字列のMD5ハッシュ値</returns>
+		//--------------------------------------------------------------------
+		public string calcMd5( string srcStr ) {
+
+				System.Security.Cryptography.MD5 md5 = System.Security.Cryptography.MD5.Create();
+
+				// md5ハッシュ値を求める
+				byte[] srcBytes = System.Text.Encoding.UTF8.GetBytes(srcStr);
+				byte[] destBytes = md5.ComputeHash(srcBytes);
+
+				// 求めたmd5値を文字列に変換する
+				System.Text.StringBuilder destStrBuilder;
+				destStrBuilder = new System.Text.StringBuilder();
+				foreach (byte curByte in destBytes) {
+						destStrBuilder.Append(curByte.ToString("x2"));
+				}
+
+				// 変換後の文字列を返す
+				return destStrBuilder.ToString();
+		}
 }

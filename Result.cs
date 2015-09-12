@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
-
+using System.Collections.Generic;
 
 public class Result : MonoBehaviour {
 
@@ -15,6 +15,7 @@ public class Result : MonoBehaviour {
 				public int enemies = 320;
 				public int useBombs = 2;
 		}
+				
 
 		public GameObject fadePrefab;
 		public GameObject noMissPrefab;
@@ -41,8 +42,7 @@ public class Result : MonoBehaviour {
 		// Use this for initialization
 		void Start () {
 				//gameObjectからデータを引き継ぐ
-				stat = getStatus ();
-
+				//stat = getStatus ();
 
 				GameObject fade = new Common ().makeFade (fadePrefab, this.gameObject, 0, 60, 255.0f, 255.0f, 255.0f);
 
@@ -175,4 +175,6 @@ public class Result : MonoBehaviour {
 				resultBoxLeft.text = messageLeft;
 				resultBoxRight.text = messageRight;
 		}
+
+
 }
