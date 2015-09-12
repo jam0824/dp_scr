@@ -7,19 +7,22 @@ using MiniJSON;
 
 public class RankingLocal : MonoBehaviour {
 
+		public GameObject netRankingPrefab;
 
-		public GameObject fadePrefab;
-		public GameObject staffRolePrefab;
-		GameObject fadein;
+
 		bool mouseFlag = true;
-
 		int myScore = 720000;
 		string myName = "m";
 		int rank = 10;
 
+		GameObject fadein;
+		EffectManager effectManager;
+
 
 		// Use this for initialization
 		void Start () {
+				effectManager = GameObject.Find("EffectManager").GetComponent<EffectManager>();
+
 				//セーブデータロード
 				string json = loadPlayerPrefs ();
 				//DictionaryのListに変換
@@ -44,7 +47,7 @@ public class RankingLocal : MonoBehaviour {
 				if (Input.GetButton ("Fire1") || (Input.GetKey (KeyCode.Z)) || (Input.GetMouseButton (0))) {
 						if (mouseFlag) {
 								mouseFlag = false;
-								preChange ();
+								preMoveToRanking ();
 						}
 				}
 		}
@@ -107,30 +110,19 @@ public class RankingLocal : MonoBehaviour {
 		}
 
 		//遷移処理
-		void preChange(){
-
-				//ライフが残っていたらスタッフロール。それ以外はタイトル
-				if (GameObject.Find ("ResultBase").GetComponent<Result> ().stat.life > 0) {
-						GameObject fadein = new Common ().makeFade (fadePrefab, this.gameObject, 1, 60, 0.0f, 0.0f, 0.0f);
-						Invoke ("changeLevel", 1f);
-				} else {
-						GameObject fadein = new Common ().makeFade (fadePrefab, this.gameObject, 1, 60, 255.0f, 255.0f, 255.0f);
-						Invoke ("changeLevelTitle", 1f);
-				}
-
+		//ランキング画面に移る前のフェード
+		public void preMoveToRanking(){
+				fadein = effectManager.makeFade("transToColor", 60, 0.0f, 0.0f, 0.0f);
+				Invoke ("changeLevel", 1f);
 		}
-
-		//staffロール開始
+		//ランキング遷移
 		void changeLevel(){
-				Destroy (fadein);
-				GameObject prefab = Instantiate (staffRolePrefab) as GameObject;
-				prefab.transform.parent = GameObject.Find ("Canvas").transform;	//Canvasを親にする
-				prefab.GetComponent<RectTransform>().localScale = new Vector3 (1, 1, 1);	//スケールを元に戻す
-		}
-
-		//タイトルに戻る
-		void changeLevelTitle(){
-				Application.LoadLevel ("title");
+				Destroy (fadein);	//フェードを削除しておく
+				GameObject ranking = Instantiate (netRankingPrefab, this.transform.position, this.transform.rotation) as GameObject;
+				ranking.transform.parent = GameObject.Find ("Canvas").transform;	//Canvasを親にする
+				ranking.GetComponent<RectTransform>().localScale = new Vector3 (1, 1, 1);	//スケールを元に戻す
+				fadein = effectManager.makeFade("colorToTrans", 60, 0.0f, 0.0f, 0.0f);
+				//Destroy (this.gameObject);
 		}
 
 		//ローカルランキングを書く

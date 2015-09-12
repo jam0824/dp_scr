@@ -3,6 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class ConnectAPI : MonoBehaviour {
+
+		public string result = "";
+		public string apiUrl = "http://localhost/~m/api/gameapi.php";
+
 		public WWW GET(string url) {
 				WWW www = new WWW (url);
 				StartCoroutine (WaitForRequest (www));
@@ -22,8 +26,13 @@ public class ConnectAPI : MonoBehaviour {
 				// check for errors
 				if (www.error == null) {
 						Debug.Log("WWW Ok!: " + www.text);
+						result = www.text;
 				} else {
 						Debug.Log("WWW Error: "+ www.error);
+						result = www.error;
 				}
+		}
+		public void resultReset(){
+				result = "";
 		}
 }

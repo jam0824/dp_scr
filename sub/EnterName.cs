@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 public class EnterName : MonoBehaviour {
 
-		public string apiUrl = "http://localhost/~m/api/gameapi.php";
+
 
 		// Use this for initialization
 		void Start () {
@@ -61,6 +61,6 @@ public class EnterName : MonoBehaviour {
 				string query = "insert into ANGEL_BEATS_RANKING (type,name,score,date) values (0,'" + name + "'," + score + ",CURDATE());";
 				dic.Add ("md5", new Common().calcMd5(query + word));
 				dic.Add ("query", query);
-				WWW results = w.POST(apiUrl, dic);
+				WWW results = w.POST(w.apiUrl, dic);
 		}
 }

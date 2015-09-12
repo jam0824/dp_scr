@@ -38,11 +38,14 @@ public class Result : MonoBehaviour {
 		bool mouseFlag = false;
 		GameObject fadein;
 
-
 		// Use this for initialization
 		void Start () {
 				//gameObjectからデータを引き継ぐ
-				//stat = getStatus ();
+				GameObject gm = GameObject.Find ("GameManager");
+				if (gm != null) {
+						gameManager = gm.GetComponent<GameManager>();
+						stat = getStatus ();
+				}
 
 				GameObject fade = new Common ().makeFade (fadePrefab, this.gameObject, 0, 60, 255.0f, 255.0f, 255.0f);
 
@@ -139,7 +142,6 @@ public class Result : MonoBehaviour {
 		//*******************************************************************
 		//ゲームマネージャーからデータ取得
 		Status getStatus(){
-				GameManager gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
 				Status data = new Status ();
 				data.score = gameManager.score;
 				data.life = gameManager.life;
