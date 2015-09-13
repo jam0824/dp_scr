@@ -55,7 +55,7 @@ public class player : MonoBehaviour {
 						Shot ();
 				}
 				//セカンドボタンでボム
-				if (Input.GetButton ("Fire2") || (Input.GetKey (KeyCode.X)) || (Input.GetMouseButton (1))) {
+				if (Input.GetButton ("Fire2") || (Input.GetKey (KeyCode.X)) || (Input.GetMouseButton (2))) {
 						makeBomb ();
 				}
 		}
@@ -228,9 +228,13 @@ public class player : MonoBehaviour {
 		void OnTriggerEnter2D(Collider2D c){
 					switch(c.gameObject.tag){
 				case "e_bullet":	//敵弾
-						gameManager.graze++;
-						soundManager.playSE ("graze");
-						gameManager.score += gameManager.grazeScore;
+						bullet b = c.gameObject.GetComponent<bullet> ();
+						if(!b.isGraze){
+							b.isGraze = true;
+							gameManager.graze++;
+							soundManager.playSE ("graze");
+							gameManager.score += gameManager.grazeScore;
+						}
 						break;
 
 					case "power_item1":	//パワーアップアイテム

@@ -17,7 +17,6 @@ public class Result : MonoBehaviour {
 		}
 				
 
-		public GameObject fadePrefab;
 		public GameObject noMissPrefab;
 		public GameObject rankingPrefab;
 		public GameObject enterNamePrefab;
@@ -25,6 +24,7 @@ public class Result : MonoBehaviour {
 		public Status stat = new Status();
 
 		GameManager gameManager;
+		EffectManager effectManager;
 
 		string messageLeft = "";
 		string messageRight = "";
@@ -40,14 +40,16 @@ public class Result : MonoBehaviour {
 
 		// Use this for initialization
 		void Start () {
+				effectManager = GameObject.Find("EffectManager").GetComponent<EffectManager>();
+
 				//gameObjectからデータを引き継ぐ
 				GameObject gm = GameObject.Find ("GameManager");
 				if (gm != null) {
 						gameManager = gm.GetComponent<GameManager>();
 						stat = getStatus ();
 				}
-
-				GameObject fade = new Common ().makeFade (fadePrefab, this.gameObject, 0, 60, 255.0f, 255.0f, 255.0f);
+						
+				fadein = effectManager.makeFade("colorToTrans", 60, 255.0f, 255.0f, 255.0f);
 
 				resultBoxLeft = GameObject.Find ("messageLeft").GetComponent<Text> ();
 				resultBoxRight = GameObject.Find ("messageRight").GetComponent<Text> ();
@@ -154,7 +156,7 @@ public class Result : MonoBehaviour {
 
 		//ランキング画面に移る前のフェード
 		public void preMoveToRanking(){
-				fadein = new Common ().makeFade (fadePrefab, this.gameObject, 1, 60, 0.0f, 0.0f, 0.0f);
+				fadein = effectManager.makeFade("transToColor", 60, 0.0f, 0.0f, 0.0f);
 				Invoke ("changeLevel", 1f);
 		}
 		//ランキング遷移
@@ -163,7 +165,7 @@ public class Result : MonoBehaviour {
 				GameObject ranking = Instantiate (rankingPrefab, this.transform.position, this.transform.rotation) as GameObject;
 				ranking.transform.parent = GameObject.Find ("Canvas").transform;	//Canvasを親にする
 				ranking.GetComponent<RectTransform>().localScale = new Vector3 (1, 1, 1);	//スケールを元に戻す
-				fadein = new Common ().makeFade (fadePrefab, this.gameObject, 0, 60, 0.0f, 0.0f, 0.0f);
+				fadein = effectManager.makeFade("colorToTrans", 60, 0.0f, 0.0f, 0.0f);
 				//Destroy (this.gameObject);
 		}
 

@@ -68,10 +68,12 @@ public class enemy : MonoBehaviour {
 						break;
 				case "Bezier":
 						//Debug.Log ("bezier_x=" + transform.position.x);
+
 						myBezier = new Bezier( new Vector3(transform.position.x, transform.position.y, transform.position.z), 
 								new Vector3( transform.position.x + data.bezierParam[0], transform.position.y + data.bezierParam[1], 0f ), 
 								new Vector3( transform.position.x + data.bezierParam[2], transform.position.y + data.bezierParam[3], 0f ), 
 								new Vector3( transform.position.x + data.bezierParam[4], transform.position.y + data.bezierParam[5], 0f ) );
+
 						break;
 
 

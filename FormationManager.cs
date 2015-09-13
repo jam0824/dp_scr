@@ -37,7 +37,7 @@ public class FormationManager : MonoBehaviour {
 		}
 
 		private void makeEnemy(FormationDataBean enemyData){
-				Debug.Log ("enemyNo = " + enemyData.enemyNo);
+				//Debug.Log ("enemyNo = " + enemyData.enemyNo);
 				//9999を見つけたら削除
 				if (enemyData.enemyNo == 9999) {
 						delete ();
