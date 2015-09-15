@@ -69,10 +69,10 @@ public class enemy : MonoBehaviour {
 				case "Bezier":
 						//Debug.Log ("bezier_x=" + transform.position.x);
 
-						myBezier = new Bezier( new Vector3(transform.position.x, transform.position.y, transform.position.z), 
-								new Vector3( transform.position.x + data.bezierParam[0], transform.position.y + data.bezierParam[1], 0f ), 
-								new Vector3( transform.position.x + data.bezierParam[2], transform.position.y + data.bezierParam[3], 0f ), 
-								new Vector3( transform.position.x + data.bezierParam[4], transform.position.y + data.bezierParam[5], 0f ) );
+						myBezier = new Bezier( new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z), 
+								new Vector3( this.transform.position.x + data.bezierParam[0], this.transform.position.y + data.bezierParam[1], 0f ), 
+								new Vector3( this.transform.position.x + data.bezierParam[2], this.transform.position.y + data.bezierParam[3], 0f ), 
+								new Vector3( this.transform.position.x + data.bezierParam[4], this.transform.position.y + data.bezierParam[5], 0f ) );
 
 						break;
 
@@ -154,8 +154,9 @@ public class enemy : MonoBehaviour {
 
 		//if bullet go out of screen, delete it
 		void OnTriggerEnter2D(Collider2D c){
-				if((c.gameObject.tag == "p_bullet") || (c.gameObject.tag == "bomb")){
-						HP--;
+				if(c.gameObject.tag == "p_bullet"){
+						int damage = c.GetComponent<WeponStatBean> ().damage;
+						HP -= damage;
 						if(HP <= 0) deleteEnemy();
 						if(c.gameObject.tag == "p_bullet"){
 								Destroy (c.gameObject);
@@ -172,6 +173,23 @@ public class enemy : MonoBehaviour {
 						Destroy(gameObject);
 				}
 			}
+
+		void OnTriggerStay2D (Collider2D c){
+				if(c.gameObject.tag == "bomb"){
+						HP--;
+						if(HP <= 0) deleteEnemy();
+
+
+						Vector3 pos = this.transform.position;
+						float v = 0.5f;
+						pos.x += (Random.value * v) - v / 2;
+						pos.y += (Random.value * v) - v / 2;
+						effectManager.makeEffect ("middleExplosion", pos);
+
+
+				}
+
+		}
 
 		/// <summary>
 		/// Deletes the enemy.

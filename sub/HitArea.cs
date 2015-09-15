@@ -34,6 +34,11 @@ public class HitArea : MonoBehaviour {
 						count = HIT_WAIT;
 						break;
 
+				case "enemy":	//敵
+						GameObject hit = Instantiate (hitPrefab, this.transform.position, this.transform.rotation) as GameObject;
+						count = HIT_WAIT;
+						break;
+
 				}
 						
 		}

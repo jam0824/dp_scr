@@ -9,7 +9,7 @@ public class GameManager : MonoBehaviour {
 		const int START_TIME = 5;
 
 		public int gameFrame = 0;
-		public int gameSecond = 0;
+		public int gameSecond = 90;
 		public int frameRate = 60;
 
 		//メトリクス
@@ -45,11 +45,9 @@ public class GameManager : MonoBehaviour {
 
 		SoundManager soundManager;
 		EffectManager effectManager;
-
+		Common common;
 		BGMplay bgm;
 
-		List<GameObject> lifeObjects = new List<GameObject>();
-		List<GameObject> bombObjects = new List<GameObject>();
 		List<scenarioBean> scenario = new List<scenarioBean>();
 
 		void Awake(){
@@ -61,6 +59,7 @@ public class GameManager : MonoBehaviour {
 		void Start () {
 				effectManager = GameObject.Find("EffectManager").GetComponent<EffectManager>();
 				soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
+				common = new Common ();
 
 				Application.targetFrameRate = GAME_FPS;
 				ScenarioLoader loader = new ScenarioLoader ();
@@ -74,8 +73,8 @@ public class GameManager : MonoBehaviour {
 
 				scoreText = GameObject.Find("score").GetComponent<Text>();
 				fpsText = GameObject.Find("fps").GetComponent<Text>();
-				lifeObjects = initLifeBombUI (lifePrefab, life, 25, -110, 32);
-				bombObjects = initLifeBombUI (bombPrefab, bomb, 25, -142, 32);
+				initLifeBombUI (lifePrefab, life, 25, -110, 32);
+				initLifeBombUI (bombPrefab, bomb, 25, -142, 32);
 
 
 		}
@@ -104,10 +103,13 @@ public class GameManager : MonoBehaviour {
 								makeMsg (startMsgPrefab);	//スタートメッセージ
 								break;
 						case "Formation":
+								Debug.Log ("time=" + scenario[0].getTime());
 								makeFormation (scenario[0].getParam());
 								break;
 						case "Boss":
 								bossAppearFlag = true;
+								RectTransform rt = GameObject.Find ("statusView").GetComponent<RectTransform> ();
+								StartCoroutine (common.moveUI(rt, -1f, -50f, 0.01f)); //コールチンでステータス移動
 								makeBoss ();
 								break;
 						case "Warning":
@@ -190,29 +192,40 @@ public class GameManager : MonoBehaviour {
 		/// <param name="x">The x coordinate.</param>
 		/// <param name="y">The y coordinate.</param>
 		/// <param name="w">The width.</param>
-		List<GameObject> initLifeBombUI(GameObject LBPrefab, int num, int x, int y, int w){
-				List<GameObject> objects = new List<GameObject>();
+		void initLifeBombUI(GameObject LBPrefab, int num, int x, int y, int w){
 				for(int i = 0; i < num; i++){
 						GameObject prefab = Instantiate (LBPrefab, this.transform.position, this.transform.rotation) as GameObject;
-						prefab.transform.parent = GameObject.Find ("Canvas").transform;	//Canvasを親にする
+						prefab.transform.parent = GameObject.Find ("statusView").transform;	//Canvasを親にする
 
 						RectTransform rt = prefab.GetComponent<RectTransform>();
-						rt.localScale = new Vector3 (2, 2, 1);	//スケールを元に戻す
+						rt.localScale = new Vector3 (2, 2, 1);	//スケールを２倍にする
 						rt.anchoredPosition = new Vector2(x, y);	//位置変更
 						x += w;
-						objects.Add (prefab);
 				}
-				return objects;
+		}
+
+		//ライフとボムを再描画
+		void redrawLifeBombUI(int lifeNum, int bombNum){
+				deleteObject ("UILife");
+				deleteObject ("UIBomb");
+				initLifeBombUI (lifePrefab, lifeNum, 25, -110, 32);
+				initLifeBombUI (bombPrefab, bombNum, 25, -142, 32);
+		}
+
+		//指定したタグのオブジェクトを全て削除
+		void deleteObject(string tagName){
+				GameObject[] prefabs = GameObject.FindGameObjectsWithTag (tagName);
+				for(int i = 0; i < prefabs.Length; i++){
+						Destroy (prefabs[i]);
+				}
 		}
 
 		/// <summary>
 		/// ライフを減らす
 		/// </summary>
 		public void decLife(){
-				int max = lifeObjects.Count;
-				Destroy (lifeObjects [max - 1]);
-				lifeObjects.RemoveAt (max - 1);
 				life--;
+				redrawLifeBombUI (life, bomb);
 				//ゲームオーバー
 				if (life == 0) {
 						playingFlag = false;
@@ -225,12 +238,12 @@ public class GameManager : MonoBehaviour {
 		/// ボムを減らす
 		/// </summary>
 		public void decBomb(){
-				int max = bombObjects.Count;
-				Destroy (bombObjects [max - 1]);
-				bombObjects.RemoveAt (max - 1);
 				bomb--;
 				useBombs++;
+				redrawLifeBombUI (life, bomb);
 		}
+				
+
 
 
 		// ///////////////////////////////////////

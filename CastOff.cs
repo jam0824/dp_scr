@@ -42,9 +42,10 @@ public class CastOff : MonoBehaviour {
 
 		//if bullet go out of screen, delete it
 		void OnTriggerEnter2D(Collider2D c){
-				if (c.gameObject.tag == "p_bullet") {
-						HP--;
-						bossScript.HP--;
+				if(c.gameObject.tag == "p_bullet"){
+						int damage = c.GetComponent<WeponStatBean> ().damage;
+						HP -= damage;
+						bossScript.HP -= damage;
 						//定数割合以下でキャストオフ
 						if ((HP <= MaxHP * BREAK_PER) && (!breakTrigger)) {
 								breakTrigger = true;
@@ -60,6 +61,27 @@ public class CastOff : MonoBehaviour {
 						pos.y += (Random.value * v) - v / 2;
 						effectManager.makeEffect ("middleExplosion", pos);
 				}
+		}
+
+		void OnTriggerStay2D (Collider2D c){
+				if(c.gameObject.tag == "bomb"){
+						HP--;
+						bossScript.HP--;
+						//定数割合以下でキャストオフ
+						if ((HP <= MaxHP * BREAK_PER) && (!breakTrigger)) {
+								breakTrigger = true;
+								castOff ();
+								castOffAnimation ();
+						} else if (HP <= 0) {
+								deleteEnemy ();
+						}
+						Vector3 pos = this.transform.position;
+						float v = 0.5f;
+						pos.x += (Random.value * v) - v / 2;
+						pos.y += (Random.value * v) - v / 2;
+						effectManager.makeEffect ("middleExplosion", pos);
+				}
+
 		}
 		/// <summary>
 		/// Deletes the enemy.

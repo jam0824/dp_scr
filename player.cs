@@ -33,6 +33,9 @@ public class player : MonoBehaviour {
 		//******************************************************
 		// Update is called once per frame
 		void Update () {
+				if (gameManager.life == 0)
+						return;
+
 				movePlayerToTouch ();	//マウスで移動
 				keyBoardMove ();		//padなどで移動
 
@@ -227,7 +230,7 @@ public class player : MonoBehaviour {
 		//if bullet go out of screen, delete it
 		void OnTriggerEnter2D(Collider2D c){
 					switch(c.gameObject.tag){
-				case "e_bullet":	//敵弾
+					case "e_bullet":	//敵弾
 						bullet b = c.gameObject.GetComponent<bullet> ();
 						if(!b.isGraze){
 							b.isGraze = true;

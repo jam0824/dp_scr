@@ -228,20 +228,23 @@ public class Boss : MonoBehaviour {
 		//UI系
 		void makeLifeBar(){
 				int x = 0;
-				int y = -40;
-				GameObject prefab = Instantiate (lifebarPrefab, this.transform.position, this.transform.rotation) as GameObject;
-				prefab.transform.parent = GameObject.Find ("Canvas").transform;	//Canvasを親にする
-				lifebar = prefab.GetComponent<RectTransform>();
-				lifebar.localScale = new Vector3 (2, 2, 1);	//スケールを元に戻す
-				lifebar.anchoredPosition = new Vector2(x, y);	//位置変更
-
+				int y = 0;
 				GameObject prefabWaku = Instantiate (lifebarWakuPrefab, this.transform.position, this.transform.rotation) as GameObject;
 				prefabWaku.transform.parent = GameObject.Find ("Canvas").transform;	//Canvasを親にする
 				RectTransform waku = prefabWaku.GetComponent<RectTransform>();
 				waku.localScale = new Vector3 (2, 2, 1);	//スケールを元に戻す
 				waku.anchoredPosition = new Vector2(x, y);	//位置変更
-		}
 
+				GameObject prefab = Instantiate (lifebarPrefab, this.transform.position, this.transform.rotation) as GameObject;
+				prefab.transform.parent = prefabWaku.transform;	//枠を親にする
+				lifebar = prefab.GetComponent<RectTransform>();
+				lifebar.localScale = new Vector3 (1, 1, 1);	//スケールを元に戻す
+				lifebar.anchoredPosition = new Vector2(0, 0);	//位置変更
+
+				StartCoroutine (new Common().moveUI(waku, -1f, -40f, 0.01f));	//コールチンでバー移動
+		}
+				
+		//バーを再描画
 		void drawLifeBar(){
 				int w = 400;
 				int h = 23;

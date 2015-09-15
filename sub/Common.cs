@@ -158,4 +158,36 @@ public class Common : MonoBehaviour {
 				// 変換後の文字列を返す
 				return destStrBuilder.ToString();
 		}
+
+		//コールチンでステータスアニメーション
+		/// <summary>
+		/// UIを上下に移動する
+		/// </summary>
+		/// <returns></returns>
+		/// <param name="rt">RectTransform</param>
+		/// <param name="v">増分</param>
+		/// <param name="maxY">ストップ位置</param>
+		/// <param name="waitTime">待ち時間（sec）</param>
+		public IEnumerator moveUI(RectTransform rt, float v, float maxY, float waitTime) {
+				//無限ループ防止
+				for (int i = 0; i < 1000; i++) {
+
+						Vector2 pos = rt.anchoredPosition;
+						pos.y += v;
+						rt.anchoredPosition = pos;
+						yield return new WaitForSeconds (waitTime);
+						//maxでコルーチン終了
+						if(v < 0){
+								if (pos.y <= maxY) {
+										yield break;
+								}
+						}else{
+								if (pos.y >= maxY) {
+										yield break;
+								}
+						}
+
+				}
+				yield break;
+		}
 }

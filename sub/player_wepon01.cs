@@ -2,6 +2,8 @@
 using System.Collections;
 
 public class player_wepon01 : MonoBehaviour {
+		public int damage;
+
 	// 移動速度を設定
 	// @param direction 角度
 	// @param speed 速さ
