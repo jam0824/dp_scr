@@ -7,24 +7,33 @@ public class Tj_logo : MonoBehaviour {
 		public GameObject fadePrefab;
 		public GameObject titlePrefab;
 		GameObject fadein;
+		SoundManager soundManager;
 
+		int gameCount = 0;
+		int viewTitleTime = 60 * 4;
 		public bool isClick = false;
 
 		// Use this for initialization
 		void Start () {
+				soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
+				BGMplay bgm = soundManager.playBGM ("opening");
 				fadein = new Common ().makeFade (fadePrefab, this.gameObject, 0, 60, 255.0f, 255.0f, 255.0f);
 		}
 	
 		// Update is called once per frame
 		void Update () {
-				if (Input.GetButton ("Fire1") || (Input.GetKey (KeyCode.Z)) || (Input.GetMouseButton (0))) {
+				if (Input.GetButton ("Fire1") || (Input.GetKey (KeyCode.Z)) || (Input.GetMouseButton (0))
+						|| (gameCount > viewTitleTime)) {
 						if (!isClick) {
 								fadein = new Common ().makeFade (fadePrefab, this.gameObject, 1, 60, 255.0f, 255.0f, 255.0f);
 								Invoke ("makeTitle", 1f);
 								isClick = true;
 						}
 				}
-						
+
+				if (!isClick)
+						gameCount++;
+
 		}
 				
 		void makeTitle(){

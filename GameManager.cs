@@ -262,7 +262,7 @@ public class GameManager : MonoBehaviour {
 		//*******************************************
 		//ボスを倒したあと
 		public void finishGame(){
-				soundManager.stopBGM (bgm);
+				soundManager.fadeOutBGM (bgm, 0.04f, 0.1f);
 				//透明→色のフェード
 				//GameObject fadein = new Common ().makeFade (fadePrefab, this.gameObject, 1, 180, 255.0f, 255.0f, 255.0f);
 				//makeWhiteOut ();

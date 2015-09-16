@@ -11,6 +11,7 @@ public class SoundManager : MonoBehaviour {
 
 		const int BGM00 = 0;
 		const int BGM01 = 1;
+		const int BGM02 = 2;
 
 		const int EXP_SMALL = 0;
 		const int EXP_BIG = 1;
@@ -33,6 +34,9 @@ public class SoundManager : MonoBehaviour {
 					case "bgm01":
 						bgmPlayScr.bgmPlay(BGM01, this);
 					break;
+				case "opening":
+						bgmPlayScr.bgmPlay(BGM02, this);
+					break;
 
 			}
 			return bgmPlayScr;
@@ -43,6 +47,15 @@ public class SoundManager : MonoBehaviour {
 		}
 		public void deleteBGM(BGMplay bgmPlayScr){
 				bgmPlayScr.bgmDelete ();
+		}
+		/// <summary>
+		/// Fades the out background.
+		/// </summary>
+		/// <param name="bgmPlayScr">Bgm play scr.</param>
+		/// <param name="v">減量分</param>
+		/// <param name="waitTime">Wait time.</param>
+		public void fadeOutBGM(BGMplay bgmPlayScr, float v, float waitTime){
+				bgmPlayScr.bgmFadeOut (v, waitTime);
 		}
 
 		public void playSE(string kind){
