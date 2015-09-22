@@ -3,7 +3,7 @@ using System.Collections;
 
 public class enemy : MonoBehaviour {
 
-		const int POWER_MAX = 5;
+		const int POWER_MAX = 500;
 		public int HP = 1;
 		public bool isDirAnime = false;
 		public float startBulletTime = 0.0f;

@@ -33,6 +33,17 @@ public class Common : MonoBehaviour {
 				return rot;
 		}
 
+		// p2からp1への角度を求める
+		// @param p1 自分の座標
+		// @param p2 相手の座標
+		// @return 2点の角度(Degree)
+		public float getAim(Vector2 p1, Vector2 p2) {
+				float dx = p2.x - p1.x;
+				float dy = p2.y - p1.y;
+				float rad = Mathf.Atan2(dy, dx);
+				return rad * Mathf.Rad2Deg;
+		}
+
 		/// <summary>
 		/// フェード処理を作成
 		/// </summary>

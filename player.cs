@@ -8,6 +8,7 @@ public class player : MonoBehaviour {
 		public GameObject prefab;
 		public GameObject explosion01;
 		public GameObject bombPrefab;
+		public GameObject missilePrefab;
 
 		int speed = 150;
 		float moveOffset = 0.04f;
@@ -45,6 +46,10 @@ public class player : MonoBehaviour {
 						//ダメージの際の処理
 						if(noDamageCount > 0)
 							noDamageCount = DamageCheck (noDamageCount);
+				}
+
+				if(gameCount % 180 == 0){
+						makeMissile ();
 				}
 				gameCount++;
 
@@ -191,17 +196,49 @@ public class player : MonoBehaviour {
 
 		//******************************************************
 		void Shot(){
-				makeShot (90.0f + Random.value * 5 - 2.5f , 15.0f);
+				int powerUpNum = 10;
+				float angle = 3f;
+				float n = Mathf.Floor (gameManager.power / powerUpNum);
+				float startAngle = 90 - (n * angle);
+
+
+				for(int i = 0; i < (2 * n + 1); i++){
+						float r = 5f;
+						makeShot (startAngle + (Random.value * r - r / 2), 15.0f);
+						startAngle += angle;
+				}
+
+
 				soundManager.playSE ("playerBullet");
 		}
 				
 		//Making one bullet object
 		void makeShot(float direction, float speed){
-				Vector3 pos = this.transform.position;
-				pos.y += 1.0f;
-				GameObject shot = Instantiate (prefab, pos, this.transform.rotation) as GameObject;
+			Vector3 pos = this.transform.position;
+				pos.y += 0.3f;
+			GameObject shot = Instantiate (prefab, pos, this.transform.rotation) as GameObject;
 			player_wepon01 s = shot.GetComponent<player_wepon01>();
 			s.Create(direction, speed);
+		}
+
+		//Making one missile object
+		void makeMissile(){
+				int powerUpNum = 20;
+				float angle = 10f;
+				//最初はミサイルなし
+				if (gameManager.power < powerUpNum)
+						return;
+
+				float n = Mathf.Floor (gameManager.power / powerUpNum);
+				//float n = Mathf.Floor (100 / powerUpNum);
+				float startAngle = 90 - (n * angle);
+
+
+				for(int i = 0; i < (2 * n + 1); i++){
+						GameObject missile = Instantiate (missilePrefab, this.transform.position, this.transform.rotation) as GameObject;
+						missile.GetComponent<Missail> ().Create (startAngle);
+						startAngle += angle;
+				}
 		}
 
 		//******************************************************
