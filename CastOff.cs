@@ -42,6 +42,8 @@ public class CastOff : MonoBehaviour {
 
 		//if bullet go out of screen, delete it
 		void OnTriggerEnter2D(Collider2D c){
+				if (!bossScript.setStartPosition)
+						return;
 				if(c.gameObject.tag == "p_bullet"){
 						int damage = c.GetComponent<WeponStatBean> ().damage;
 						HP -= damage;
@@ -59,7 +61,7 @@ public class CastOff : MonoBehaviour {
 						float v = 0.5f;
 						pos.x += (Random.value * v) - v / 2;
 						pos.y += (Random.value * v) - v / 2;
-						effectManager.makeEffect ("middleExplosion", pos);
+						effectManager.makeEffect ("smallExplosion", pos);
 				}
 		}
 

@@ -197,7 +197,7 @@ public class player : MonoBehaviour {
 
 		//******************************************************
 		void Shot(){
-				int powerUpNum = 20;
+				int powerUpNum = 30;
 				float angle = 3f;
 				float n = Mathf.Floor (gameManager.power / powerUpNum);
 				float startAngle = 90 - (n * angle);
@@ -224,7 +224,7 @@ public class player : MonoBehaviour {
 
 		//Making one missile object
 		void makeMissile(){
-				int powerUpNum = 30;
+				int powerUpNum = 50;
 				float angle = 10f;
 				//最初はミサイルなし
 				if (gameManager.power < powerUpNum)return;
@@ -232,7 +232,7 @@ public class player : MonoBehaviour {
 				float n = Mathf.Floor (gameManager.power / powerUpNum);
 				//float n = Mathf.Floor (100 / powerUpNum);
 				float startAngle = 90 - (n * angle);
-
+				soundManager.playSE ("missile");
 				//make smoke
 				GameObject smoke = Instantiate (smokePrefab, this.transform.position, this.transform.rotation) as GameObject;
 				for(int i = 0; i < (2 * n + 1); i++){
@@ -281,6 +281,7 @@ public class player : MonoBehaviour {
 					case "power_item1":	//パワーアップアイテム
 							Destroy (c.gameObject);
 							gameManager.power++;
+							soundManager.playSE ("get_item");
 							break;
 
 					case "score_item":	//スコアアイテム

@@ -30,7 +30,7 @@ public class Missail : MonoBehaviour {
 				int r = Random.Range (0, 3);
 				switch (r) {
 				case 0:
-						timing = 30;
+						timing = 45;
 						break;
 				case 1:
 						timing = 15;

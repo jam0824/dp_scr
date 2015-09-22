@@ -20,7 +20,7 @@ public class Boss : MonoBehaviour {
 		public GameObject lifebarWakuPrefab;
 		public TextAsset textAset;
 
-		bool setStartPosition = false;
+		public bool setStartPosition = false;
 		bool isDefeated = false;
 
 		int sessionNo = -1;	//現在どこのセッションの行動を行っているか

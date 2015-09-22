@@ -12,10 +12,14 @@ public class StaffRoleScroll : MonoBehaviour {
 		RectTransform rect;
 
 		bool mouseFlag = true;
+		SoundManager soundManager;
+		BGMplay bgm;
 
 		// Use this for initialization
 		void Start () {
 				rect = this.GetComponent<RectTransform> ();
+				soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
+				bgm = soundManager.playBGM ("ending");
 		}
 	
 		// Update is called once per frame
