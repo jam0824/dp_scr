@@ -21,6 +21,7 @@ public class Missail : MonoBehaviour {
 		public void Create(float direction){
 				decidePattern ();
 				SetVelocityForRigidbody2D (direction, speed);
+				this.transform.rotation = Quaternion.Euler (0, 0, direction - 90f);
 				oldDirection = direction;
 		}
 	
@@ -29,13 +30,15 @@ public class Missail : MonoBehaviour {
 				int r = Random.Range (0, 3);
 				switch (r) {
 				case 0:
-						timing = 6;
+						timing = 30;
 						break;
 				case 1:
-						timing = 3;
+						timing = 15;
+						speed = 6f;
 						break;
 				case 2:
-						timing = 1;
+						timing = 5;
+						speed = 5f;
 						break;
 
 				}
@@ -54,6 +57,7 @@ public class Missail : MonoBehaviour {
 		//方向を変える
 		void turnDirection(){
 				Vector2 pos = checkEnemyPos ();
+
 				float direction = common.getAim (this.transform.position, pos);
 				//角度調整
 				if(direction - oldDirection > maxAngle){
@@ -62,6 +66,7 @@ public class Missail : MonoBehaviour {
 				else if(direction - oldDirection < maxAngle){
 						direction = oldDirection - maxAngle;
 				}
+				this.transform.rotation = Quaternion.Euler (0, 0, direction - 90f);
 				SetVelocityForRigidbody2D (direction, speed);
 				oldDirection = direction;
 		}

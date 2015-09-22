@@ -9,6 +9,7 @@ public class player : MonoBehaviour {
 		public GameObject explosion01;
 		public GameObject bombPrefab;
 		public GameObject missilePrefab;
+		public GameObject smokePrefab;
 
 		int speed = 150;
 		float moveOffset = 0.04f;
@@ -196,7 +197,7 @@ public class player : MonoBehaviour {
 
 		//******************************************************
 		void Shot(){
-				int powerUpNum = 10;
+				int powerUpNum = 20;
 				float angle = 3f;
 				float n = Mathf.Floor (gameManager.power / powerUpNum);
 				float startAngle = 90 - (n * angle);
@@ -223,17 +224,17 @@ public class player : MonoBehaviour {
 
 		//Making one missile object
 		void makeMissile(){
-				int powerUpNum = 20;
+				int powerUpNum = 30;
 				float angle = 10f;
 				//最初はミサイルなし
-				if (gameManager.power < powerUpNum)
-						return;
+				if (gameManager.power < powerUpNum)return;
 
 				float n = Mathf.Floor (gameManager.power / powerUpNum);
 				//float n = Mathf.Floor (100 / powerUpNum);
 				float startAngle = 90 - (n * angle);
 
-
+				//make smoke
+				GameObject smoke = Instantiate (smokePrefab, this.transform.position, this.transform.rotation) as GameObject;
 				for(int i = 0; i < (2 * n + 1); i++){
 						GameObject missile = Instantiate (missilePrefab, this.transform.position, this.transform.rotation) as GameObject;
 						missile.GetComponent<Missail> ().Create (startAngle);
