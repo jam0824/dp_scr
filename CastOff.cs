@@ -44,7 +44,7 @@ public class CastOff : MonoBehaviour {
 		void OnTriggerEnter2D(Collider2D c){
 				if (!bossScript.setStartPosition)
 						return;
-				if(c.gameObject.tag == "p_bullet"){
+				if((c.gameObject.tag == "p_bullet")||(c.gameObject.tag == "missile")){
 						int damage = c.GetComponent<WeponStatBean> ().damage;
 						HP -= damage;
 						bossScript.HP -= damage;
@@ -61,7 +61,13 @@ public class CastOff : MonoBehaviour {
 						float v = 0.5f;
 						pos.x += (Random.value * v) - v / 2;
 						pos.y += (Random.value * v) - v / 2;
-						effectManager.makeEffect ("smallExplosion", pos);
+						if (c.gameObject.tag == "p_bullet") {
+								effectManager.makeEffect ("smallExplosion", pos);
+						}
+						else if (c.gameObject.tag == "missile") {
+								effectManager.makeEffect ("fireExplosion", pos);
+								soundManager.playSE ("exp_missile");
+						}
 				}
 		}
 

@@ -11,7 +11,12 @@ public class EffectManager : MonoBehaviour {
 		public GameObject middleExplosion;
 		public GameObject bigExplosion;
 		public GameObject hitSperk;
+		public GameObject fireExplosion;
 
+		GameObject fadein;
+		GameObject nextPrefab;
+		string fadeType = "black";
+		Vector3 prefabPos;
 
 		// Use this for initialization
 		void Start () {
@@ -45,9 +50,42 @@ public class EffectManager : MonoBehaviour {
 				case "hitSperk":
 						return hitSperk;
 						break;
+				case "fireExplosion":
+						return fireExplosion;
+						break;
 				default :
 						return middleExplosion;
 						break;
+				}
+		}
+
+		/// <summary>
+		/// Changes the scene.
+		/// </summary>
+		/// <param name="type">Fade type : black or white</param>
+		/// <param name="nextScene">Next scene prefab</param>
+		/// <param name="pos">view position</param>
+		public void changeScene(string type, GameObject nextScene, Vector3 pos){
+				fadeType = type;
+				prefabPos = pos;
+				if (fadeType == "white") {
+						fadein = new Common ().makeFade (fadePrefab, this.gameObject, 1, 60, 255.0f, 255.0f, 255.0f);
+				} else {
+						fadein = new Common ().makeFade (fadePrefab, this.gameObject, 1, 60, 0.0f, 0.0f, 0.0f);
+				}
+				nextPrefab = nextScene;
+				Invoke ("changeNextScene", 1f);
+
+		}
+		private void changeNextScene(){
+				Destroy (fadein);
+				GameObject scene = Instantiate (nextPrefab, prefabPos, this.transform.rotation) as GameObject;
+				scene.transform.parent = GameObject.Find ("Canvas").transform;	//Canvasを親にする
+				scene.GetComponent<RectTransform>().localScale = new Vector3 (1, 1, 1);	//スケールを元に戻す
+				if (fadeType == "white") {
+						fadein = new Common ().makeFade (fadePrefab, this.gameObject, 0, 60, 255.0f, 255.0f, 255.0f);
+				} else {
+						fadein = new Common ().makeFade (fadePrefab, this.gameObject, 0, 60, 0.0f, 0.0f, 0.0f);
 				}
 		}
 

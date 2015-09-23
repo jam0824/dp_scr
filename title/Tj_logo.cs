@@ -8,6 +8,7 @@ public class Tj_logo : MonoBehaviour {
 		public GameObject titlePrefab;
 		GameObject fadein;
 		SoundManager soundManager;
+		EffectManager effectManager;
 
 		int gameCount = 0;
 		int viewTitleTime = 60 * 4;
@@ -15,6 +16,7 @@ public class Tj_logo : MonoBehaviour {
 
 		// Use this for initialization
 		void Start () {
+				effectManager = GameObject.Find("EffectManager").GetComponent<EffectManager>();
 				soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
 				BGMplay bgm = soundManager.playBGM ("opening");
 				fadein = new Common ().makeFade (fadePrefab, this.gameObject, 0, 60, 255.0f, 255.0f, 255.0f);
@@ -25,8 +27,7 @@ public class Tj_logo : MonoBehaviour {
 				if (Input.GetButton ("Fire1") || (Input.GetKey (KeyCode.Z)) || (Input.GetMouseButton (0))
 						|| (gameCount > viewTitleTime)) {
 						if (!isClick) {
-								fadein = new Common ().makeFade (fadePrefab, this.gameObject, 1, 60, 255.0f, 255.0f, 255.0f);
-								Invoke ("makeTitle", 1f);
+								effectManager.changeScene ("white", titlePrefab, this.transform.position);
 								isClick = true;
 						}
 				}
@@ -35,13 +36,5 @@ public class Tj_logo : MonoBehaviour {
 						gameCount++;
 
 		}
-				
-		void makeTitle(){
-				Destroy (fadein);
-				GameObject title = Instantiate (titlePrefab, this.transform.position, this.transform.rotation) as GameObject;
-				title.transform.parent = GameObject.Find ("Canvas").transform;	//Canvasを親にする
-				title.GetComponent<RectTransform>().localScale = new Vector3 (1, 1, 1);	//スケールを元に戻す
-				fadein = new Common ().makeFade (fadePrefab, this.gameObject, 0, 60, 255.0f, 255.0f, 255.0f);
-				Destroy (this.gameObject);
-		}
+
 }

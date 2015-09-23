@@ -112,8 +112,9 @@ public class RankingLocal : MonoBehaviour {
 		//遷移処理
 		//ランキング画面に移る前のフェード
 		public void preMoveToRanking(){
-				fadein = effectManager.makeFade("transToColor", 60, 0.0f, 0.0f, 0.0f);
-				Invoke ("changeLevel", 1f);
+				effectManager.changeScene ("black", netRankingPrefab, this.transform.position);
+				//fadein = effectManager.makeFade("transToColor", 60, 0.0f, 0.0f, 0.0f);
+				//Invoke ("changeLevel", 1f);
 		}
 		//ランキング遷移
 		void changeLevel(){

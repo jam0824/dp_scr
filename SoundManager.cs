@@ -25,6 +25,7 @@ public class SoundManager : MonoBehaviour {
 		const int SE_OK = 8;
 		const int SE_GET_ITEM = 9;
 		const int SE_MISSILE = 10;
+		const int SE_MISSILE_EX = 11;
 	
 
 		public BGMplay playBGM(string kind){
@@ -101,6 +102,9 @@ public class SoundManager : MonoBehaviour {
 						break;
 					case "missile":
 						sePlayScr.sePlay(SE_MISSILE, this, volume);
+						break;
+					case "exp_missile":
+						sePlayScr.sePlay(SE_MISSILE_EX, this, volume);
 						break;
 				
 				}

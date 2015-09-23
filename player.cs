@@ -49,9 +49,7 @@ public class player : MonoBehaviour {
 							noDamageCount = DamageCheck (noDamageCount);
 				}
 
-				if(gameCount % 180 == 0){
-						makeMissile ();
-				}
+
 				gameCount++;
 
 		}
@@ -62,6 +60,9 @@ public class player : MonoBehaviour {
 		void keyCheck(){
 				if (Input.GetButton ("Fire1") || (Input.GetKey (KeyCode.Z))) {
 						Shot ();
+						if(gameCount % 180 == 0){
+								makeMissile ();
+						}
 				}
 				//セカンドボタンでボム
 				if (Input.GetButton ("Fire2") || (Input.GetKey (KeyCode.X)) || (Input.GetMouseButton (2))) {

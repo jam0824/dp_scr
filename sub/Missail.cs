@@ -30,14 +30,14 @@ public class Missail : MonoBehaviour {
 				int r = Random.Range (0, 3);
 				switch (r) {
 				case 0:
-						timing = 45;
+						timing = 30;
 						break;
 				case 1:
 						timing = 15;
 						speed = 6f;
 						break;
 				case 2:
-						timing = 5;
+						timing = 2;
 						speed = 5f;
 						break;
 

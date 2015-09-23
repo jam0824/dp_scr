@@ -47,6 +47,7 @@ public class Result : MonoBehaviour {
 				if (gm != null) {
 						gameManager = gm.GetComponent<GameManager>();
 						stat = getStatus ();
+						Destroy (gm);
 				}
 						
 				fadein = effectManager.makeFade("colorToTrans", 60, 255.0f, 255.0f, 255.0f);
@@ -156,8 +157,9 @@ public class Result : MonoBehaviour {
 
 		//ランキング画面に移る前のフェード
 		public void preMoveToRanking(){
-				fadein = effectManager.makeFade("transToColor", 60, 0.0f, 0.0f, 0.0f);
-				Invoke ("changeLevel", 1f);
+				effectManager.changeScene ("black", rankingPrefab, this.transform.position);
+				//fadein = effectManager.makeFade("transToColor", 60, 0.0f, 0.0f, 0.0f);
+				//Invoke ("changeLevel", 1f);
 		}
 		//ランキング遷移
 		void changeLevel(){
