@@ -5,6 +5,7 @@ using System.IO;
 
 public class ScenarioLoader : MonoBehaviour {
 
+		bool isSkip = false;
 
 		//**************************************************************
 		//ボスの行動データを読み込む
@@ -16,8 +17,16 @@ public class ScenarioLoader : MonoBehaviour {
 						string line = reader.ReadLine();
 
 						string[] values = line.Split(',');
-						if ((values [0] == "")||(line.Substring (0, 2) == "//"))
+
+						if (line.Substring (0, 2) == "/*") {
+								isSkip = true;
 								continue;
+						}
+						if (line.Substring (0, 2) == "*/") {
+								isSkip = false;
+								continue;
+						}
+						if ((isSkip)||(values [0] == "")||(line.Substring (0, 2) == "//")) continue;
 						scenarioBean data = new scenarioBean ();
 						data.setTime (int.Parse(values[0]));
 						data.setCommand (values[1]);

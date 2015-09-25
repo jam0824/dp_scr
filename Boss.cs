@@ -12,6 +12,7 @@ public class Boss : MonoBehaviour {
 
 		public List<GameObject> gurdSkills;
 		public List<GameObject> normalSkills;
+		public List<GameObject> labelGuardSkillName;
 		public GameObject gurdSkillBG;
 		public int MAX_HP = 0;
 		public int HP = 0;
@@ -145,6 +146,7 @@ public class Boss : MonoBehaviour {
 						makeGurdSkillBG ();
 						gameManager.deleteBG ();
 						soundManager.playSE ("danmaku");
+						makeLabelGuardSkillName (data.bombNo);
 						break;
 				//通常
 				case "normal":
@@ -154,6 +156,15 @@ public class Boss : MonoBehaviour {
 				}
 		}
 
+		/// <summary>
+		/// ガードスキルのラベル表示
+		/// </summary>
+		/// <param name="guardSkillNo">Guard skill no.</param>
+		void makeLabelGuardSkillName(int guardSkillNo){
+				GameObject label = Instantiate (labelGuardSkillName[guardSkillNo]) as GameObject;
+				label.transform.parent = GameObject.Find("statusView").transform;
+				label.GetComponent<RectTransform>().localScale = new Vector3 (1, 1, 1);	//スケールを元に戻す
+		}
 
 		/// <summary>
 		/// ボスを倒した後
@@ -203,11 +214,6 @@ public class Boss : MonoBehaviour {
 				for(int i = 0; i < num; i++){
 						GameObject prefab = Instantiate (gurdSkillBG) as GameObject;
 						prefab.transform.position = pos;
-						/*
-						if (i % 2 == 1) {
-								prefab.transform.Rotate (180.0f,0.0f,0.0f);
-						}
-						*/
 						pos.y += v;
 				}
 

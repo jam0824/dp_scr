@@ -26,6 +26,7 @@ public class GameManager : MonoBehaviour {
 		public TextAsset scenarioFile;
 
 		public GameObject bossPrefab;
+		public GameObject middleBossPrefab;
 		public GameObject bgPrefab;
 		public GameObject lifePrefab;
 		public GameObject bombPrefab;
@@ -37,7 +38,6 @@ public class GameManager : MonoBehaviour {
 		public List<GameObject> formaitonManager = new List<GameObject>();
 
 		bool playingFlag = true;	//本編フラグ。
-
 		bool bossAppearFlag = false;
 
 		Text scoreText;
@@ -98,6 +98,7 @@ public class GameManager : MonoBehaviour {
 		//シナリオチェック
 		void checkScenario(int gameSecond){
 				if(gameSecond == scenario[0].getTime()){
+						RectTransform rt;
 						switch(scenario[0].getCommand()){
 						case "Start":
 								makeMsg (startMsgPrefab);	//スタートメッセージ
@@ -108,9 +109,16 @@ public class GameManager : MonoBehaviour {
 								break;
 						case "Boss":
 								bossAppearFlag = true;
-								RectTransform rt = GameObject.Find ("statusView").GetComponent<RectTransform> ();
+								rt = GameObject.Find ("statusView").GetComponent<RectTransform> ();
 								StartCoroutine (common.moveUI(rt, -1f, -50f, 0.01f)); //コールチンでステータス移動
 								makeBoss ();
+								break;
+						case "MiddleBoss":
+					
+								rt = GameObject.Find ("statusView").GetComponent<RectTransform> ();
+								StartCoroutine (common.moveUI(rt, -1f, -50f, 0.01f)); //コールチンでステータス移動
+
+								makeMiddleBoss ();
 								break;
 						case "Warning":
 								makeMsg (warningMsgPrefab);	//ワーニングメッセージ
@@ -137,6 +145,11 @@ public class GameManager : MonoBehaviour {
 		//ボス作成
 		void makeBoss(){
 				GameObject boss = Instantiate (bossPrefab, new Vector3(-0.4f, 5.0f, 0f), this.transform.rotation) as GameObject;
+		}
+		//**********************************************************
+		//middleボス作成
+		void makeMiddleBoss(){
+				GameObject boss = Instantiate (middleBossPrefab, new Vector3(0.0f, 3.0f, 0f), this.transform.rotation) as GameObject;
 		}
 		//**********************************************************
 
@@ -287,6 +300,14 @@ public class GameManager : MonoBehaviour {
 						//fpsText.text = string.Format("{0}", 1 / Time.deltaTime);
 						fpsText.text = "FPS " + (1 / Time.deltaTime).ToString ("N2");
 				}
+		}
+
+		//*******************************************
+		//レベルを書く
+		public void drawLv(int power, int range){
+				Text level = GameObject.Find ("level").GetComponent<Text> ();
+				float f = power / range;
+				level.text = "Lv." + (f + 1);
 		}
 
 		//**********************************************************************

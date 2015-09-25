@@ -19,6 +19,7 @@ public class player : MonoBehaviour {
 		int gameCount = 0;
 		int bulletWaitTime = 5;	//弾を打つまでの待ちフレーム
 		int noDamageCount = 0;	//無敵時間カウント
+		int powerUpNum = 25;	//パワーアップ必要アイテム数
 
 		GameManager gameManager;
 		SoundManager soundManager;
@@ -198,7 +199,6 @@ public class player : MonoBehaviour {
 
 		//******************************************************
 		void Shot(){
-				int powerUpNum = 30;
 				float angle = 3f;
 				float n = Mathf.Floor (gameManager.power / powerUpNum);
 				float startAngle = 90 - (n * angle);
@@ -225,12 +225,12 @@ public class player : MonoBehaviour {
 
 		//Making one missile object
 		void makeMissile(){
-				int powerUpNum = 50;
+				int powerUpNumMissile = powerUpNum * 2;
 				float angle = 10f;
 				//最初はミサイルなし
-				if (gameManager.power < powerUpNum)return;
+				if (gameManager.power < powerUpNumMissile)return;
 
-				float n = Mathf.Floor (gameManager.power / powerUpNum);
+				float n = Mathf.Floor (gameManager.power / powerUpNumMissile);
 				//float n = Mathf.Floor (100 / powerUpNum);
 				float startAngle = 90 - (n * angle);
 				soundManager.playSE ("missile");
@@ -283,6 +283,10 @@ public class player : MonoBehaviour {
 							Destroy (c.gameObject);
 							gameManager.power++;
 							soundManager.playSE ("get_item");
+						//パワーアップの幅ちょうどになったときにレベル書き換え
+							if(gameManager.power % powerUpNum == 0){
+								gameManager.drawLv (gameManager.power, powerUpNum);
+							}
 							break;
 
 					case "score_item":	//スコアアイテム
