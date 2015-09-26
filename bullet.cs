@@ -3,7 +3,6 @@ using System.Collections;
 
 public class bullet : MonoBehaviour {
 		public GameObject prefab;
-		public bool isRotate = false;
 		public bool isGraze = false;
 
 		GameManager gameManager;
@@ -25,9 +24,7 @@ public class bullet : MonoBehaviour {
 				if ((gameManager.bombFlag == true) ||(gameCount > deleteFrame)){
 						delete ();
 				}
-				if (isRotate) {
-						transform.Rotate (0,0,1);
-				}
+
 				gameCount++;
 		}
 		

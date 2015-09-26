@@ -26,6 +26,9 @@ public class SoundManager : MonoBehaviour {
 		const int SE_GET_ITEM = 9;
 		const int SE_MISSILE = 10;
 		const int SE_MISSILE_EX = 11;
+		const int SE_POWER_UP = 12;
+		const int SE_RESULT_DRAW = 13;
+
 	
 
 		public BGMplay playBGM(string kind){
@@ -98,13 +101,19 @@ public class SoundManager : MonoBehaviour {
 						sePlayScr.sePlay(SE_OK, this, volume);
 						break;
 					case "get_item":
-						sePlayScr.sePlay(SE_GET_ITEM, this, volume);
+						sePlayScr.sePlay(SE_GET_ITEM, this, 0.2f);
 						break;
 					case "missile":
 						sePlayScr.sePlay(SE_MISSILE, this, volume);
 						break;
 					case "exp_missile":
 						sePlayScr.sePlay(SE_MISSILE_EX, this, volume);
+						break;
+				case "power_up":
+						sePlayScr.sePlay(SE_POWER_UP, this, volume);
+						break;
+				case "result_draw":
+						sePlayScr.sePlay(SE_RESULT_DRAW, this, volume);
 						break;
 				
 				}

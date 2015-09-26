@@ -8,12 +8,17 @@ public class Result : MonoBehaviour {
 		//ランキングデータ格納クラス
 		public class Status{
 				public string userName = "YOU";
+				public int playTime = 60 * 60 * 1;
 				public int score = 1234;
 				public int life = 2;
 				public int graze = 256;
 				public int power = 256;
 				public int enemies = 320;
 				public int useBombs = 2;
+				public int lifeScore = 500000;
+				public int grazeScore = 5000;
+				public int powerScore = 10000;
+				public int timeScore = 1000;
 		}
 				
 
@@ -25,6 +30,7 @@ public class Result : MonoBehaviour {
 
 		GameManager gameManager;
 		EffectManager effectManager;
+		SoundManager soundManager;
 
 		string messageLeft = "";
 		string messageRight = "";
@@ -40,6 +46,7 @@ public class Result : MonoBehaviour {
 
 		// Use this for initialization
 		void Start () {
+				soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
 				effectManager = GameObject.Find("EffectManager").GetComponent<EffectManager>();
 
 				//gameObjectからデータを引き継ぐ
@@ -55,12 +62,14 @@ public class Result : MonoBehaviour {
 				resultBoxLeft = GameObject.Find ("messageLeft").GetComponent<Text> ();
 				resultBoxRight = GameObject.Find ("messageRight").GetComponent<Text> ();
 				resultBoxAll = GameObject.Find ("messageAll").GetComponent<Text> ();
+				//最初に計算前結果を入れておく
+				resultBoxAll.text = string.Format ("{0:#,0}", stat.score);
 
 				//順番に結果表示
 				Invoke ("redrawLife", 1f);
 				Invoke ("redrawGraze", 1f + waitTime * 1);
 				Invoke ("redrawPower", 1f + waitTime * 2);
-				Invoke ("redrawEnemies", 1f + waitTime * 3);
+				Invoke ("redrawPlayTime", 1f + waitTime * 3);
 				Invoke ("redrawUseBombs", 1f + waitTime * 4);
 		}
 	
@@ -78,28 +87,33 @@ public class Result : MonoBehaviour {
 		}
 				
 		void redrawLife(){
-				messageLeft += "Life\n100,000 × " + stat.life + "\n";
+				messageLeft += "Life\n" + string.Format ("{0:#,0}", stat.lifeScore)+ " × " + stat.life + "\n";
 				//カンマ区切りで表示
-				messageRight += "\n= " + string.Format ("{0:#,0}", (100000 * stat.life)) + "\n";
-				stat.score += 100000 * stat.life;
+				messageRight += "\n= " + string.Format ("{0:#,0}", (stat.lifeScore* stat.life)) + "\n";
+				stat.score += stat.lifeScore * stat.life;
 				inputMessage ();
 		}
 		void redrawGraze(){
-				messageLeft += "Graze\n10,000 × " + stat.graze + "\n";
-				messageRight += "\n= " + string.Format ("{0:#,0}", (10000 * stat.graze)) + "\n";
-				stat.score += 10000 * stat.graze;
+				messageLeft += "Graze\n" + string.Format ("{0:#,0}", stat.grazeScore)+ " × " + stat.graze + "\n";
+				messageRight += "\n= " + string.Format ("{0:#,0}", (stat.grazeScore * stat.graze)) + "\n";
+				stat.score += stat.grazeScore * stat.graze;
 				inputMessage ();
 		}
 		void redrawPower(){
-				messageLeft += "Power\n5,000 × " + stat.power + "\n";
-				messageRight += "\n= " + string.Format ("{0:#,0}", (5000 * stat.power)) + "\n";
-				stat.score += 5000 * stat.power;
+				messageLeft += "Power\n" + string.Format ("{0:#,0}", stat.powerScore)+ " × " + stat.power + "\n";
+				messageRight += "\n= " + string.Format ("{0:#,0}", (stat.powerScore * stat.power)) + "\n";
+				stat.score += stat.powerScore * stat.power;
 				inputMessage ();
 		}
-		void redrawEnemies(){
-				messageLeft += "Enemy\n5,000 × " + stat.enemies + "\n";
-				messageRight += "\n= " + string.Format ("{0:#,0}", (5000 * stat.power)) + "\n";
-				stat.score += 5000 * stat.enemies;
+		void redrawPlayTime(){
+				int time = (int)(300 - (Mathf.Floor (stat.playTime) / 60));
+				//プレイ時間が短いときもペナルティ
+				int timeScore = ((Mathf.Floor (stat.playTime) / 60) < 120) ? -stat.timeScore : stat.timeScore;
+
+				messageLeft += "Play Time(Base:300sec)\n300 - " + Mathf.Floor(stat.playTime / 60) + "\n";
+				messageRight += "\n= " + string.Format ("{0:#,0}", (timeScore * time)) + "\n";
+
+				stat.score += timeScore * time;
 				inputMessage ();
 		}
 		void redrawUseBombs(){
@@ -152,6 +166,7 @@ public class Result : MonoBehaviour {
 				data.graze = gameManager.graze;
 				data.enemies = gameManager.defeatEnemies;
 				data.useBombs = gameManager.useBombs;
+				data.playTime = gameManager.gameFrame;
 				return data;
 		}
 
@@ -178,8 +193,10 @@ public class Result : MonoBehaviour {
 		}
 		//描画処理
 		void inputMessage(){
+				soundManager.playSE ("result_draw");
 				resultBoxLeft.text = messageLeft;
 				resultBoxRight.text = messageRight;
+				resultBoxAll.text = string.Format ("{0:#,0}", stat.score);
 		}
 
 

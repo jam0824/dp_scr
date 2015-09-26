@@ -21,8 +21,10 @@ public class StartNormalGame : MonoBehaviour {
 		void Update () {
 				if (Input.GetButton ("Fire1") || (Input.GetKey (KeyCode.Z)) || (Input.GetMouseButton (0))) {
 						if (!isClick) {
+								soundManager.playSE ("OK");
 								BGMplay bgm = GameObject.Find ("BGMplay(Clone)").GetComponent<BGMplay> ();
 								soundManager.fadeOutBGM (bgm, 0.04f, 0.1f);
+
 								changeScene ();
 								isClick = true;
 						}

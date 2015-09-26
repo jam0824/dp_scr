@@ -42,6 +42,7 @@ public class GameManager : MonoBehaviour {
 
 		Text scoreText;
 		Text fpsText;
+		float fps;
 
 		SoundManager soundManager;
 		EffectManager effectManager;
@@ -286,6 +287,8 @@ public class GameManager : MonoBehaviour {
 		//*********************************************
 		//人魂をつくる
 		void makeHitodama(){
+				if (fps < 50)
+						return;
 				float speed = (Random.value + 0.1f);
 				Vector3 pos = new Vector3 (Random.value * 4 - 2, Random.value * 6 - 3,0);
 				GameObject hitodama = Instantiate (hitodamaPrefab, pos, this.transform.rotation) as GameObject;
@@ -297,8 +300,9 @@ public class GameManager : MonoBehaviour {
 		void drawFPS(){
 				if (Time.frameCount % Application.targetFrameRate == 0)
 				{
+						fps = 1 / Time.deltaTime;
 						//fpsText.text = string.Format("{0}", 1 / Time.deltaTime);
-						fpsText.text = "FPS " + (1 / Time.deltaTime).ToString ("N2");
+						fpsText.text = "FPS " + fps.ToString ("N2");
 				}
 		}
 

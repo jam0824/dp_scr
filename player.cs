@@ -285,6 +285,7 @@ public class player : MonoBehaviour {
 							soundManager.playSE ("get_item");
 						//パワーアップの幅ちょうどになったときにレベル書き換え
 							if(gameManager.power % powerUpNum == 0){
+								soundManager.playSE ("power_up");
 								gameManager.drawLv (gameManager.power, powerUpNum);
 							}
 							break;
