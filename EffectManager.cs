@@ -12,6 +12,7 @@ public class EffectManager : MonoBehaviour {
 		public GameObject bigExplosion;
 		public GameObject hitSperk;
 		public GameObject fireExplosion;
+		public GameObject debugPrefab;
 
 		GameObject fadein;
 		GameObject nextPrefab;
@@ -111,5 +112,14 @@ public class EffectManager : MonoBehaviour {
 		//フラッシュ作成
 		public void flash(){
 				GameObject flash = Instantiate (flashPrefab, this.transform.position, this.transform.rotation) as GameObject;
+		}
+
+		public void drawDebug(string msg){
+				GameObject debugWindow = Instantiate (debugPrefab, this.transform.position, this.transform.rotation) as GameObject;
+				debugWindow.transform.parent = GameObject.Find ("Canvas").transform;
+				RectTransform pos = debugWindow.GetComponent<RectTransform>();
+				pos.localScale = new Vector3 (1, 1, 1);	//スケールを元に戻す
+				//pos.anchoredPosition = new Vector2(0, 0);	//位置変更
+				debugPrefab.GetComponent<Text> ().text = msg;
 		}
 }

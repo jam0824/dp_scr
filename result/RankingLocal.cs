@@ -9,11 +9,13 @@ public class RankingLocal : MonoBehaviour {
 
 		public GameObject netRankingPrefab;
 
-
+		bool isClickSns = false;
 		bool mouseFlag = true;
 		int myScore = 720000;
 		string myName = "m";
 		int rank = 10;
+
+
 
 		GameObject fadein;
 		EffectManager effectManager;
@@ -45,10 +47,13 @@ public class RankingLocal : MonoBehaviour {
 		void Update () {
 				//キー入力でスキップ
 				if (Input.GetButton ("Fire1") || (Input.GetKey (KeyCode.Z)) || (Input.GetMouseButton (0))) {
-						if (mouseFlag) {
-								mouseFlag = false;
-								preMoveToRanking ();
-						}
+						Invoke ("nextPage", 1f);
+				}
+		}
+		void nextPage(){
+				if ((mouseFlag) && (!isClickSns)) {
+						mouseFlag = false;
+						preMoveToRanking ();
 				}
 		}
 
@@ -137,5 +142,22 @@ public class RankingLocal : MonoBehaviour {
 				//表示
 				redrawMessage (makeMsgLeft(dic, rank), makeMsgRight(dic, rank));
 		}
-				
+
+		public void openTwitter(){
+				isClickSns = true;
+				string msg = WWW.EscapeURL (myName + "さんが#ABCastOffで" + myScore + "点を獲得！");
+				string url = "http://twitter.com/intent/tweet?hashtags=ABCastoff&amp;text=" + msg + "&amp;url=http://milk0824.sakura.ne.jp/app/ABCastOff/";
+				Application.OpenURL(url);
+				isClickSns = false;
+		}
+
+		public void openFacebook(){
+				isClickSns = true;
+				string msg = WWW.EscapeURL (myName + "さんがABCastOffで" + myScore + "点を獲得！");
+				string url = "http://twitter.com/intent/tweet?hashtags=ABCastoff&amp;text=" + msg + "&amp;url=http://milk0824.sakura.ne.jp/app/ABCastOff/";
+				Application.OpenURL(url);
+				isClickSns = false;
+
+		}
+			
 }

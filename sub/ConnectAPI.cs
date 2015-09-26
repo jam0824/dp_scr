@@ -5,7 +5,9 @@ using System.Collections.Generic;
 public class ConnectAPI : MonoBehaviour {
 
 		public string result = "";
-		public string apiUrl = "http://localhost/~m/api/gameapi.php";
+		//public string apiUrl = "http://localhost/~m/api/gameapi.php";
+		public string apiUrl = "http://milk0824.sakura.ne.jp/api/gameapi.php";
+
 
 		public WWW GET(string url) {
 				WWW www = new WWW (url);
@@ -31,6 +33,7 @@ public class ConnectAPI : MonoBehaviour {
 						Debug.Log("WWW Error: "+ www.error);
 						result = www.error;
 				}
+				//GameObject.Find ("EffectManager").GetComponent<EffectManager> ().drawDebug (result);
 		}
 		public void resultReset(){
 				result = "";
