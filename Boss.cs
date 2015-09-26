@@ -21,8 +21,10 @@ public class Boss : MonoBehaviour {
 		public GameObject lifebarWakuPrefab;
 		public TextAsset textAset;
 
+		public bool isR18 = false;
 		public bool setStartPosition = false;
 		bool isDefeated = false;
+		bool isChangeFace = false;
 
 		int sessionNo = -1;	//現在どこのセッションの行動を行っているか
 		int bulletMargin = 0;	//弾幕発生までのマージン。０以上が設定されていると待ち時間を作る
@@ -63,6 +65,9 @@ public class Boss : MonoBehaviour {
 						if (HP > 0) {
 								movement (gameFrame);
 						}
+						if((HP < (MAX_HP * 0.3f)) && (!isChangeFace)){
+								changeFace ();	//てれ表情に変更
+						}
 				}
 				if((setStartPosition) && (!isDefeated)) checkHP ();
 				if (bulletMargin > 0) decMargin ();	//弾幕待ち時間が設定されていたら
@@ -98,6 +103,12 @@ public class Boss : MonoBehaviour {
 				float sideSwingTime = 3f;
 				transform.position = new Vector3(-0.4f + Mathf.Cos (frame * sideFloatTime )/ sideSwingTime
 						, 1 + Mathf.Sin (frame * floatTime )/ swingTime,transform.position.z);
+		}
+
+		//表情変え
+		void changeFace(){
+				this.GetComponent<Animator>().SetTrigger("tereTrigger");
+				isChangeFace = true;
 		}
 		//*********************************************************
 		/// <summary>

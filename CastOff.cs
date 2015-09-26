@@ -3,8 +3,8 @@ using System.Collections;
 
 public class CastOff : MonoBehaviour {
 
-		public const int POWER_MAX = 5;
-		const float BREAK_PER = 0.2f;
+		public const int POWER_MAX = 500;
+		const float BREAK_PER = 0.5f;
 		SpriteRenderer spriteRenderer;
 		public Sprite afterBreak;
 
