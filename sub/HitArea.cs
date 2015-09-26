@@ -22,6 +22,11 @@ public class HitArea : MonoBehaviour {
 						if (count == 0) {
 								playerDamage ();
 						}
+						//喰らいボム
+						if (Input.GetButton ("Fire2") || (Input.GetKey (KeyCode.X)) || (Input.GetMouseButton (2))) {
+								p.makeBomb ();
+								count = 0;
+						}
 				}
 		}
 

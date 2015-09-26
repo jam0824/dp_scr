@@ -188,7 +188,7 @@ public class player : MonoBehaviour {
 		}
 
 		//******************************************************
-		void makeBomb(){
+		public void makeBomb(){
 				if ((gameManager.bombFlag) || (gameManager.bomb == 0)) {
 						return;
 				}

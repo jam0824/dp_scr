@@ -4,13 +4,16 @@ using System.Collections;
 
 public class StartButton : MonoBehaviour {
 
+		const int VIEW_NET_RANKING_TIME = 60 * 10;
 
+		public GameObject netRankingPrefab;
 		public GameObject normalPrefab;
 		public GameObject r18Prefab;
 		EffectManager effectManager;
 		SoundManager soundManager;
 
 		bool isClick = false;
+		int gameCount = 0;
 
 		// Use this for initialization
 		void Start () {
@@ -25,8 +28,12 @@ public class StartButton : MonoBehaviour {
 								changeNormalScene ();
 						}
 				}
-
-
+				//時間がきたら自動的にネットランキング表示
+				if((!isClick) && (gameCount > VIEW_NET_RANKING_TIME)){
+						changeNetRanking (netRankingPrefab);
+						isClick = true;
+				}
+				gameCount++;
 		}
 
 		/// <summary>
@@ -54,6 +61,11 @@ public class StartButton : MonoBehaviour {
 				}
 		}
 
-
-				
+		/// <summary>
+		/// ネットランキングページを表示
+		/// </summary>
+		/// <param name="prefab">Prefab.</param>
+		void changeNetRanking(GameObject prefab){
+				effectManager.changeScene ("black", prefab, GameObject.Find("TJ_logo").transform.position);
+		}
 }
