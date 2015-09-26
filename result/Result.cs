@@ -7,6 +7,7 @@ public class Result : MonoBehaviour {
 
 		//ランキングデータ格納クラス
 		public class Status{
+				public bool isR18Mode = false;
 				public string userName = "YOU";
 				public int playTime = 60 * 60 * 1;
 				public int score = 1234;
@@ -160,6 +161,7 @@ public class Result : MonoBehaviour {
 		//ゲームマネージャーからデータ取得
 		Status getStatus(){
 				Status data = new Status ();
+				data.isR18Mode = gameManager.isR18Mode;
 				data.score = gameManager.score;
 				data.life = gameManager.life;
 				data.power = gameManager.power;

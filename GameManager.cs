@@ -21,6 +21,7 @@ public class GameManager : MonoBehaviour {
 		public int bomb = 3;
 		public int useBombs = 0;
 		public int defeatEnemies = 0;
+		public bool isR18Mode = false;
 
 
 		public TextAsset scenarioFile;

@@ -8,6 +8,8 @@ using MiniJSON;
 public class RankingLocal : MonoBehaviour {
 
 		public GameObject netRankingPrefab;
+		string savePosition = "RankingData";
+
 
 		bool isClickSns = false;
 		bool mouseFlag = true;
@@ -23,6 +25,7 @@ public class RankingLocal : MonoBehaviour {
 
 		// Use this for initialization
 		void Start () {
+				savePosition = getSavePosition ();	//セーブポジションを選択する
 				effectManager = GameObject.Find("EffectManager").GetComponent<EffectManager>();
 
 				//セーブデータロード
@@ -57,6 +60,8 @@ public class RankingLocal : MonoBehaviour {
 				}
 		}
 
+
+
 		//メッセージ表示
 		void redrawMessage(string msgLeft, string msgRight){
 				GameObject.Find ("RankingMsgLeft").GetComponent<Text> ().text = msgLeft;
@@ -88,11 +93,22 @@ public class RankingLocal : MonoBehaviour {
 				dic.Add ("date", new Common().getDate());
 				return dic;
 		}
-
-
+		//***************************************************************************
+		/// <summary>
+		/// セーブする場所を返す
+		/// </summary>
+		/// <returns>The save position.</returns>
+		string getSavePosition(){
+				//R18モードのときはセーブポジションを変える。
+				if (GameObject.Find ("ResultBase").GetComponent<Result> ().stat.isR18Mode) {
+						return "RankingDataR18";
+				} else {
+						return "RankingData";
+				}
+		}
 		//セーブ
 		void savePlayerPrefs(string json){
-				PlayerPrefs.SetString ("RankingData", json);
+				PlayerPrefs.SetString (savePosition, json);
 		}
 
 		//ロード
@@ -110,10 +126,10 @@ public class RankingLocal : MonoBehaviour {
 						"{\"name\":\"HHH\",\"score\":\"50000\",\"date\":\"2015/9/2 1:02\"}," +
 						"]";
 
-				string data = PlayerPrefs.GetString("RankingData", "");
+				string data = PlayerPrefs.GetString(savePosition, "");
 				return (data != "") ? data : testJson;
 		}
-
+		//***************************************************************************
 		//遷移処理
 		//ランキング画面に移る前のフェード
 		public void preMoveToRanking(){
@@ -143,6 +159,8 @@ public class RankingLocal : MonoBehaviour {
 				redrawMessage (makeMsgLeft(dic, rank), makeMsgRight(dic, rank));
 		}
 
+		//***************************************************************************
+		//SNS
 		public void openTwitter(){
 				isClickSns = true;
 				string msg = WWW.EscapeURL (myName + "さんが#ABCastOffで" + myScore + "点を獲得！");

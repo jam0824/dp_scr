@@ -149,9 +149,18 @@ public class RankingNet : MonoBehaviour {
 				api = GameObject.Find("ConnectAPI").GetComponent<ConnectAPI>();
 				api.resultReset ();
 				Dictionary<string,string> dic = new Dictionary<string,string>();
-				string query = "SELECT *,(SELECT COUNT(*) FROM ANGEL_BEATS_RANKING b WHERE a.score < b.score) + 1 AS rank FROM ANGEL_BEATS_RANKING a order by rank asc;";
+				string query = "SELECT *,(SELECT COUNT(*) FROM ANGEL_BEATS_RANKING b WHERE a.score < b.score) + 1 AS rank FROM ANGEL_BEATS_RANKING a WHERE type=" + getMode() + " order by rank asc;";
 				dic.Add ("md5", new Common().calcMd5(query + word));
 				dic.Add ("query", query);
 				WWW results = api.POST(api.apiUrl, dic);
+		}
+		//typeを返す
+		int getMode(){
+				//R18モードのときはセーブポジションを変える。
+				if (GameObject.Find ("ResultBase").GetComponent<Result> ().stat.isR18Mode) {
+						return 1;
+				} else {
+						return 0;
+				}
 		}
 }

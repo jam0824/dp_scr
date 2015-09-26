@@ -58,9 +58,18 @@ public class EnterName : MonoBehaviour {
 				string word = "milk0824";
 				ConnectAPI w = GameObject.Find("ConnectAPI").GetComponent<ConnectAPI>();
 				Dictionary<string,string> dic = new Dictionary<string,string>();
-				string query = "insert into ANGEL_BEATS_RANKING (type,name,score,date) values (0,'" + name + "'," + score + ",CURDATE());";
+				string query = "insert into ANGEL_BEATS_RANKING (type,name,score,date) values (" + getMode() + ",'" + name + "'," + score + ",CURDATE());";
 				dic.Add ("md5", new Common().calcMd5(query + word));
 				dic.Add ("query", query);
 				WWW results = w.POST(w.apiUrl, dic);
+		}
+		//typeを返す
+		int getMode(){
+				//R18モードのときはセーブポジションを変える。
+				if (GameObject.Find ("ResultBase").GetComponent<Result> ().stat.isR18Mode) {
+						return 1;
+				} else {
+						return 0;
+				}
 		}
 }
