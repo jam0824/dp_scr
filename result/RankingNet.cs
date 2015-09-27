@@ -156,10 +156,17 @@ public class RankingNet : MonoBehaviour {
 		}
 		//typeを返す
 		int getMode(){
-				//R18モードのときはセーブポジションを変える。
-				if (GameObject.Find ("ResultBase").GetComponent<Result> ().stat.isR18Mode) {
-						return 1;
+				GameObject rs = GameObject.Find ("ResultBase");
+				//Result画面から飛んだとき
+				if (rs != null) {
+						//R18モードのときはセーブポジションを変える。
+						if (GameObject.Find ("ResultBase").GetComponent<Result> ().stat.isR18Mode) {
+								return 1;
+						} else {
+								return 0;
+						}
 				} else {
+						//タイトルなどから飛んだとき
 						return 0;
 				}
 		}

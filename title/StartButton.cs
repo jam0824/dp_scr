@@ -7,31 +7,36 @@ public class StartButton : MonoBehaviour {
 		const int VIEW_NET_RANKING_TIME = 60 * 20;
 
 		public GameObject netRankingPrefab;
-		public GameObject normalPrefab;
+		public GameObject normalPrefab;	//HowToPlayのプレハブ
+		public Sprite r18StringSprite;	//R18のアクティブ時の画像
+
 		EffectManager effectManager;
 		SoundManager soundManager;
 
-		bool isClick = false;
 		int gameCount = 0;
-		bool isR18Mode = false;
-		int selectItem = 0;
-		RectTransform yubi;
+		int selectItem = 0;	//０がノーマルモード選択時、１がR18モード選択時
 
+		RectTransform selecter;
+		bool isClick = false;
+		bool isR18Mode = false;
 
 		// Use this for initialization
 		void Start () {
 				soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
 				effectManager = GameObject.Find("EffectManager").GetComponent<EffectManager>();
-				yubi = GameObject.Find("yubi").GetComponent<RectTransform>();
+				selecter = GameObject.Find("selecter").GetComponent<RectTransform>();
+
 				isR18Mode = getR18mode ();
-				//isR18Mode = true;
-				drawYubi (selectItem);
+				isR18Mode = true;
+				changeR18String (r18StringSprite);
+				drawSelecter (selectItem);
 		}
 	
 		// Update is called once per frame
 		void Update () {
 				keyCheck ();
 				if (Input.GetButtonUp ("Fire1") || (Input.GetKeyUp (KeyCode.Z))) {
+						//クリックは例外にしておく
 						if((!Input.GetMouseButton (0)) && (!isClick)){
 								//ノーマルモード
 								if(selectItem == 0){
@@ -50,17 +55,19 @@ public class StartButton : MonoBehaviour {
 				}
 				gameCount++;
 		}
-
+		//****************************************************
+		//モード選択
 		void keyCheck(){
 				float y = Input.GetAxis ("Vertical");
 				if(y > 0){
 						selectItem = 0;
+						drawSelecter (selectItem);
 				}
 				else if((y < 0) && (isR18Mode)){
-
 						selectItem = 1;
+						drawSelecter (selectItem);
 				}
-				drawYubi (selectItem);
+
 		}
 		/// <summary>
 		/// Changes the normal scene.
@@ -109,17 +116,22 @@ public class StartButton : MonoBehaviour {
 				return (PlayerPrefs.GetString ("R18Mode", "") == "iris") ? true : false;
 		}
 
-		//**********************************************************************
-		void drawYubi(int selectItemNo){
-				Vector2 pos = new Vector2 ();
-				if (selectItemNo == 0) {
-						pos.x = -260;
-						pos.y = -180;
-				} else {
-						pos.x = -260;
-						pos.y = -255;
+		//R18モード解禁時のR18ボタンアクティブ化
+		void changeR18String(Sprite sprite){
+				if (isR18Mode) {
+						Image img = GameObject.Find ("startR18").GetComponent<Image> ();
+						img.sprite = sprite;
+						GameObject.Find ("startR18").GetComponent<Button> ().enabled = true;
 				}
-				yubi.anchoredPosition = pos;
+		}
+				
+		//**********************************************************************
+		//モードセレクトの選択を表示
+		void drawSelecter(int selectItemNo){
+				Vector2 pos = new Vector2 ();
+				pos.x = 0;
+				pos.y = (selectItemNo == 0) ? -210 : -280;
+				selecter.anchoredPosition = pos;
 		}
 
 }
