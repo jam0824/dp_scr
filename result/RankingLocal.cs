@@ -21,12 +21,13 @@ public class RankingLocal : MonoBehaviour {
 
 		GameObject fadein;
 		EffectManager effectManager;
-
+		SoundManager soundManager;
 
 		// Use this for initialization
 		void Start () {
 				savePosition = getSavePosition ();	//セーブポジションを選択する
 				effectManager = GameObject.Find("EffectManager").GetComponent<EffectManager>();
+				soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
 
 				//セーブデータロード
 				string json = loadPlayerPrefs ();
@@ -162,6 +163,7 @@ public class RankingLocal : MonoBehaviour {
 		//***************************************************************************
 		//SNS
 		public void openTwitter(){
+				soundManager.playSE ("OK");
 				isClickSns = true;
 				string msg = WWW.EscapeURL (myName + "さんが#ABCastOffで" + string.Format ("{0:#,0}",myScore) + "点を獲得！");
 				string url = "http://twitter.com/intent/tweet?hashtags=ABCastoff&amp;text=" + msg + "&amp;url=http://milk0824.sakura.ne.jp/app/ABCastOff/";
@@ -170,6 +172,7 @@ public class RankingLocal : MonoBehaviour {
 		}
 
 		public void openFacebook(){
+				soundManager.playSE ("OK");
 				isClickSns = true;
 				string message = WWW.EscapeURL ("AngelBeatsCastOffで" + string.Format ("{0:#,0}",myScore) + "点を獲得しました");
 				string msg = WWW.EscapeURL (myName + "さんが#ABCastOffで" + myScore + "点を獲得！");

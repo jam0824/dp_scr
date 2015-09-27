@@ -8,7 +8,8 @@ public class StaffRoleScroll : MonoBehaviour {
 		public string loadLevel = "title";
 
 		float v = 0.5f;
-		int sizeStaff = 1300;
+		//int sizeStaff = 1300;
+		int stopPos = 2250;
 		RectTransform rect;
 
 		bool mouseFlag = true;
@@ -26,7 +27,7 @@ public class StaffRoleScroll : MonoBehaviour {
 		// Update is called once per frame
 		void Update () {
 				//スクロール処理
-				if (rect.position.y < (sizeStaff + 240)) {
+				if (this.GetComponent<RectTransform> ().anchoredPosition.y < stopPos) {
 						scroll ();
 				} else {
 						//マウスがクリックされていないときは遷移
@@ -47,14 +48,15 @@ public class StaffRoleScroll : MonoBehaviour {
 
 		//スクロール
 		void scroll(){
-				Vector3 pos = rect.position;
+				Vector3 pos = this.GetComponent<RectTransform> ().anchoredPosition;
 				pos.y += v;
-				//this.GetComponent<RectTransform> ().position = pos;
-				rect.position = pos;
+				this.GetComponent<RectTransform> ().anchoredPosition = pos;
+				//rect.position = pos;
 		}
 
 		//タイトルに戻る
 		void preChange(){
+				soundManager.fadeOutBGM (bgm, 0.04f, 0.1f);
 				GameObject fadein = new Common ().makeFade (fadePrefab, this.gameObject, 1, 60, 255.0f, 255.0f, 255.0f);
 				Invoke ("changeLevel",1f);
 		}

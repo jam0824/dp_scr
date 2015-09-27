@@ -195,6 +195,7 @@ public class player : MonoBehaviour {
 				gameManager.decBomb ();
 				gameManager.bombFlag = true;
 				GameObject gs = Instantiate (bombPrefab, new Vector3(0,0,0), this.transform.rotation) as GameObject;
+				soundManager.playSE ("bomb");
 		}
 
 		//******************************************************
@@ -221,6 +222,7 @@ public class player : MonoBehaviour {
 			GameObject shot = Instantiate (prefab, pos, this.transform.rotation) as GameObject;
 			player_wepon01 s = shot.GetComponent<player_wepon01>();
 			s.Create(direction, speed);
+
 		}
 
 		//Making one missile object

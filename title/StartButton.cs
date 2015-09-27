@@ -97,6 +97,9 @@ public class StartButton : MonoBehaviour {
 				if (!isClick) {
 						isClick = true;
 						soundManager.playSE ("OK");
+						BGMplay bgm = GameObject.Find ("BGMplay(Clone)").GetComponent<BGMplay> ();
+						soundManager.fadeOutBGM (bgm, 0.04f, 0.1f);
+
 						//位置取得にタイトルを利用しているだけ
 						effectManager.changeScene ("black", prefab, GameObject.Find("TJ_logo").transform.position);
 				}

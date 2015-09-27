@@ -44,11 +44,13 @@ public class Result : MonoBehaviour {
 		float waitTime = 0.5f;
 		bool mouseFlag = false;
 		GameObject fadein;
+		BGMplay bgm;
 
 		// Use this for initialization
 		void Start () {
 				soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
 				effectManager = GameObject.Find("EffectManager").GetComponent<EffectManager>();
+
 
 				//gameObjectからデータを引き継ぐ
 				GameObject gm = GameObject.Find ("GameManager");
@@ -143,6 +145,7 @@ public class Result : MonoBehaviour {
 		void redrawTotal(){
 				resultBoxAll.text = string.Format ("{0:#,0}", stat.score);
 				mouseFlag = true;	//クリックを許可
+				bgm = soundManager.playBGM ("result");
 		}
 		//名前入力ボックス作成
 		void makeEnterNameBox(){

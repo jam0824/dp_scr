@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 public class EnterName : MonoBehaviour {
 
-
+		bool isClick = false;
 
 		// Use this for initialization
 		void Start () {
@@ -15,7 +15,13 @@ public class EnterName : MonoBehaviour {
 	
 		// Update is called once per frame
 		void Update () {
-	
+				//何かボタンが押されたら名前ボックスを出す。
+				if (Input.GetButtonDown ("Fire1")) {
+						if (!isClick) {
+								isClick = true;
+								checkString ();
+						}
+				}
 		}
 
 		//クリックされたら

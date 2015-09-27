@@ -13,6 +13,7 @@ public class SoundManager : MonoBehaviour {
 		const int BGM01 = 1;
 		const int BGM02 = 2;
 		const int BGM03 = 3;
+		const int BGM04 = 4;
 
 		const int EXP_SMALL = 0;
 		const int EXP_BIG = 1;
@@ -28,6 +29,7 @@ public class SoundManager : MonoBehaviour {
 		const int SE_MISSILE_EX = 11;
 		const int SE_POWER_UP = 12;
 		const int SE_RESULT_DRAW = 13;
+		const int SE_BOMB = 14;
 
 	
 
@@ -46,6 +48,9 @@ public class SoundManager : MonoBehaviour {
 					break;
 					case "ending":
 						bgmPlayScr.bgmPlay(BGM03, this);
+						break;
+					case "result":
+						bgmPlayScr.bgmPlay(BGM04, this);
 						break;
 
 			}
@@ -114,6 +119,9 @@ public class SoundManager : MonoBehaviour {
 						break;
 				case "result_draw":
 						sePlayScr.sePlay(SE_RESULT_DRAW, this, volume);
+						break;
+				case "bomb":
+						sePlayScr.sePlay(SE_BOMB, this, volume);
 						break;
 				
 				}

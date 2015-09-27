@@ -19,13 +19,16 @@ public class RankingNet : MonoBehaviour {
 
 		GameObject fadein;
 		EffectManager effectManager;
-
+		SoundManager soundManager;
+		BGMplay bgm;
 
 		// Use this for initialization
 		void Start () {
 				readMySql ();
 				effectManager = GameObject.Find("EffectManager").GetComponent<EffectManager>();
+				soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
 				GameObject rs = GameObject.Find ("ResultBase");
+
 				if (rs != null) {
 						myScore = rs.GetComponent<Result> ().stat.score;
 						myName = rs.GetComponent<Result> ().stat.userName;
@@ -110,6 +113,9 @@ public class RankingNet : MonoBehaviour {
 		//遷移処理
 		void preChange(){
 				GameObject rs = GameObject.Find ("ResultBase");
+				BGMplay bgm = GameObject.Find ("BGMplay(Clone)").GetComponent<BGMplay> ();
+				soundManager.fadeOutBGM (bgm, 0.04f, 0.1f);
+
 				if (rs != null) {
 						//result画面からの遷移ならこっち。
 						//ライフが残っていたらスタッフロール。それ以外はタイトル
