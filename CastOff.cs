@@ -57,20 +57,28 @@ public class CastOff : MonoBehaviour {
 								deleteEnemy ();
 						}
 						Destroy (c.gameObject);
-						Vector3 pos = c.transform.position;
-						float v = 0.5f;
-						pos.x += (Random.value * v) - v / 2;
-						pos.y += (Random.value * v) - v / 2;
-						if (c.gameObject.tag == "p_bullet") {
+
+						//処理落ちするため、たまにしかダメージエフェクトを出さない
+						int r = Random.Range (0,8);
+						if ((c.gameObject.tag == "p_bullet") && (r == 0)) {
+								Vector3 pos = c.transform.position;
+								float v = 0.5f;
+								pos.x += (Random.value * v) - v / 2;
+								pos.y += (Random.value * v) - v / 2;
 								effectManager.makeEffect ("smallExplosion", pos);
 						}
 						else if (c.gameObject.tag == "missile") {
+								Vector3 pos = c.transform.position;
+								float v = 0.5f;
+								pos.x += (Random.value * v) - v / 2;
+								pos.y += (Random.value * v) - v / 2;
 								effectManager.makeEffect ("fireExplosion", pos);
 								soundManager.playSE ("exp_missile");
 						}
 				}
 		}
 
+		//TODO : bom判定なし。
 		void OnTriggerStay2D (Collider2D c){
 				if(c.gameObject.tag == "bomb"){
 						HP--;
@@ -110,6 +118,7 @@ public class CastOff : MonoBehaviour {
 				}
 		}
 
+		//衣装ブレイク
 		void castOff(){
 				SpriteRenderer currentCos = GetComponent<SpriteRenderer> ();
 				currentCos.sprite = afterBreak;
@@ -118,6 +127,7 @@ public class CastOff : MonoBehaviour {
 				p [1].enabled = true;	//破れのコライダーオン
 		}
 
+		//衣装ブレイク時のエフェクト作成
 		void castOffAnimation(){
 				effectManager.flash ();	//フラッシュ作成
 				soundManager.playSE ("castOff");	//効果音

@@ -75,8 +75,8 @@ public class GameManager : MonoBehaviour {
 
 				scoreText = GameObject.Find("score").GetComponent<Text>();
 				fpsText = GameObject.Find("fps").GetComponent<Text>();
-				initLifeBombUI (lifePrefab, life, 25, -110, 32);
-				initLifeBombUI (bombPrefab, bomb, 25, -142, 32);
+				initLifeBombUI (lifePrefab, life, 25, -110, 50, 0.5f);
+				initLifeBombUI (bombPrefab, bomb, 25, -142, 32, 2f);
 
 
 		}
@@ -207,13 +207,13 @@ public class GameManager : MonoBehaviour {
 		/// <param name="x">The x coordinate.</param>
 		/// <param name="y">The y coordinate.</param>
 		/// <param name="w">The width.</param>
-		void initLifeBombUI(GameObject LBPrefab, int num, int x, int y, int w){
+		void initLifeBombUI(GameObject LBPrefab, int num, int x, int y, int w, float scale){
 				for(int i = 0; i < num; i++){
 						GameObject prefab = Instantiate (LBPrefab, this.transform.position, this.transform.rotation) as GameObject;
 						prefab.transform.parent = GameObject.Find ("statusView").transform;	//Canvasを親にする
 
 						RectTransform rt = prefab.GetComponent<RectTransform>();
-						rt.localScale = new Vector3 (2, 2, 1);	//スケールを２倍にする
+						rt.localScale = new Vector3 (scale, scale, 1);	//スケールを２倍にする
 						rt.anchoredPosition = new Vector2(x, y);	//位置変更
 						x += w;
 				}
@@ -223,8 +223,8 @@ public class GameManager : MonoBehaviour {
 		void redrawLifeBombUI(int lifeNum, int bombNum){
 				deleteObject ("UILife");
 				deleteObject ("UIBomb");
-				initLifeBombUI (lifePrefab, lifeNum, 25, -110, 32);
-				initLifeBombUI (bombPrefab, bombNum, 25, -142, 32);
+				initLifeBombUI (lifePrefab, lifeNum, 25, -110, 50, 0.5f);
+				initLifeBombUI (bombPrefab, bombNum, 25, -142, 32, 2f);
 		}
 
 		//指定したタグのオブジェクトを全て削除

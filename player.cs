@@ -206,7 +206,7 @@ public class player : MonoBehaviour {
 
 				for(int i = 0; i < (2 * n + 1); i++){
 						float r = 5f;
-						makeShot (startAngle + (Random.value * r - r / 2), 15.0f);
+						makeShot (startAngle + (Random.value * r - r / 2), 30.0f);
 						startAngle += angle;
 				}
 

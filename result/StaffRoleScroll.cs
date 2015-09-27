@@ -17,6 +17,7 @@ public class StaffRoleScroll : MonoBehaviour {
 
 		// Use this for initialization
 		void Start () {
+				openR18 ();
 				rect = this.GetComponent<RectTransform> ();
 				soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
 				bgm = soundManager.playBGM ("ending");
@@ -60,5 +61,10 @@ public class StaffRoleScroll : MonoBehaviour {
 
 		void changeLevel(){
 				Application.LoadLevel (loadLevel);
+		}
+
+		//R18モード解禁
+		void openR18(){
+				PlayerPrefs.SetString ("R18Mode", "iris");
 		}
 }

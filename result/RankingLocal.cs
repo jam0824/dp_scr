@@ -163,7 +163,7 @@ public class RankingLocal : MonoBehaviour {
 		//SNS
 		public void openTwitter(){
 				isClickSns = true;
-				string msg = WWW.EscapeURL (myName + "さんが#ABCastOffで" + myScore + "点を獲得！");
+				string msg = WWW.EscapeURL (myName + "さんが#ABCastOffで" + string.Format ("{0:#,0}",myScore) + "点を獲得！");
 				string url = "http://twitter.com/intent/tweet?hashtags=ABCastoff&amp;text=" + msg + "&amp;url=http://milk0824.sakura.ne.jp/app/ABCastOff/";
 				Application.OpenURL(url);
 				isClickSns = false;
@@ -171,7 +171,7 @@ public class RankingLocal : MonoBehaviour {
 
 		public void openFacebook(){
 				isClickSns = true;
-				string message = WWW.EscapeURL ("AngelBeatsCastOffで" + myScore + "点を獲得しました");
+				string message = WWW.EscapeURL ("AngelBeatsCastOffで" + string.Format ("{0:#,0}",myScore) + "点を獲得しました");
 				string msg = WWW.EscapeURL (myName + "さんが#ABCastOffで" + myScore + "点を獲得！");
 				string pictureUrl = "http://ecx.images-amazon.com/images/I/61173sb%2Bg%2BL._SL160_.jpg";
 

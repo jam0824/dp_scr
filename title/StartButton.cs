@@ -27,7 +27,7 @@ public class StartButton : MonoBehaviour {
 				selecter = GameObject.Find("selecter").GetComponent<RectTransform>();
 
 				isR18Mode = getR18mode ();
-				isR18Mode = true;
+				//isR18Mode = true;
 				changeR18String (r18StringSprite);
 				drawSelecter (selectItem);
 		}

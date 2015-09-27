@@ -8,10 +8,12 @@ public class MiddleBoss : MonoBehaviour {
 		public int MAX_HP;
 		int HP;
 		public int gameFrame = 0;
+		int runAwayTime = 60 * 11;
 		public GameObject lifebarPrefab;
 		public GameObject lifebarWakuPrefab;
 		public GameObject bulletPrefab;
 		public GameObject itemPrefab;
+		public Sprite middleNakedSprite;
 
 		GameObject prefabWaku;
 
@@ -20,6 +22,7 @@ public class MiddleBoss : MonoBehaviour {
 		EffectManager effectManager;
 		RectTransform lifebar;
 		bool setStartPosition = false;
+		bool isRunAway = false;
 
 		// Use this for initialization
 		void Start () {
@@ -34,7 +37,13 @@ public class MiddleBoss : MonoBehaviour {
 	
 		// Update is called once per frame
 		void Update () {
-
+				if((!isRunAway) && (gameFrame > runAwayTime) && (HP > 0)){
+						moveStatus ();	//ステータスの移動
+						Destroy(prefabWaku);	//ライフバー削除
+						isRunAway = true;
+						StartCoroutine (goHomeMoving (-0.01f, 0.01f));
+				}
+				gameFrame++;
 		}
 
 		//******************************************************************************
@@ -111,21 +120,50 @@ public class MiddleBoss : MonoBehaviour {
 						Destroy(gameObject);
 				}
 		}
+
+
 				
 		/// <summary>
 		/// Deletes the enemy.
 		/// </summary>
 		void deleteEnemy(){
-				makeItem (gameManager.power);	//アイテム作成
+
 				moveStatus ();	//ステータスの移動
 
 				soundManager.playSE ("exp_big");
 				effectManager.makeEffect ("bigExplosion", this.transform.position);
-
+				makeItem (gameManager.power);	//アイテム作成
+				drawExplosion ();	//派手に爆発
 				Destroy(prefabWaku);	//ライフバー削除
-				Destroy(gameObject);
+
+				if (!gameManager.isR18Mode) {
+
+						Destroy (this.gameObject);
+				} else {
+						//脱がす
+						this.GetComponent<SpriteRenderer> ().sprite = middleNakedSprite;
+						Invoke ("waitMoving", 1f);
+				}
+
 
 		}
+		//派手に爆発
+		void drawExplosion(){
+				for(int i = 0; i < 30; i++){
+						Vector3 pos = this.transform.position;
+						float v = 1.5f;
+						pos.x += (Random.value * v) - v / 2;
+						pos.y += (Random.value * v) - v / 2;
+						effectManager.makeEffect ("middleExplosion", pos);
+				}
+		}
+		//少しだけとまって見る時間を作る
+		void waitMoving(){
+				//コールチンスタート
+				StartCoroutine (goHomeMoving (-0.01f, 0.01f));
+		}
+	
+
 		/// <summary>
 		/// ステータスを移動させる
 		/// </summary>
@@ -138,7 +176,14 @@ public class MiddleBoss : MonoBehaviour {
 
 		//アイテム作成
 		private void makeItem(int power){
-			GameObject item = Instantiate (itemPrefab, this.transform.position, this.transform.rotation) as GameObject;
+				for(int i = 0; i < 10; i++){
+						Vector3 pos = this.transform.position;
+						float v = 1.5f;
+						pos.x += (Random.value * v) - v / 2;
+						pos.y += (Random.value * v) - v / 2;
+						GameObject item = Instantiate (itemPrefab, pos, this.transform.rotation) as GameObject;
+				}
+			
 		}
 
 		//コールチンで初回移動
@@ -152,6 +197,20 @@ public class MiddleBoss : MonoBehaviour {
 								makeBullet ();	//弾幕開始
 								yield break;
 						}
+						yield return new WaitForSeconds (0.016f);
+
+				}
+				yield break;
+		}
+
+		//コールチンで帰還
+		public IEnumerator goHomeMoving(float vx, float vy) {
+				//無限ループ防止
+				for (int i = 0; i < 10000; i++) {
+
+						transform.Translate (vx, vy, 0);
+						vx -= 0.001f;
+						vy += 0.005f;
 						yield return new WaitForSeconds (0.016f);
 
 				}
