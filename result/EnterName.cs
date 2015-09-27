@@ -17,6 +17,9 @@ public class EnterName : MonoBehaviour {
 		void Update () {
 				//何かボタンが押されたら名前ボックスを出す。
 				if (Input.GetButtonDown ("Fire1")) {
+						if (Input.GetMouseButton (0))
+								return;
+
 						if (!isClick) {
 								isClick = true;
 								checkString ();

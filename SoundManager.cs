@@ -94,7 +94,7 @@ public class SoundManager : MonoBehaviour {
 							sePlayScr.sePlay(E_BULLET, this, volume);
 							break;
 					case "playerDamage":
-							sePlayScr.sePlay(P_DAMAGE, this, volume);
+						sePlayScr.sePlay(P_DAMAGE, this, 1.0f);
 							break;
 					case "danmaku":
 						sePlayScr.sePlay(DANMAKU, this, volume);
@@ -112,16 +112,16 @@ public class SoundManager : MonoBehaviour {
 						sePlayScr.sePlay(SE_MISSILE, this, volume);
 						break;
 					case "exp_missile":
-						sePlayScr.sePlay(SE_MISSILE_EX, this, volume);
+						sePlayScr.sePlay(SE_MISSILE_EX, this, 1.0f);
 						break;
 				case "power_up":
-						sePlayScr.sePlay(SE_POWER_UP, this, volume);
+						sePlayScr.sePlay(SE_POWER_UP, this, 1.0f);
 						break;
 				case "result_draw":
 						sePlayScr.sePlay(SE_RESULT_DRAW, this, volume);
 						break;
 				case "bomb":
-						sePlayScr.sePlay(SE_BOMB, this, volume);
+						sePlayScr.sePlay(SE_BOMB, this, 1.0f);
 						break;
 				
 				}

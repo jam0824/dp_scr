@@ -21,7 +21,6 @@ public class Boss : MonoBehaviour {
 		public GameObject lifebarWakuPrefab;
 		public TextAsset textAset;
 
-		public bool isR18 = false;
 		public bool setStartPosition = false;
 		bool isDefeated = false;
 		bool isChangeFace = false;
@@ -183,7 +182,39 @@ public class Boss : MonoBehaviour {
 		void defeatedBoss(){
 				isDefeated = true;
 				deleteGurdSkill (activeGurdSkill);
-				deleteGurdSkillBG ();
+				//R18モードと区別
+				if (!gameManager.isR18Mode) {
+						Invoke ("finishGame",2f);	//ちょっと見せ時間を儲ける
+				} else {
+						Invoke ("waitFinish",3f);	//ちょっと見せ時間を儲ける
+				}
+
+		}
+
+		void waitFinish(){
+				StartCoroutine (makeSmall (0.003f));
+		}
+		//コールチンで縮小
+		public IEnumerator makeSmall(float v) {
+				//無限ループ防止
+				for (int i = 0; i < 1000; i++) {
+						Vector3 scale = this.transform.localScale;
+						scale.x -= v;
+						scale.y -= v;
+						this.transform.localScale = scale;
+						if(scale.x < 0.1f){
+								finishGame ();
+								yield break;
+						}
+						yield return new WaitForSeconds (0.016f);
+
+				}
+				yield break;
+		}
+
+		//終了する
+		void finishGame(){
+				//deleteGurdSkillBG ();
 				gameManager.finishGame ();
 		}
 
