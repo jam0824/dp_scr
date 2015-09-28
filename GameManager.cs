@@ -55,6 +55,8 @@ public class GameManager : MonoBehaviour {
 		void Awake(){
 				//破棄しないようにする
 				DontDestroyOnLoad(this.gameObject);
+				//Time.captureFramerate = 30;
+				Application.targetFrameRate = 30;
 		}
 
 		// Use this for initialization
@@ -71,7 +73,7 @@ public class GameManager : MonoBehaviour {
 				GameObject fadein = effectManager.makeFade("colorToTrans", 60, 0.0f, 0.0f, 0.0f);
 				makeBG ();
 
-				bgm = soundManager.playBGM ("bgm00");
+				bgm = (!isR18Mode)? soundManager.playBGM ("bgm00") : soundManager.playBGM ("R18battle");
 
 				scoreText = GameObject.Find("score").GetComponent<Text>();
 				fpsText = GameObject.Find("fps").GetComponent<Text>();
@@ -131,6 +133,9 @@ public class GameManager : MonoBehaviour {
 						case "PlayBGM":
 								string name = scenario [0].getParam () [0];
 								bgm = soundManager.playBGM (name);
+								break;
+						case "PlayBossBGM":
+								bgm = (!isR18Mode) ? soundManager.playBGM ("bgm01") : soundManager.playBGM ("R18boss");
 								break;
 						}
 						scenario.RemoveAt(0);//先頭要素削除。常に先頭を参照

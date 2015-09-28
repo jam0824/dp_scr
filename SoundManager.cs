@@ -14,6 +14,8 @@ public class SoundManager : MonoBehaviour {
 		const int BGM02 = 2;
 		const int BGM03 = 3;
 		const int BGM04 = 4;
+		const int BGM05 = 5;
+		const int BGM06 = 6;
 
 		const int EXP_SMALL = 0;
 		const int EXP_BIG = 1;
@@ -51,6 +53,12 @@ public class SoundManager : MonoBehaviour {
 						break;
 					case "result":
 						bgmPlayScr.bgmPlay(BGM04, this);
+						break;
+					case "R18battle":
+						bgmPlayScr.bgmPlay(BGM05, this);
+						break;
+					case "R18boss":
+						bgmPlayScr.bgmPlay(BGM06, this);
 						break;
 
 			}
