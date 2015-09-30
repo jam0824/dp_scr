@@ -32,38 +32,16 @@ public class StartButton : MonoBehaviour {
 				drawSelecter (selectItem);
 		}
 	
-		// Update is called once per frame
-		void Update () {
-				keyCheck ();
-				if (Input.GetButtonUp ("Fire1") || (Input.GetKeyUp (KeyCode.Z))) {
-						//クリックは例外にしておく
-						if((!Input.GetMouseButton (0)) && (!isClick)){
-								//ノーマルモード
-								if(selectItem == 0){
-										changeNormalScene ();
-								}
-								//R18モード
-								else if(selectItem == 1){
-										changeR18Scene ();
-								}
-						}
-				}
-				//時間がきたら自動的にネットランキング表示
-				if((!isClick) && (gameCount > VIEW_NET_RANKING_TIME)){
-						changeNetRanking (netRankingPrefab);
-						isClick = true;
-				}
-				gameCount++;
-		}
+
 		//****************************************************
 		//モード選択
 		void keyCheck(){
 				float y = Input.GetAxis ("Vertical");
-				if(y > 0){
+				if((y > 0) && (selectItem != 0)){
 						selectItem = 0;
 						drawSelecter (selectItem);
 				}
-				else if((y < 0) && (isR18Mode)){
+				else if((y < 0) && (isR18Mode) && (selectItem != 1)){
 						selectItem = 1;
 						drawSelecter (selectItem);
 				}
@@ -125,6 +103,7 @@ public class StartButton : MonoBehaviour {
 						Image img = GameObject.Find ("startR18").GetComponent<Image> ();
 						img.sprite = sprite;
 						GameObject.Find ("startR18").GetComponent<Button> ().enabled = true;
+						Debug.Log ("R18 enable");
 				}
 		}
 				
@@ -135,6 +114,32 @@ public class StartButton : MonoBehaviour {
 				pos.x = 0;
 				pos.y = (selectItemNo == 0) ? -210 : -280;
 				selecter.anchoredPosition = pos;
+		}
+		// Update is called once per frame
+		void Update () {
+				keyCheck ();
+
+				if (Input.GetButtonDown ("Fire1") || (Input.GetKeyDown (KeyCode.Z))) {
+						Debug.Log ("押された");
+						//クリックは例外にしておく
+						if(!isClick){
+								//ノーマルモード
+								if(selectItem == 0){
+										changeNormalScene ();
+								}
+								//R18モード
+								else if(selectItem == 1){
+										changeR18Scene ();
+								}
+						}
+				}
+
+				//時間がきたら自動的にネットランキング表示
+				if((!isClick) && (gameCount > VIEW_NET_RANKING_TIME)){
+						changeNetRanking (netRankingPrefab);
+						isClick = true;
+				}
+				gameCount++;
 		}
 
 }

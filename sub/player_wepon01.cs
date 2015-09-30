@@ -13,8 +13,8 @@ public class player_wepon01 : MonoBehaviour {
 				//this.transform.RotateAround(new Vector3 (0, 0, 0), transform.up, direction - 90);
 				this.transform.Rotate (0,0,direction - 90);
 
-		v.x = Mathf.Cos (Mathf.Deg2Rad * direction) * speed;
-		v.y = Mathf.Sin (Mathf.Deg2Rad * direction) * speed;
+				v.x = Mathf.Cos (Mathf.Deg2Rad * direction) * speed;
+				v.y = Mathf.Sin (Mathf.Deg2Rad * direction) * speed;
 		GetComponent<Rigidbody2D>().velocity = v;
 	}
 

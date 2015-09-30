@@ -56,7 +56,6 @@ public class GameManager : MonoBehaviour {
 				//破棄しないようにする
 				DontDestroyOnLoad(this.gameObject);
 				//Time.captureFramerate = 30;
-				Application.targetFrameRate = 30;
 		}
 
 		// Use this for initialization
