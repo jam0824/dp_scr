@@ -72,6 +72,15 @@ public class Common : MonoBehaviour {
 				return thisDay.ToString("yyyy/MM/dd (ddd) HH:mm:ss");
 		}
 
+		/// <summary>
+		/// Gets the day.
+		/// </summary>
+		/// <returns>The day.</returns>
+		public int getDay(){
+				DateTime thisDay = DateTime.Now;
+				return thisDay.Day;
+		}
+
 		// **************************json系
 		//Jsonを受け取ってdictionary<string,string>のListで返す
 		public List<Dictionary<string, string>> decodeJson(string source){

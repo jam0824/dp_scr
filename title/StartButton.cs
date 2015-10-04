@@ -115,11 +115,13 @@ public class StartButton : MonoBehaviour {
 				pos.y = (selectItemNo == 0) ? -210 : -280;
 				selecter.anchoredPosition = pos;
 		}
+				
+
 		// Update is called once per frame
 		void Update () {
 				keyCheck ();
 
-				if (Input.GetButtonDown ("Fire1") || (Input.GetKeyDown (KeyCode.Z))) {
+				if (Input.GetButtonDown ("Fire1")){
 						Debug.Log ("押された");
 						//クリックは例外にしておく
 						if(!isClick){

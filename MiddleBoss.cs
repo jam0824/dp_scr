@@ -83,7 +83,7 @@ public class MiddleBoss : MonoBehaviour {
 		//if bullet go out of screen, delete it
 		void OnTriggerEnter2D(Collider2D c){
 				//ポジションにいないときはダメージ処理なし
-				if (!setStartPosition) {
+				if ((!setStartPosition)||(isRunAway)) {
 						return;
 				}
 				//ダメージ処理

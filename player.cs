@@ -59,14 +59,14 @@ public class player : MonoBehaviour {
 		/// Keies the check.
 		/// </summary>
 		void keyCheck(){
-				if (Input.GetButton ("Fire1") || (Input.GetKey (KeyCode.Z))) {
+				if ((Input.GetButton ("Fire1")) || (Input.GetMouseButton (0))) {
 						Shot ();
 						if(gameCount % 180 == 0){
 								makeMissile ();
 						}
 				}
 				//セカンドボタンでボム
-				if (Input.GetButton ("Fire2") || (Input.GetKey (KeyCode.X)) || (Input.GetMouseButton (2))) {
+				if (Input.GetButton ("Fire2")) {
 						makeBomb ();
 				}
 		}

@@ -37,7 +37,7 @@ public class StaffRoleScroll : MonoBehaviour {
 						}
 				}
 				//キー入力でスキップ
-				if (Input.GetButton ("Fire1") || (Input.GetKey (KeyCode.Z)) || (Input.GetMouseButton (0))) {
+				if (Input.GetButton ("Fire1") || (Input.GetMouseButton (0))) {
 						if (mouseFlag) {
 								mouseFlag = false;
 								preChange ();
