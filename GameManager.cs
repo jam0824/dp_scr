@@ -25,7 +25,9 @@ public class GameManager : MonoBehaviour {
 
 
 		public TextAsset scenarioFile;
+		List<scenarioBean> scenario = new List<scenarioBean>();
 
+		//設定用プレハブ
 		public GameObject bossPrefab;
 		public GameObject middleBossPrefab;
 		public GameObject bgPrefab;
@@ -35,9 +37,9 @@ public class GameManager : MonoBehaviour {
 		public GameObject warningMsgPrefab;
 		public GameObject hitodamaPrefab;
 
-		public bool bombFlag = false;
 		public List<GameObject> formaitonManager = new List<GameObject>();
 
+		public bool bombFlag = false;
 		bool playingFlag = true;	//本編フラグ。
 		bool bossAppearFlag = false;
 
@@ -50,7 +52,7 @@ public class GameManager : MonoBehaviour {
 		Common common;
 		BGMplay bgm;
 
-		List<scenarioBean> scenario = new List<scenarioBean>();
+
 
 		void Awake(){
 				//破棄しないようにする
@@ -101,7 +103,7 @@ public class GameManager : MonoBehaviour {
 		//シナリオチェック
 		void checkScenario(int gameSecond){
 				if(gameSecond == scenario[0].getTime()){
-						RectTransform rt;
+						RectTransform rt = GameObject.Find ("statusView").GetComponent<RectTransform> ();
 						switch(scenario[0].getCommand()){
 						case "Start":
 								makeMsg (startMsgPrefab);	//スタートメッセージ
@@ -112,15 +114,11 @@ public class GameManager : MonoBehaviour {
 								break;
 						case "Boss":
 								bossAppearFlag = true;
-								rt = GameObject.Find ("statusView").GetComponent<RectTransform> ();
 								StartCoroutine (common.moveUI(rt, -1f, -50f, 0.01f)); //コールチンでステータス移動
 								makeBoss ();
 								break;
 						case "MiddleBoss":
-					
-								rt = GameObject.Find ("statusView").GetComponent<RectTransform> ();
 								StartCoroutine (common.moveUI(rt, -1f, -50f, 0.01f)); //コールチンでステータス移動
-
 								makeMiddleBoss ();
 								break;
 						case "Warning":
@@ -159,12 +157,12 @@ public class GameManager : MonoBehaviour {
 		}
 		//**********************************************************
 
-		//ボムオン
+		//ボムオン。ボムがオンの時は玉が消える
 		public void bombOn(){
 				bombFlag = true;
 		}
 
-		//ボムオフ
+		//ボムオフ。ボム終了時に呼ばれる。
 		public void bombOff(){
 				bombFlag = false;
 		}
@@ -203,13 +201,12 @@ public class GameManager : MonoBehaviour {
 		// ////////////////////////////////////////////////////////////////////////////////
 		//ライフ・ボム描画
 		/// <summary>
-		/// Inits the life bomb U.
+		/// ライフとボム描画
 		/// </summary>
-		/// <returns>List of UI</returns>
-		/// <param name="LBPrefab">LB prefab.</param>
-		/// <param name="num">Number.</param>
-		/// <param name="x">The x coordinate.</param>
-		/// <param name="y">The y coordinate.</param>
+		/// <param name="LBPrefab">prefab.</param>
+		/// <param name="num">描画個数</param>
+		/// <param name="x">x</param>
+		/// <param name="y">y</param>
 		/// <param name="w">The width.</param>
 		void initLifeBombUI(GameObject LBPrefab, int num, int x, int y, int w, float scale){
 				for(int i = 0; i < num; i++){
@@ -266,6 +263,7 @@ public class GameManager : MonoBehaviour {
 
 
 		// ///////////////////////////////////////
+		//ゲーム中の「operation start」といったメッセージオブジェクト描画
 		void makeMsg(GameObject basePrefab){
 				int x = 0;
 				int y = 0;
@@ -282,9 +280,6 @@ public class GameManager : MonoBehaviour {
 		//ボスを倒したあと
 		public void finishGame(){
 				soundManager.fadeOutBGM (bgm, 0.04f, 0.1f);
-				//透明→色のフェード
-				//GameObject fadein = new Common ().makeFade (fadePrefab, this.gameObject, 1, 180, 255.0f, 255.0f, 255.0f);
-				//makeWhiteOut ();
 				gameOver ();
 		}
 				
@@ -306,7 +301,6 @@ public class GameManager : MonoBehaviour {
 				if (Time.frameCount % Application.targetFrameRate == 0)
 				{
 						fps = 1 / Time.deltaTime;
-						//fpsText.text = string.Format("{0}", 1 / Time.deltaTime);
 						fpsText.text = "FPS " + fps.ToString ("N2");
 				}
 		}
@@ -321,7 +315,7 @@ public class GameManager : MonoBehaviour {
 
 		//**********************************************************************
 		/// <summary>
-		/// ゲーム終了
+		/// ゲーム終了。フェードアウトさせて３秒後に結果画面遷移
 		/// </summary>
 		public void gameOver(){
 				//透明→色のフェード
