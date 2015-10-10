@@ -7,6 +7,7 @@ using System.Collections.Generic;
 public class EnterName : MonoBehaviour {
 
 		bool isClick = false;
+		bool isSent = false;
 
 		// Use this for initialization
 		void Start () {
@@ -64,12 +65,16 @@ public class EnterName : MonoBehaviour {
 		/// Data save to DB
 		/// </summary>
 		void writeMySql(string name, int score){
+				if (isSent)
+						return;
+
 				string word = "milk0824";
 				ConnectAPI w = GameObject.Find("ConnectAPI").GetComponent<ConnectAPI>();
 				Dictionary<string,string> dic = new Dictionary<string,string>();
 				string query = "insert into ANGEL_BEATS_RANKING (type,name,score,date) values (" + getMode() + ",'" + name + "'," + score + ",CURDATE());";
 				dic.Add ("md5", new Common().calcMd5(query + word));
 				dic.Add ("query", query);
+				isSent = true;
 				WWW results = w.POST(w.apiUrl, dic);
 		}
 		//typeを返す
