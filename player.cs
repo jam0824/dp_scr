@@ -39,18 +39,17 @@ public class player : MonoBehaviour {
 				if (gameManager.life == 0)
 						return;
 
-				movePlayerToTouch ();	//マウスで移動
-				keyBoardMove ();		//padなどで移動
+				movePlayerToTouch ();
+				keyBoardMove ();
 
 				//定期フレームごとに弾発射
 				if(gameCount % bulletWaitTime == 0){
-						keyCheck ();	//キーチェック
+						keyCheck ();
 						//ダメージの際の処理
 						if(noDamageCount > 0)
 							noDamageCount = DamageCheck (noDamageCount);
 				}
-
-
+						
 				gameCount++;
 
 		}
@@ -79,11 +78,9 @@ public class player : MonoBehaviour {
 		/// <returns>The check.</returns>
 		/// <param name="cnt">Count.</param>
 		int DamageCheck(int cnt){
-				if (GetComponent<SpriteRenderer> ().enabled) {
-						GetComponent<SpriteRenderer> ().enabled = false;
-				} else {
-						GetComponent<SpriteRenderer> ().enabled = true;
-				}
+				//やられの点滅処理
+				GetComponent<SpriteRenderer> ().enabled = (GetComponent<SpriteRenderer> ().enabled) ? false : true;
+
 				cnt--;
 				//無敵時間終了
 				if(cnt == 0){
@@ -100,10 +97,9 @@ public class player : MonoBehaviour {
 				//マウス入力だったら返す
 				if (Input.GetMouseButton (0))
 						return;
+
 				float speed = 0.05f;
-				// 右・左
 				float x = Input.GetAxis("Horizontal");
-				// 上・下
 				float y = Input.GetAxis ("Vertical");
 
 				Vector3 myPos = transform.position;
@@ -157,6 +153,8 @@ public class player : MonoBehaviour {
 			return;
 		}
 
+		//******************************************
+		//移動アニメーション
 		void setAnimeTrigger(float x, float y){
 
 				if((x < 0) && (y < 0) && (x < y)){
@@ -201,28 +199,27 @@ public class player : MonoBehaviour {
 		//******************************************************
 		void Shot(){
 				float angle = 3f;
+				float speed = 30.0f;
 				float n = Mathf.Floor (gameManager.power / powerUpNum);
-				float startAngle = 90 - (n * angle);
+				float startAngle = 90 - (n * angle);	//発射の初期位置決め
 
-
+				//奇数回数描画
 				for(int i = 0; i < (2 * n + 1); i++){
 						float r = 5f;
-						makeShot (startAngle + (Random.value * r - r / 2), 30.0f);
+						makeShot (startAngle + (Random.value * r - r / 2), speed);
 						startAngle += angle;
 				}
-
 
 				soundManager.playSE ("playerBullet");
 		}
 				
 		//Making one bullet object
 		void makeShot(float direction, float speed){
-			Vector3 pos = this.transform.position;
+				Vector3 pos = this.transform.position;
 				pos.y += 0.3f;
-			GameObject shot = Instantiate (prefab, pos, this.transform.rotation) as GameObject;
-			player_wepon01 s = shot.GetComponent<player_wepon01>();
-			s.Create(direction, speed);
-
+				GameObject shot = Instantiate (prefab, pos, this.transform.rotation) as GameObject;
+				player_wepon01 s = shot.GetComponent<player_wepon01>();
+				s.Create(direction, speed);
 		}
 
 		//Making one missile object

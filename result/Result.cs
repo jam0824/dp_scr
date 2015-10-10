@@ -109,11 +109,12 @@ public class Result : MonoBehaviour {
 				inputMessage ();
 		}
 		void redrawPlayTime(){
-				int time = (int)(300 - (Mathf.Floor (stat.playTime) / 60));
+				int baseTime = (stat.isR18Mode) ? 400 : 300;
+				int time = (int)(baseTime - (Mathf.Floor (stat.playTime) / 60));
 				//プレイ時間が短いときもペナルティ
 				int timeScore = ((Mathf.Floor (stat.playTime) / 60) < 120) ? -stat.timeScore : stat.timeScore;
 
-				messageLeft += "Play Time(Base:300sec)\n300 - " + Mathf.Floor(stat.playTime / 60) + "\n";
+				messageLeft += "Play Time(Base:" + baseTime + "sec)\n" + baseTime + " - " + Mathf.Floor(stat.playTime / 60) + "\n";
 				messageRight += "\n= " + string.Format ("{0:#,0}", (timeScore * time)) + "\n";
 
 				stat.score += timeScore * time;

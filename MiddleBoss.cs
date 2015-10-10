@@ -77,13 +77,17 @@ public class MiddleBoss : MonoBehaviour {
 		void drawLifeBar(){
 				int w = 400;
 				int h = 23;
-				lifebar.sizeDelta = new Vector2 ((int)Mathf.Floor(w * HP / MAX_HP), h);
+				try{
+					lifebar.sizeDelta = new Vector2 ((int)Mathf.Floor(w * HP / MAX_HP), h);
+				}catch(MissingReferenceException e){
+						Debug.Log ("RectTransform has been destroyed.");
+				}
 		}
 
 		//if bullet go out of screen, delete it
 		void OnTriggerEnter2D(Collider2D c){
 				//ポジションにいないときはダメージ処理なし
-				if ((!setStartPosition)||(isRunAway)) {
+				if ((!setStartPosition)||(isRunAway)||(HP <= 0)) {
 						return;
 				}
 				//ダメージ処理

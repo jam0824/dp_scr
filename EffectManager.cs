@@ -78,6 +78,7 @@ public class EffectManager : MonoBehaviour {
 				Invoke ("changeNextScene", 1f);
 
 		}
+		//遷移実体
 		private void changeNextScene(){
 				Destroy (fadein);
 				GameObject scene = Instantiate (nextPrefab, prefabPos, this.transform.rotation) as GameObject;
@@ -114,6 +115,7 @@ public class EffectManager : MonoBehaviour {
 				GameObject flash = Instantiate (flashPrefab, this.transform.position, this.transform.rotation) as GameObject;
 		}
 
+		//デバッグメッセージを書く
 		public void drawDebug(string msg){
 				GameObject debugWindow = Instantiate (debugPrefab, this.transform.position, this.transform.rotation) as GameObject;
 				debugWindow.transform.parent = GameObject.Find ("Canvas").transform;
