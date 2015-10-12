@@ -28,15 +28,13 @@ public class bullet : MonoBehaviour {
 				gameCount++;
 		}
 		
-		//if bullet go out of screen, delete it
-		void OnTriggerEnter2D(Collider2D c){
-				if(c.gameObject.tag == "delete_area"){
-						Destroy(gameObject);
-				}
-		}
 
 		void delete(){
 				GameObject explosion = Instantiate (prefab, this.transform.position, this.transform.rotation) as GameObject;
 				Destroy(this.gameObject);
+		}
+		//画面外にでたとき
+		void OnBecameInvisible(){
+				Destroy (this.gameObject);
 		}
 }

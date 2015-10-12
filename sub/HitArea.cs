@@ -3,7 +3,7 @@ using System.Collections;
 
 public class HitArea : MonoBehaviour {
 
-		const int HIT_WAIT = 10;
+		const int HIT_WAIT = 20;
 		public player p;
 		public GameObject hitPrefab;
 

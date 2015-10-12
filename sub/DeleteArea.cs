@@ -9,4 +9,5 @@ public class DeleteArea : MonoBehaviour {
 						Destroy(gameObject);
 				}
 		}
+
 }

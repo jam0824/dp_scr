@@ -3,7 +3,7 @@ using System.Collections;
 
 public class MiddleBoss : MonoBehaviour {
 
-		const float START_POSISION_Y = 1.0f;
+		const float START_POSISION_Y = 0.0f;
 
 		public int MAX_HP;
 		int HP;
@@ -103,20 +103,7 @@ public class MiddleBoss : MonoBehaviour {
 						}
 
 						if(HP <= 0) deleteEnemy();
-
-						Vector3 pos = c.transform.position;
-						float v = 0.5f;
-						pos.x += (Random.value * v) - v / 2;
-						pos.y += (Random.value * v) - v / 2;
-
-						if(c.gameObject.tag == "p_bullet"){
-								effectManager.makeEffect ("middleExplosion", pos);
-
-						}
-						else if(c.gameObject.tag == "missile"){
-								effectManager.makeEffect ("fireExplosion", pos);
-								soundManager.playSE ("exp_missile");
-						}
+						makeDamageEffect (c);
 				}
 
 				//デリートエリア到着で削除
@@ -125,6 +112,22 @@ public class MiddleBoss : MonoBehaviour {
 				}
 		}
 
+		//ダメージエフェクトを作成
+		void makeDamageEffect(Collider2D c){
+				Vector3 pos = c.transform.position;
+				float v = 0.5f;
+				pos.x += (Random.value * v) - v / 2;
+				pos.y += (Random.value * v) - v / 2;
+
+				if(c.gameObject.tag == "p_bullet"){
+						effectManager.makeEffect ("middleExplosion", pos);
+
+				}
+				else if(c.gameObject.tag == "missile"){
+						effectManager.makeEffect ("fireExplosion", pos);
+						soundManager.playSE ("exp_missile");
+				}
+		}
 
 				
 		/// <summary>
@@ -155,12 +158,13 @@ public class MiddleBoss : MonoBehaviour {
 		void drawExplosion(){
 				for(int i = 0; i < 30; i++){
 						Vector3 pos = this.transform.position;
-						float v = 1.5f;
+						float v = 2.0f;
 						pos.x += (Random.value * v) - v / 2;
 						pos.y += (Random.value * v) - v / 2;
 						effectManager.makeEffect ("middleExplosion", pos);
 				}
 		}
+				
 		//少しだけとまって見る時間を作る
 		void waitMoving(){
 				//コールチンスタート
