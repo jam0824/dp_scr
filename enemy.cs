@@ -159,16 +159,17 @@ public class enemy : MonoBehaviour {
 						HP -= damage;
 						if(HP <= 0) deleteEnemy();
 
-								Destroy (c.gameObject);
+								
 								Vector3 pos = c.transform.position;
 								float v = 0.5f;
 								pos.x += (Random.value * v) - v / 2;
 								pos.y += (Random.value * v) - v / 2;
 						if(c.gameObject.tag == "p_bullet"){
+								ObjectPool.instance.ReleaseGameObject (c.gameObject);
 								effectManager.makeEffect ("middleExplosion", pos);
-
 						}
 						else if(c.gameObject.tag == "missile"){
+								Destroy (c.gameObject);
 								effectManager.makeEffect ("fireExplosion", pos);
 								soundManager.playSE ("exp_missile");
 						}

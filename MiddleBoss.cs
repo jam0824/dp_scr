@@ -99,7 +99,12 @@ public class MiddleBoss : MonoBehaviour {
 						}else{
 								int damage = c.GetComponent<WeponStatBean> ().damage;
 								HP -= damage;
-								Destroy (c.gameObject);
+
+								if (c.gameObject.tag == "p_bullet") {
+										ObjectPool.instance.ReleaseGameObject (c.gameObject);
+								} else {
+										Destroy (c.gameObject);
+								}
 						}
 
 						if(HP <= 0) deleteEnemy();

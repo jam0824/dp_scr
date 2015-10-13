@@ -217,9 +217,13 @@ public class player : MonoBehaviour {
 		void makeShot(float direction, float speed){
 				Vector3 pos = this.transform.position;
 				pos.y += 0.3f;
+
+				ObjectPool.instance.GetGameObject (prefab, direction, speed, pos, this.transform.rotation);
+				/*
 				GameObject shot = Instantiate (prefab, pos, this.transform.rotation) as GameObject;
 				player_wepon01 s = shot.GetComponent<player_wepon01>();
 				s.Create(direction, speed);
+				*/
 		}
 
 		//Making one missile object

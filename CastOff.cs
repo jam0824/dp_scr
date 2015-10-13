@@ -56,8 +56,12 @@ public class CastOff : MonoBehaviour {
 						} else if (HP <= 0) {
 								deleteEnemy ();
 						}
-						Destroy (c.gameObject);
 
+						if (c.gameObject.tag == "p_bullet") {
+								ObjectPool.instance.ReleaseGameObject (c.gameObject);
+						} else {
+								Destroy (c.gameObject);
+						}
 						//処理落ちするため、たまにしかダメージエフェクトを出さない
 						int r = Random.Range (0,8);
 						if ((c.gameObject.tag == "p_bullet") && (r == 0)) {
