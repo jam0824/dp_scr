@@ -2,17 +2,14 @@
 using System.Collections;
 
 public class BGMplay : MonoBehaviour {
-		public AudioClip audioClip;
 		public AudioSource audioSource;
 
 		//******************************再生メイン
 		//Sound Manager側に登録されているSE NOを使って再生を行う
-		public void bgmPlay(int audioNo, SoundManager soundManager){
-					audioSource = GetComponent<AudioSource>();
-					audioClip = soundManager.bgm[audioNo];
-
-					audioSource.clip = audioClip;
-					audioSource.Play ();
+		public void bgmPlay(AudioClip bgm){
+				audioSource = GetComponent<AudioSource>();
+				audioSource.clip = bgm;
+				audioSource.Play ();
 		}
 
 		/// <summary>

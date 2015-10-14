@@ -7,12 +7,11 @@ public class EffectManager : MonoBehaviour {
 
 		public GameObject fadePrefab;
 		public GameObject flashPrefab;
-		public GameObject smallExplosion;
-		public GameObject middleExplosion;
-		public GameObject bigExplosion;
-		public GameObject hitSperk;
-		public GameObject fireExplosion;
 		public GameObject debugPrefab;
+
+		public List<string> labels;
+		public List<GameObject> effects;
+		Dictionary<string,GameObject> effectDictionary;
 
 		GameObject fadein;
 		GameObject nextPrefab;
@@ -21,7 +20,22 @@ public class EffectManager : MonoBehaviour {
 
 		// Use this for initialization
 		void Start () {
-	
+				//inspectorのデータからdictionaryを作る
+				effectDictionary = makeEffectDictionary(labels, effects);
+		}
+
+		/// <summary>
+		/// inspectorのデータからLabelとgameobjectを対応させたdictionaryを作る
+		/// </summary>
+		/// <returns>The effect dictionary.</returns>
+		/// <param name="labels">Labels.</param>
+		/// <param name="effects">Effects.</param>
+		Dictionary<string,GameObject> makeEffectDictionary(List<string> labels, List<GameObject> effects){
+				Dictionary<string, GameObject> dic = new Dictionary<string, GameObject> ();
+				for(int i = 0; i < labels.Count; i++){
+						dic.Add (labels[i], effects[i]);
+				}
+				return dic;
 		}
 	
 		// Update is called once per frame
@@ -31,33 +45,8 @@ public class EffectManager : MonoBehaviour {
 
 		//ゲームオブジェクトを作る
 		public GameObject makeEffect(string effectType, Vector3 pos){
-				GameObject obj = Instantiate (getPrefab(effectType), pos, this.transform.rotation) as GameObject;
+				GameObject obj = Instantiate (effectDictionary [effectType], pos, this.transform.rotation) as GameObject;
 				return obj;
-		}
-
-		//文字列できたタイプからプレファブを返す
-		GameObject getPrefab(string effectType){
-				switch(effectType){
-				case "smallExplosion":
-						return smallExplosion;
-						break;
-
-				case "middleExplosion":
-						return middleExplosion;
-						break;
-				case "bigExplosion":
-						return bigExplosion;
-						break;
-				case "hitSperk":
-						return hitSperk;
-						break;
-				case "fireExplosion":
-						return fireExplosion;
-						break;
-				default :
-						return middleExplosion;
-						break;
-				}
 		}
 
 		/// <summary>

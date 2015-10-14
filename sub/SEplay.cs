@@ -3,8 +3,6 @@ using System.Collections;
 
 public class SEplay : MonoBehaviour {
 	public AudioSource audioSource;
-	public SoundManager soundManager;
-	public AudioClip[] clip;
 	public int destroyFrame = 0;
 	public int frameRate = 60;
 	// Update is called once per frame
@@ -17,13 +15,12 @@ public class SEplay : MonoBehaviour {
 
 	//******************************再生メイン
 	//Sound Manager側に登録されているSE NOを使って再生を行う
-		public void sePlay(int audioNo, SoundManager soundManager, float volume){
+		public void sePlay(AudioClip se, float volume){
 			audioSource = GetComponent<AudioSource>();
 
-			AudioClip audioClip = soundManager.audioClip[audioNo];
-			destroyFrame = (int)Mathf.Ceil(audioClip.length * frameRate);
-			audioSource.clip = audioClip;
-			audioSource.volume = volume;
-			audioSource.PlayOneShot(audioClip);
+				destroyFrame = (int)Mathf.Ceil(se.length * frameRate);
+				audioSource.clip = se;
+				audioSource.volume = volume;
+				audioSource.PlayOneShot(se);
 		}
 }
