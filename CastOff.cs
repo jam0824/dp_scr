@@ -3,13 +3,11 @@ using System.Collections;
 
 public class CastOff : MonoBehaviour {
 
-		public const int POWER_MAX = 500;
 		const float BREAK_PER = 0.5f;
 		SpriteRenderer spriteRenderer;
 		public Sprite afterBreak;
 
 		public GameObject itemPrefab;
-		public GameObject subItemPrefab;
 
 		int MaxHP = 0;
 		public int HP = 0;
@@ -20,6 +18,7 @@ public class CastOff : MonoBehaviour {
 		Boss bossScript;
 		SoundManager soundManager;
 		EffectManager effectManager;
+		Common common;
 
 		// Use this for initialization
 		void Start () {
@@ -27,6 +26,7 @@ public class CastOff : MonoBehaviour {
 				bossScript = GameObject.FindWithTag("boss").GetComponent<Boss>();
 				soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
 				effectManager = GameObject.Find("EffectManager").GetComponent<EffectManager>();
+				common = new Common ();
 				MaxHP = HP;
 				bossScript.HP += HP;
 				bossScript.MAX_HP += HP;
@@ -44,16 +44,19 @@ public class CastOff : MonoBehaviour {
 		void OnTriggerEnter2D(Collider2D c){
 				if (!bossScript.setStartPosition)
 						return;
+
 				if((c.gameObject.tag == "p_bullet")||(c.gameObject.tag == "missile")){
 						int damage = c.GetComponent<WeponStatBean> ().damage;
 						HP -= damage;
 						bossScript.HP -= damage;
+
 						//定数割合以下でキャストオフ
 						if ((HP <= MaxHP * BREAK_PER) && (!breakTrigger)) {
 								breakTrigger = true;
 								castOff ();
 								castOffAnimation ();
 						} else if (HP <= 0) {
+								//服を消す
 								deleteEnemy ();
 						}
 
@@ -65,17 +68,11 @@ public class CastOff : MonoBehaviour {
 						//処理落ちするため、たまにしかダメージエフェクトを出さない
 						int r = Random.Range (0,8);
 						if ((c.gameObject.tag == "p_bullet") && (r == 0)) {
-								Vector3 pos = c.transform.position;
-								float v = 0.5f;
-								pos.x += (Random.value * v) - v / 2;
-								pos.y += (Random.value * v) - v / 2;
+								Vector3 pos = common.randomPos (c.transform.position, 0.5f);
 								effectManager.makeEffect ("smallExplosion", pos);
 						}
 						else if (c.gameObject.tag == "missile") {
-								Vector3 pos = c.transform.position;
-								float v = 0.5f;
-								pos.x += (Random.value * v) - v / 2;
-								pos.y += (Random.value * v) - v / 2;
+								Vector3 pos = common.randomPos (c.transform.position, 0.5f);
 								effectManager.makeEffect ("fireExplosion", pos);
 								soundManager.playSE ("exp_missile");
 						}
@@ -95,10 +92,7 @@ public class CastOff : MonoBehaviour {
 						} else if (HP <= 0) {
 								deleteEnemy ();
 						}
-						Vector3 pos = this.transform.position;
-						float v = 0.5f;
-						pos.x += (Random.value * v) - v / 2;
-						pos.y += (Random.value * v) - v / 2;
+						Vector3 pos = common.randomPos (this.transform.position, 0.5f);
 						effectManager.makeEffect ("middleExplosion", pos);
 				}
 
@@ -114,12 +108,7 @@ public class CastOff : MonoBehaviour {
 
 		//アイテム作成
 		private void makeItem(int power){
-				if (power < POWER_MAX) {
-
-						GameObject item = Instantiate (itemPrefab, this.transform.position, this.transform.rotation) as GameObject;
-				} else {
-						GameObject item = Instantiate (subItemPrefab, this.transform.position, this.transform.rotation) as GameObject;
-				}
+				GameObject item = Instantiate (itemPrefab, this.transform.position, this.transform.rotation) as GameObject;
 		}
 
 		//衣装ブレイク

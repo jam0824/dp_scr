@@ -66,7 +66,7 @@ public class player : MonoBehaviour {
 				}
 				//セカンドボタンでボム
 				if (Input.GetButton ("Fire2")) {
-						makeBomb ();
+						bool b = makeBomb ();
 				}
 		}
 
@@ -106,18 +106,9 @@ public class player : MonoBehaviour {
 				myPos.x += x * speed;
 				myPos.y += y * speed;
 
-				Vector3 pos = Camera.main.WorldToViewportPoint (myPos);
-
-				if ((pos.x < 0.0f) || (pos.x > 1.0f) || (pos.y < 0.0f) || (pos.y > 1.0f)) {
-						transform.position = oldPos;	//前回の位置に戻しておく（０以下で動かなくなってしまうため）
-				} else {
-						// 移動する向きとスピードを代入する
-						transform.position = myPos;
-						oldPos = transform.position;	//位置を保持しておく
-						setAnimeTrigger (x, y);
-				}
-
-
+				transform.position = myPos;
+				//画面外に出そうになった時の処理
+				oldPos = checkOutOfScreen (Camera.main.WorldToViewportPoint (myPos), oldPos, x, y);
 		}
 				
 		//******************************************************
@@ -137,20 +128,33 @@ public class player : MonoBehaviour {
 				   (Mathf.Abs(world_vec.y - this.transform.position.y) < moveOffset)){
 				}
 				else{
-					Vector3 pos = Camera.main.WorldToViewportPoint (transform.position);
-						//画面外だったら
-						if ((pos.x < 0.0f) || (pos.x > 1.0f) || (pos.y < 0.0f) || (pos.y > 1.0f)) {
-											transform.position = oldPos;	//前回の位置に戻しておく（０以下で動かなくなってしまうため）
-						} else {
-								this.GetComponent<Rigidbody2D> ().AddForce (nVec * speed);
-								oldPos = transform.position;	//位置を保持しておく
-										setAnimeTrigger (nVec.x, nVec.y);
-						}
-					
+						//画面外に出そうな時の処理
+						oldPos = checkOutOfScreen (Camera.main.WorldToViewportPoint (transform.position), oldPos, nVec.x, nVec.y);
+						this.GetComponent<Rigidbody2D> ().AddForce (nVec * speed);
+				
 				}
 				
 			}
 			return;
+		}
+
+		/// <summary>
+		/// Checks the out of screen.
+		/// </summary>
+		/// <param name="pos">Position.</param>
+		/// <param name="oldPos">Old position.</param>
+		/// <param name="vx">Vx.xの増分</param>
+		/// <param name="vy">Vy.yの増分</param>
+		Vector3 checkOutOfScreen(Vector3 pos, Vector3 oldPos, float vx, float vy){
+				//画面外だったら
+				if ((pos.x < 0.0f) || (pos.x > 1.0f) || (pos.y < 0.0f) || (pos.y > 1.0f)) {
+						this.transform.position = oldPos;	//前回の位置に戻しておく（０以下で動かなくなってしまうため）
+						return oldPos;
+				} else {
+						oldPos = transform.position;	//位置を保持しておく
+						setAnimeTrigger (vx, vy);
+						return oldPos;
+				}
 		}
 
 		//******************************************
@@ -186,14 +190,15 @@ public class player : MonoBehaviour {
 		}
 
 		//******************************************************
-		public void makeBomb(){
+		public bool makeBomb(){
 				if ((gameManager.bombFlag) || (gameManager.bomb == 0)) {
-						return;
+						return false;
 				}
 				gameManager.decBomb ();
 				gameManager.bombFlag = true;
 				GameObject gs = Instantiate (bombPrefab, new Vector3(0,0,0), this.transform.rotation) as GameObject;
 				soundManager.playSE ("bomb");
+				return true;
 		}
 
 		//******************************************************
@@ -217,13 +222,7 @@ public class player : MonoBehaviour {
 		void makeShot(float direction, float speed){
 				Vector3 pos = this.transform.position;
 				pos.y += 0.3f;
-
 				ObjectPool.instance.GetGameObject (prefab, direction, speed, pos, this.transform.rotation);
-				/*
-				GameObject shot = Instantiate (prefab, pos, this.transform.rotation) as GameObject;
-				player_wepon01 s = shot.GetComponent<player_wepon01>();
-				s.Create(direction, speed);
-				*/
 		}
 
 		//Making one missile object

@@ -6,7 +6,7 @@ using System.IO;
 
 public class Boss : MonoBehaviour {
 
-		const int BULLET_MARGIN = 120;
+		const float BULLET_MARGIN = 2f;
 		const float START_POSISION_Y = 1.0f;
 		const int gameFPS = 60;
 
@@ -69,20 +69,12 @@ public class Boss : MonoBehaviour {
 						}
 				}
 				if((setStartPosition) && (!isDefeated)) checkHP ();
-				if (bulletMargin > 0) decMargin ();	//弾幕待ち時間が設定されていたら
+
 				drawLifeBar ();
 				gameFrame++;
 
 		}
-
-		//*******
-		//次の弾幕までのマージン計算
-		void decMargin(){
-				bulletMargin--;
-				if (bulletMargin == 0) {
-						activeGurdSkill = makeGurdSkill (activeGurdSkill);
-				}
-		}
+				
 
 		//******************************************************************************
 		//最初の移動
@@ -121,8 +113,6 @@ public class Boss : MonoBehaviour {
 				}
 				//ボム切り替えトリガー
 				if(bossData.Count > 0){
-						//Debug.Log ("sessionNo = " + bossData[0].sessionNo);
-						//Debug.Log ("Hp = " + bossData[0].startHP);
 					if(((HP * 100 / MAX_HP) <= bossData[0].startHP) && (sessionNo < bossData[0].sessionNo)){
 							sessionNo = bossData [0].sessionNo;
 							changeBomb (bossData[0]);
@@ -138,32 +128,36 @@ public class Boss : MonoBehaviour {
 		void changeBomb(BossData data){
 				//弾幕発動中なら削除
 				if (activeGurdSkill != null) {
+						deleteGurdSkill (activeGurdSkill);
 						if (activeGurdSkill.tag == "gurdSkill") {
-								deleteGurdSkill (activeGurdSkill);
 								gameManager.makeBG ();	//通常背景復帰
 								deleteGurdSkillBG ();	//弾幕背景削除
 								soundManager.playSE ("exp_big");
-						} else {
-								deleteGurdSkill (activeGurdSkill);
-						}
+						} 
 				}
 
 				switch(data.patternName){
 				//弾幕時
 				case "bomb":
 						activeGurdSkill = gurdSkills [data.bombNo];	//弾幕予約
-						bulletMargin = BULLET_MARGIN;
 						makeGurdSkillBG ();
 						gameManager.deleteBG ();
 						soundManager.playSE ("danmaku");
 						makeLabelGuardSkillName (data.bombNo);
+						Invoke ("invokeBomb", BULLET_MARGIN);
 						break;
 				//通常
 				case "normal":
 						activeGurdSkill = normalSkills[data.bombNo];//弾幕予約
-						bulletMargin = BULLET_MARGIN;
+						Invoke ("invokeBomb", BULLET_MARGIN);
 						break;
 				}
+		}
+
+		//*******
+		//次の弾幕までのマージン計算
+		void invokeBomb(){
+				activeGurdSkill = makeGurdSkill (activeGurdSkill);
 		}
 
 		/// <summary>
@@ -183,17 +177,19 @@ public class Boss : MonoBehaviour {
 				isDefeated = true;
 				deleteGurdSkill (activeGurdSkill);
 				//R18モードと区別
-				if (!gameManager.isR18Mode) {
-						Invoke ("finishGame",2f);	//ちょっと見せ時間を儲ける
-				} else {
+				if (gameManager.isR18Mode) {
 						Invoke ("waitFinish",3f);	//ちょっと見せ時間を儲ける
+				} else {
+						Invoke ("finishGame",2f);	//ちょっと見せ時間を儲ける
 				}
 
 		}
 
+		//コールちんを呼び出すためだけ
 		void waitFinish(){
 				StartCoroutine (makeSmall (0.003f));
 		}
+
 		//コールチンで縮小
 		public IEnumerator makeSmall(float v) {
 				//無限ループ防止
@@ -230,8 +226,6 @@ public class Boss : MonoBehaviour {
 				pos.y += 0.5f;
 				GameObject gs = Instantiate (bullet, pos, this.transform.rotation) as GameObject;
 				gs.transform.parent = this.transform;	//Bossオブジェクト親にする
-
-
 				return gs;
 		}
 

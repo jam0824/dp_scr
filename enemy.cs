@@ -3,13 +3,11 @@ using System.Collections;
 
 public class enemy : MonoBehaviour {
 
-		const int POWER_MAX = 500;
 		public int HP = 1;
 		public bool isDirAnime = false;
 		public float startBulletTime = 0.0f;
 		public GameObject bulletPrefab;
 		public GameObject itemPrefab;
-		public GameObject subItemPrefab;
 
 		public FormationDataBean data;
 
@@ -20,6 +18,7 @@ public class enemy : MonoBehaviour {
 		GameManager gameManager;
 		SoundManager soundManager;
 		EffectManager effectManager;
+		Common common;
 
 		int maxHP = 1;
 
@@ -33,6 +32,8 @@ public class enemy : MonoBehaviour {
 				gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
 				soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
 				effectManager = GameObject.Find("EffectManager").GetComponent<EffectManager>();
+				common = new Common ();
+
 				//弾を打つ場合指定時間で発射
 				if(startBulletTime != 0){
 						Invoke ("makeBullet", startBulletTime);
@@ -46,7 +47,8 @@ public class enemy : MonoBehaviour {
 				movement ();
 		}
 
-
+		//**********************************************************
+		//初期化
 		public void initEnemy(FormationDataBean d){
 				data = d;
 				Vector2 vec;
@@ -95,7 +97,6 @@ public class enemy : MonoBehaviour {
 						//stopYが設定している場合、座標が基準を超えたらストップさせる
 						if((stopY != 0)&&(this.transform.position.y < stopY)){
 								this.GetComponent<Rigidbody2D> ().velocity = Vector3.zero;
-								//this.GetComponent<Rigidbody2D> ().angularVelocity = Vector3.zero;
 								stopY = 0;
 						}
 						break;
@@ -109,6 +110,8 @@ public class enemy : MonoBehaviour {
 				}
 		}
 
+		//***********************************************
+		//アニメーション
 		void setAnimeTrigger(float x, float y){
 				if((x == 0) && (y == 0)){
 						return;
@@ -143,27 +146,20 @@ public class enemy : MonoBehaviour {
 
 		//アイテム作成
 		private void makeItem(int power){
-				if(power < POWER_MAX){
+				GameObject item = Instantiate (itemPrefab, this.transform.position, this.transform.rotation) as GameObject;
 
-						GameObject item = Instantiate (itemPrefab, this.transform.position, this.transform.rotation) as GameObject;
-				}else{
-						GameObject item = Instantiate (subItemPrefab, this.transform.position, this.transform.rotation) as GameObject;
-				}
 		}
 
 
 		//if bullet go out of screen, delete it
 		void OnTriggerEnter2D(Collider2D c){
 				if((c.gameObject.tag == "p_bullet")||(c.gameObject.tag == "missile")){
-						int damage = c.GetComponent<WeponStatBean> ().damage;
-						HP -= damage;
+						HP -= c.GetComponent<WeponStatBean> ().damage;
+
 						if(HP <= 0) deleteEnemy();
 
-								
-								Vector3 pos = c.transform.position;
-								float v = 0.5f;
-								pos.x += (Random.value * v) - v / 2;
-								pos.y += (Random.value * v) - v / 2;
+						Vector3 pos = common.randomPos (c.transform.position, 0.5f);
+
 						if(c.gameObject.tag == "p_bullet"){
 								ObjectPool.instance.ReleaseGameObject (c.gameObject);
 								effectManager.makeEffect ("middleExplosion", pos);
@@ -185,17 +181,14 @@ public class enemy : MonoBehaviour {
 						HP--;
 						if(HP <= 0) deleteEnemy();
 
-
-						Vector3 pos = this.transform.position;
-						float v = 0.5f;
-						pos.x += (Random.value * v) - v / 2;
-						pos.y += (Random.value * v) - v / 2;
+						Vector3 pos = common.randomPos (this.transform.position, 0.5f);
 						effectManager.makeEffect ("middleExplosion", pos);
-
 
 				}
 
 		}
+
+
 
 		/// <summary>
 		/// Deletes the enemy.

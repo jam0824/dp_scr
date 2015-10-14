@@ -20,6 +20,7 @@ public class MiddleBoss : MonoBehaviour {
 		GameManager gameManager;
 		SoundManager soundManager;
 		EffectManager effectManager;
+		Common common;
 		RectTransform lifebar;
 		bool setStartPosition = false;
 		bool isRunAway = false;
@@ -29,6 +30,7 @@ public class MiddleBoss : MonoBehaviour {
 				gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
 				soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
 				effectManager = GameObject.Find("EffectManager").GetComponent<EffectManager>();
+				common = new Common ();
 				HP = MAX_HP;
 				makeLifeBar ();
 				//コールチンスタート
@@ -37,6 +39,7 @@ public class MiddleBoss : MonoBehaviour {
 	
 		// Update is called once per frame
 		void Update () {
+				//HPを残して逃げる時
 				if((!isRunAway) && (gameFrame > runAwayTime) && (HP > 0)){
 						moveStatus ();	//ステータスの移動
 						Destroy(prefabWaku);	//ライフバー削除
@@ -91,24 +94,19 @@ public class MiddleBoss : MonoBehaviour {
 						return;
 				}
 				//ダメージ処理
-				//TODO : bombが機能していない 
-				if((c.gameObject.tag == "p_bullet")||(c.gameObject.tag == "missile") || (c.gameObject.tag == "bomb")){
-						drawLifeBar ();
-						if(c.gameObject.tag == "bomb"){
-								HP--;
-						}else{
-								int damage = c.GetComponent<WeponStatBean> ().damage;
-								HP -= damage;
+				if((c.gameObject.tag == "p_bullet")||(c.gameObject.tag == "missile")){
 
-								if (c.gameObject.tag == "p_bullet") {
-										ObjectPool.instance.ReleaseGameObject (c.gameObject);
-								} else {
-										Destroy (c.gameObject);
-								}
+						HP -= c.GetComponent<WeponStatBean> ().damage;
+
+						if (c.gameObject.tag == "p_bullet") {
+								ObjectPool.instance.ReleaseGameObject (c.gameObject);
+						} else {
+								Destroy (c.gameObject);
 						}
-
+								
 						if(HP <= 0) deleteEnemy();
 						makeDamageEffect (c);
+						drawLifeBar ();
 				}
 
 				//デリートエリア到着で削除
@@ -117,12 +115,22 @@ public class MiddleBoss : MonoBehaviour {
 				}
 		}
 
+		//ボムは継続してダメージ
+		void OnTriggerStay2D (Collider2D c){
+				if(c.gameObject.tag == "bomb"){
+						HP--;
+						if(HP <= 0) deleteEnemy();
+
+						Vector3 pos = common.randomPos (this.transform.position, 0.5f);
+						effectManager.makeEffect ("middleExplosion", pos);
+
+				}
+
+		}
+
 		//ダメージエフェクトを作成
 		void makeDamageEffect(Collider2D c){
-				Vector3 pos = c.transform.position;
-				float v = 0.5f;
-				pos.x += (Random.value * v) - v / 2;
-				pos.y += (Random.value * v) - v / 2;
+				Vector3 pos = common.randomPos (c.transform.position, 0.5f);
 
 				if(c.gameObject.tag == "p_bullet"){
 						effectManager.makeEffect ("middleExplosion", pos);
@@ -142,10 +150,12 @@ public class MiddleBoss : MonoBehaviour {
 
 				moveStatus ();	//ステータスの移動
 
-				soundManager.playSE ("exp_big");
 				effectManager.makeEffect ("bigExplosion", this.transform.position);
-				makeItem (gameManager.power);	//アイテム作成
 				drawExplosion ();	//派手に爆発
+				soundManager.playSE ("exp_big");
+
+				makeItem (gameManager.power);	//アイテム作成
+
 				Destroy(prefabWaku);	//ライフバー削除
 
 				if (!gameManager.isR18Mode) {
@@ -162,10 +172,7 @@ public class MiddleBoss : MonoBehaviour {
 		//派手に爆発
 		void drawExplosion(){
 				for(int i = 0; i < 30; i++){
-						Vector3 pos = this.transform.position;
-						float v = 2.0f;
-						pos.x += (Random.value * v) - v / 2;
-						pos.y += (Random.value * v) - v / 2;
+						Vector3 pos = common.randomPos (this.transform.position, 2.0f);
 						effectManager.makeEffect ("middleExplosion", pos);
 				}
 		}
@@ -190,10 +197,7 @@ public class MiddleBoss : MonoBehaviour {
 		//アイテム作成
 		private void makeItem(int power){
 				for(int i = 0; i < 10; i++){
-						Vector3 pos = this.transform.position;
-						float v = 1.5f;
-						pos.x += (Random.value * v) - v / 2;
-						pos.y += (Random.value * v) - v / 2;
+						Vector3 pos = common.randomPos (this.transform.position, 1.5f);
 						GameObject item = Instantiate (itemPrefab, pos, this.transform.rotation) as GameObject;
 				}
 			
