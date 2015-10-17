@@ -34,13 +34,45 @@ public class CastOff : MonoBehaviour {
 		
 		// Update is called once per frame
 		void Update () {
+
 		
 		}
 
 
-
-
+		//bulletヒット時
+		public void hitBullet(int damage){
+				if (!bossScript.setStartPosition)
+						return;
+				HP -= damage;
+				bossScript.HP -= damage;
+				checkHP ();
+		}
+		void checkHP(){
+				//定数割合以下でキャストオフ
+				if ((HP <= MaxHP * BREAK_PER) && (!breakTrigger)) {
+						breakTrigger = true;
+						castOff ();
+						castOffAnimation ();
+				} else if (HP <= 0) {
+						//服を消す
+						deleteEnemy ();
+				}
+		}
+		//エフェクトはキャスト側で出す。
+		public void makeEffect(string tag, Vector3 bulletPos){
+				int r = Random.Range (0,8);
+				if ((tag == "p_bullet") && (r == 0)) {
+						Vector3 pos = common.randomPos (bulletPos, 0.5f);
+						effectManager.makeEffect ("smallExplosion", pos);
+				}
+				else if (tag == "missile") {
+						Vector3 pos = common.randomPos (bulletPos, 0.5f);
+						effectManager.makeEffect ("fireExplosion", pos);
+						soundManager.playSE ("exp_missile");
+				}
+		}
 		//if bullet go out of screen, delete it
+		/*
 		void OnTriggerEnter2D(Collider2D c){
 				if (!bossScript.setStartPosition)
 						return;
@@ -50,15 +82,6 @@ public class CastOff : MonoBehaviour {
 						HP -= damage;
 						bossScript.HP -= damage;
 
-						//定数割合以下でキャストオフ
-						if ((HP <= MaxHP * BREAK_PER) && (!breakTrigger)) {
-								breakTrigger = true;
-								castOff ();
-								castOffAnimation ();
-						} else if (HP <= 0) {
-								//服を消す
-								deleteEnemy ();
-						}
 
 						if (c.gameObject.tag == "p_bullet") {
 								ObjectPool.instance.ReleaseGameObject (c.gameObject);
@@ -78,8 +101,9 @@ public class CastOff : MonoBehaviour {
 						}
 				}
 		}
-
+		*/
 		//TODO : bom判定なし。
+		/*
 		void OnTriggerStay2D (Collider2D c){
 				if(c.gameObject.tag == "bomb"){
 						HP--;
@@ -97,6 +121,7 @@ public class CastOff : MonoBehaviour {
 				}
 
 		}
+		*/
 		/// <summary>
 		/// Deletes the enemy.
 		/// </summary>
@@ -115,9 +140,9 @@ public class CastOff : MonoBehaviour {
 		void castOff(){
 				SpriteRenderer currentCos = GetComponent<SpriteRenderer> ();
 				currentCos.sprite = afterBreak;
-				PolygonCollider2D[] p = GetComponents<PolygonCollider2D>();
-				p [0].enabled = false; //ノーマルのコライダーオフ
-				p [1].enabled = true;	//破れのコライダーオン
+				//PolygonCollider2D[] p = GetComponents<PolygonCollider2D>();
+				//p [0].enabled = false; //ノーマルのコライダーオフ
+				//p [1].enabled = true;	//破れのコライダーオン
 		}
 
 		//衣装ブレイク時のエフェクト作成

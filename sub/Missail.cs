@@ -9,12 +9,13 @@ public class Missail : MonoBehaviour {
 		float oldDirection = 45f;
 		int gameCount = 0;
 		int timing = 1;
+		int damage = 20;
 		Common common;
 
 		// Use this for initialization
 		void Start () {
 				common = new Common ();
-
+				damage = GetComponent<WeponStatBean> ().damage;
 		}
 
 		//初期設定
@@ -76,6 +77,12 @@ public class Missail : MonoBehaviour {
 				GameObject enemy = GameObject.FindGameObjectWithTag ("enemy");
 				if (enemy != null) {
 						pos = enemy.transform.position;
+						return pos;
+				}
+				enemy = GameObject.FindGameObjectWithTag ("close");
+				if (enemy != null) {
+						pos = enemy.transform.position;
+						return pos;
 				} else {
 						pos = new Vector2 (0, 5);
 				}
@@ -95,8 +102,29 @@ public class Missail : MonoBehaviour {
 
 		//if bullet go out of screen, delete it
 		void OnTriggerEnter2D(Collider2D c){
-				if(c.gameObject.tag == "delete_area"){
+
+				switch(c.gameObject.tag){
+				case "close":
+						CastOff castOff = c.gameObject.GetComponent<CastOff> ();
+						castOff.hitBullet (damage);
+						castOff.makeEffect(transform.tag, transform.position);
 						Destroy(gameObject);
+						break;
+				case "enemy":
+						enemy enemyScript = c.gameObject.GetComponent<enemy> ();
+						enemyScript.hitBullet (damage);
+						enemyScript.makeEffect(transform.tag, transform.position);
+						Destroy(gameObject);
+						break;
+				case "middleBoss":
+						MiddleBoss middleBoss = c.gameObject.GetComponent<MiddleBoss> ();
+						middleBoss.hitBullet (damage);
+						middleBoss.makeEffect(transform.tag, transform.position);
+						Destroy(gameObject);
+						break;
+				case "delete_area":
+						Destroy(gameObject);
+						break;
 				}
 		}
 }

@@ -202,6 +202,7 @@ public class player : MonoBehaviour {
 		}
 
 		//******************************************************
+
 		void Shot(){
 				float angle = 3f;
 				float speed = 30.0f;
@@ -217,13 +218,44 @@ public class player : MonoBehaviour {
 
 				soundManager.playSE ("playerBullet");
 		}
-				
 		//Making one bullet object
 		void makeShot(float direction, float speed){
 				Vector3 pos = this.transform.position;
 				pos.y += 0.3f;
-				ObjectPool.instance.GetGameObject (prefab, direction, speed, pos, this.transform.rotation);
+				GameObject go = ObjectPool.instance.GetGameObject (prefab, pos, this.transform.rotation);
+				go.transform.position = pos;
+				go.transform.rotation = this.transform.rotation;
+				go.transform.Rotate (0,0,direction - 90);
 		}
+
+		/*
+		//*********************For Android
+		void Shot(){
+				float angle = 2f;
+				float speed = 30.0f;
+				float n = Mathf.Floor (gameManager.power / powerUpNum);
+				//float startAngle = 90 - (n * angle);	//発射の初期位置決め
+				float w = 0.2f;
+				Vector3 pos = this.transform.position;
+				pos.x -= (n * w) / 2;
+
+				//奇数回数描画
+				for(int i = 0; i < n + 1; i++){
+						float r = 5f;
+						makeShot (pos, 90f, speed);
+						pos.x += w;
+				}
+
+				soundManager.playSE ("playerBullet");
+		}
+		void makeShot(Vector3 pos, float direction, float speed){
+
+				pos.y += 0.3f;
+				GameObject go = ObjectPool.instance.GetGameObject (prefab, pos, this.transform.rotation);
+				go.transform.position = pos;
+				go.transform.Rotate (0,0,direction - 90);
+		}
+		*/
 
 		//Making one missile object
 		void makeMissile(){

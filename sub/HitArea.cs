@@ -3,7 +3,7 @@ using System.Collections;
 
 public class HitArea : MonoBehaviour {
 
-		const int HIT_WAIT = 15;
+		const int HIT_WAIT = 20;
 		public player p;
 		public GameObject hitPrefab;
 
@@ -34,7 +34,8 @@ public class HitArea : MonoBehaviour {
 		void OnTriggerEnter2D(Collider2D c){
 				if ((c.gameObject.tag == "e_bullet") || (c.gameObject.tag == "enemy")) {
 						if (c.gameObject.tag == "e_bullet") {
-								Destroy (c.gameObject);
+								c.gameObject.GetComponent<bullet> ().delete ();
+
 						}
 						GameObject e = Instantiate (hitPrefab, this.transform.position, this.transform.rotation) as GameObject;
 						count = HIT_WAIT;

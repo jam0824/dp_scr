@@ -42,11 +42,14 @@ public class enemy : MonoBehaviour {
 		
 		// Update is called once per frame
 		void Update () {
-
-			
+				if(isDirAnime){
+						enemyAnimation ();
+				}
+		}
+		//固定時間呼び出し
+		void FixedUpdate(){
 				movement ();
 		}
-
 		//**********************************************************
 		//初期化
 		public void initEnemy(FormationDataBean d){
@@ -102,12 +105,14 @@ public class enemy : MonoBehaviour {
 						break;
 				}
 
-				if(isDirAnime){
-						float x = this.transform.position.x - prevPos.x; //xの差分
-						float y = this.transform.position.y - prevPos.y; //yの差分
-						setAnimeTrigger (x, y);
-						prevPos = this.transform.position;
-				}
+
+		}
+
+		private void enemyAnimation(){
+				float x = this.transform.position.x - prevPos.x; //xの差分
+				float y = this.transform.position.y - prevPos.y; //yの差分
+				setAnimeTrigger (x, y);
+				prevPos = this.transform.position;
 		}
 
 		//***********************************************
@@ -150,31 +155,44 @@ public class enemy : MonoBehaviour {
 
 		}
 
+		//bulletヒット時
+		public void hitBullet(int damage){
+				HP -= damage;
+				checkHP ();
+		}
+		void checkHP(){
+				if (HP <= 0) {
+						//敵を倒す
+						deleteEnemy ();
+				}
+		}
+		//エフェクトは敵側で出す。
+		public void makeEffect(string tag, Vector3 bulletPos){
+
+				if (tag == "p_bullet"){
+						//エフェクトはたまにだけにする
+						if(HP > 5){
+								int r = Random.Range (0,5);
+								if (r != 0)
+										return;
+						}
+						Vector3 pos = common.randomPos (bulletPos, 0.5f);
+						effectManager.makeEffect ("middleExplosion", pos);
+				}
+				else if (tag == "missile") {
+						Vector3 pos = common.randomPos (bulletPos, 0.5f);
+						effectManager.makeEffect ("fireExplosion", pos);
+						soundManager.playSE ("exp_missile");
+				}
+		}
 
 		//if bullet go out of screen, delete it
 		void OnTriggerEnter2D(Collider2D c){
-				if((c.gameObject.tag == "p_bullet")||(c.gameObject.tag == "missile")){
-						HP -= c.GetComponent<WeponStatBean> ().damage;
-
-						if(HP <= 0) deleteEnemy();
-
-						Vector3 pos = common.randomPos (c.transform.position, 0.5f);
-
-						if(c.gameObject.tag == "p_bullet"){
-								ObjectPool.instance.ReleaseGameObject (c.gameObject);
-								effectManager.makeEffect ("middleExplosion", pos);
-						}
-						else if(c.gameObject.tag == "missile"){
-								Destroy (c.gameObject);
-								effectManager.makeEffect ("fireExplosion", pos);
-								soundManager.playSE ("exp_missile");
-						}
-				}
 				//デリートエリア到着で削除
 				if(c.gameObject.tag == "delete_area"){
 						Destroy(gameObject);
 				}
-			}
+		}
 
 		void OnTriggerStay2D (Collider2D c){
 				if(c.gameObject.tag == "bomb"){

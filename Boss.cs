@@ -56,6 +56,13 @@ public class Boss : MonoBehaviour {
 		
 		// Update is called once per frame
 		void Update () {
+				if((setStartPosition) && (!isDefeated)) checkHP ();
+				drawLifeBar ();
+				gameFrame++;
+
+		}
+
+		void FixedUpdate(){
 				//最初の登場シーン
 				if(!setStartPosition){
 						startingMoving ();
@@ -68,10 +75,6 @@ public class Boss : MonoBehaviour {
 								changeFace ();	//てれ表情に変更
 						}
 				}
-				if((setStartPosition) && (!isDefeated)) checkHP ();
-
-				drawLifeBar ();
-				gameFrame++;
 
 		}
 				

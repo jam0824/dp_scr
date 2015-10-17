@@ -23,6 +23,7 @@ public class GameManager : MonoBehaviour {
 		public int defeatEnemies = 0;
 		public bool isR18Mode = false;
 
+		public int bulletNum = 0;
 
 		public TextAsset scenarioFile;
 		List<scenarioBean> scenario = new List<scenarioBean>();
@@ -58,6 +59,8 @@ public class GameManager : MonoBehaviour {
 				//破棄しないようにする
 				DontDestroyOnLoad(this.gameObject);
 				//Time.captureFramerate = 30;
+				QualitySettings.vSyncCount = 0; // VSyncをOFFにする
+				Application.targetFrameRate = GAME_FPS; // ターゲットフレームレートを60に設定
 		}
 
 		// Use this for initialization
@@ -66,7 +69,6 @@ public class GameManager : MonoBehaviour {
 				soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
 				common = new Common ();
 
-				Application.targetFrameRate = GAME_FPS;
 				ScenarioLoader loader = new ScenarioLoader ();
 				scenario = loader.fileRead (scenarioFile);
 
@@ -109,7 +111,6 @@ public class GameManager : MonoBehaviour {
 								makeMsg (startMsgPrefab);	//スタートメッセージ
 								break;
 						case "Formation":
-								Debug.Log ("time=" + scenario[0].getTime());
 								makeFormation (scenario[0].getParam());
 								break;
 						case "Boss":

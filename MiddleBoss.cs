@@ -83,35 +83,16 @@ public class MiddleBoss : MonoBehaviour {
 				try{
 					lifebar.sizeDelta = new Vector2 ((int)Mathf.Floor(w * HP / MAX_HP), h);
 				}catch(MissingReferenceException e){
-						Debug.Log ("RectTransform has been destroyed.");
+						//Debug.Log ("RectTransform has been destroyed.");
 				}
 		}
 
 		//if bullet go out of screen, delete it
 		void OnTriggerEnter2D(Collider2D c){
-				//ポジションにいないときはダメージ処理なし
-				if ((!setStartPosition)||(isRunAway)||(HP <= 0)) {
-						return;
-				}
-				//ダメージ処理
-				if((c.gameObject.tag == "p_bullet")||(c.gameObject.tag == "missile")){
-
-						HP -= c.GetComponent<WeponStatBean> ().damage;
-
-						if (c.gameObject.tag == "p_bullet") {
-								ObjectPool.instance.ReleaseGameObject (c.gameObject);
-						} else {
-								Destroy (c.gameObject);
-						}
-								
-						if(HP <= 0) deleteEnemy();
-						makeDamageEffect (c);
-						drawLifeBar ();
-				}
-
+		
 				//デリートエリア到着で削除
 				if(c.gameObject.tag == "delete_area"){
-						Destroy(gameObject);
+						Destroy(this.gameObject);
 				}
 		}
 
@@ -127,16 +108,36 @@ public class MiddleBoss : MonoBehaviour {
 				}
 
 		}
-
-		//ダメージエフェクトを作成
-		void makeDamageEffect(Collider2D c){
-				Vector3 pos = common.randomPos (c.transform.position, 0.5f);
-
-				if(c.gameObject.tag == "p_bullet"){
-						effectManager.makeEffect ("middleExplosion", pos);
-
+		//bulletヒット時
+		public void hitBullet(int damage){
+				//ポジションにいないときはダメージ処理なし
+				if ((!setStartPosition)||(isRunAway)||(HP <= 0)) {
+						return;
 				}
-				else if(c.gameObject.tag == "missile"){
+				HP -= damage;
+				checkHP ();
+		}
+		void checkHP(){
+				if (HP <= 0) {
+						//敵を倒す
+						deleteEnemy ();
+				}
+				drawLifeBar ();
+		}
+		//エフェクトは敵側で出す。
+		public void makeEffect(string tag, Vector3 bulletPos){
+
+				if (tag == "p_bullet"){
+						if(HP > 5){
+								int r = Random.Range (0,5);
+								if (r != 0)
+										return;
+						}
+						Vector3 pos = common.randomPos (bulletPos, 0.5f);
+						effectManager.makeEffect ("middleExplosion", pos);
+				}
+				else if (tag == "missile") {
+						Vector3 pos = common.randomPos (bulletPos, 0.5f);
 						effectManager.makeEffect ("fireExplosion", pos);
 						soundManager.playSE ("exp_missile");
 				}
@@ -223,16 +224,22 @@ public class MiddleBoss : MonoBehaviour {
 		//コールチンで帰還
 		public IEnumerator goHomeMoving(float vx, float vy) {
 				//無限ループ防止
-				for (int i = 0; i < 10000; i++) {
+				for (int i = 0; i < 600; i++) {
 
 						transform.Translate (vx, vy, 0);
 						vx -= 0.001f;
-						vy += 0.005f;
+						vy += 0.003f;
 						yield return new WaitForSeconds (0.016f);
 
 				}
+				Destroy (this.gameObject);
 				yield break;
 		}
 
+		//画面外にでたとき
+		void OnBecameInvisible(){
+				if(setStartPosition)
+					Destroy (this.gameObject);
+		}
 
 }

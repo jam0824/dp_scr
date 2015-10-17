@@ -4,11 +4,11 @@ using System.Collections;
 public class bullet : MonoBehaviour {
 		public GameObject prefab;
 		public bool isGraze = false;
+		public int gameCount = 0;
 
-		GameManager gameManager;
 		float bullet_direction;
 
-		int gameCount = 0;
+
 		int deleteFrame = 420;
 
 	// 移動速度を設定
@@ -16,12 +16,18 @@ public class bullet : MonoBehaviour {
 	// @param speed 速さ
 	// @param rotationTrigger(bool)  rotate image
 		void Start() {
-				gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
-	}
+				//bulletPool = GameObject.Find("BulletPool");
+				//transform.parent = bulletPool.transform;
+		}
+		void OnEnable ()
+		{
+				gameCount = 0;
+		}
+
 
 		void Update(){
 				//もしボムが発動中だったら削除
-				if ((gameManager.bombFlag == true) ||(gameCount > deleteFrame)){
+				if (gameCount > deleteFrame){
 						delete ();
 				}
 
@@ -29,12 +35,20 @@ public class bullet : MonoBehaviour {
 		}
 		
 
-		void delete(){
+		public void delete(){
 				GameObject explosion = Instantiate (prefab, this.transform.position, this.transform.rotation) as GameObject;
 				Destroy(this.gameObject);
+				//deleteExec ();
 		}
 		//画面外にでたとき
 		void OnBecameInvisible(){
 				Destroy (this.gameObject);
+				//deleteExec ();
+		}
+		public void deleteExec(){
+				//gameCount = 0;
+				//Destroy(this.GetComponent("BulletScript"));
+				//BulletPool.instance.ReleaseGameObject (gameObject);
+				Destroy (gameObject);
 		}
 }
