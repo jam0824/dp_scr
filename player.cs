@@ -222,10 +222,11 @@ public class player : MonoBehaviour {
 		void makeShot(float direction, float speed){
 				Vector3 pos = this.transform.position;
 				pos.y += 0.3f;
-				GameObject go = ObjectPool.instance.GetGameObject (prefab, pos, this.transform.rotation);
-				go.transform.position = pos;
-				go.transform.rotation = this.transform.rotation;
+				GameObject go = ObjectPool.instance.GetGameObject (prefab, pos, this.transform.rotation, direction);
+				go.transform.rotation = Quaternion.Euler(0, 0, 0);
 				go.transform.Rotate (0,0,direction - 90);
+				go.transform.position = pos;
+
 		}
 
 		/*

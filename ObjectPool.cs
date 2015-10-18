@@ -28,7 +28,7 @@ public class ObjectPool : MonoBehaviour
 		private Dictionary<int, List<GameObject>> pooledGameObjects = new Dictionary<int, List<GameObject>> ();
 
 		// ゲームオブジェクトをpooledGameObjectsから取得する。必要であれば新たに生成する
-		public GameObject GetGameObject (GameObject prefab, Vector2 position, Quaternion rotation)
+		public GameObject GetGameObject (GameObject prefab, Vector2 position, Quaternion rotation, float direction)
 		{
 				// プレハブのインスタンスIDをkeyとする
 				int key = prefab.GetInstanceID ();
@@ -51,14 +51,14 @@ public class ObjectPool : MonoBehaviour
 						if (go.activeInHierarchy == false) {
 								// これから使用するのでアクティブにする
 								go.SetActive (true);
-
+								go = setObjectStat (go, position, rotation, direction);
 								return go;
 						}
 				}
 
 				// 使用できるものがないので新たに生成する
 				go = (GameObject)Instantiate (prefab, position, rotation);
-
+				go = setObjectStat (go, position, rotation, direction);
 				// ObjectPoolゲームオブジェクトの子要素にする
 				go.transform.parent = transform;
 
@@ -69,7 +69,7 @@ public class ObjectPool : MonoBehaviour
 		}
 
 		//オブジェクトのセッティング
-		private GameObject setObjectStat(GameObject go, float direction, float speed, Vector2 position, Quaternion rotation){
+		private GameObject setObjectStat(GameObject go, Vector2 position, Quaternion rotation, float direction){
 				Vector2 v;
 				go.transform.position = position;
 				go.transform.rotation = rotation;
