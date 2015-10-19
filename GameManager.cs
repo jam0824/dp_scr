@@ -59,7 +59,7 @@ public class GameManager : MonoBehaviour {
 				//破棄しないようにする
 				DontDestroyOnLoad(this.gameObject);
 				//Time.captureFramerate = 30;
-				QualitySettings.vSyncCount = 0; // VSyncをOFFにする
+				//QualitySettings.vSyncCount = 0; // VSyncをOFFにする
 				Application.targetFrameRate = GAME_FPS; // ターゲットフレームレートを60に設定
 		}
 
