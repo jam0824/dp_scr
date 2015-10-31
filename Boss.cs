@@ -32,7 +32,9 @@ public class Boss : MonoBehaviour {
 		GameManager gameManager;
 		SoundManager soundManager;
 		EffectManager effectManager;
+		Common common;
 		List<BossData> bossData = new List<BossData>();
+
 
 		//ボス行動パターンデータ
 		class BossData{
@@ -51,6 +53,7 @@ public class Boss : MonoBehaviour {
 				gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
 				soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
 				effectManager = GameObject.Find("EffectManager").GetComponent<EffectManager>();
+				common = GameObject.Find("Common").GetComponent<Common>();
 				makeLifeBar ();
 		}
 		
@@ -286,7 +289,7 @@ public class Boss : MonoBehaviour {
 				lifebar.localScale = new Vector3 (1, 1, 1);	//スケールを元に戻す
 				lifebar.anchoredPosition = new Vector2(0, 0);	//位置変更
 
-				StartCoroutine (new Common().moveUI(waku, -1f, -40f, 0.01f));	//コールチンでバー移動
+				StartCoroutine (common.moveUI(waku, -1f, -40f, 0.01f));	//コールチンでバー移動
 		}
 				
 		//バーを再描画

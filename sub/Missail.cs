@@ -14,7 +14,7 @@ public class Missail : MonoBehaviour {
 
 		// Use this for initialization
 		void Start () {
-				common = new Common ();
+				common = GameObject.Find("Common").GetComponent<Common>();
 				damage = GetComponent<WeponStatBean> ().damage;
 		}
 

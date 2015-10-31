@@ -20,6 +20,7 @@ public class RankingNet : MonoBehaviour {
 		GameObject fadein;
 		EffectManager effectManager;
 		SoundManager soundManager;
+		Common common;
 		BGMplay bgm;
 
 		// Use this for initialization
@@ -27,6 +28,7 @@ public class RankingNet : MonoBehaviour {
 				readMySql ();
 				effectManager = GameObject.Find("EffectManager").GetComponent<EffectManager>();
 				soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
+				common = GameObject.Find("Common").GetComponent<Common>();
 				GameObject rs = GameObject.Find ("ResultBase");
 
 				if (rs != null) {
@@ -59,7 +61,7 @@ public class RankingNet : MonoBehaviour {
 
 		//描画
 		void drawJsonString(string json){
-				List<Dictionary<string, string>> dic = new Common().decodeJson(json);
+				List<Dictionary<string, string>> dic = common.decodeJson(json);
 				//クリア後ではないときに呼ばれたら１位から描画
 				int redrawPosition = 0;
 				if (myScore != 0) {
@@ -156,7 +158,7 @@ public class RankingNet : MonoBehaviour {
 				api.resultReset ();
 				Dictionary<string,string> dic = new Dictionary<string,string>();
 				string query = "SELECT *,(SELECT COUNT(*) FROM ANGEL_BEATS_RANKING b WHERE a.score < b.score AND type=" + getMode() + ") + 1 AS rank FROM ANGEL_BEATS_RANKING a WHERE type=" + getMode() + " order by rank asc;";
-				dic.Add ("md5", new Common().calcMd5(query + word));
+				dic.Add ("md5", common.calcMd5(query + word));
 				dic.Add ("query", query);
 				WWW results = api.POST(api.apiUrl, dic);
 		}

@@ -32,7 +32,7 @@ public class enemy : MonoBehaviour {
 				gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
 				soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
 				effectManager = GameObject.Find("EffectManager").GetComponent<EffectManager>();
-				common = new Common ();
+				common = GameObject.Find("Common").GetComponent<Common>();
 
 				//弾を打つ場合指定時間で発射
 				if(startBulletTime != 0){
@@ -69,7 +69,7 @@ public class enemy : MonoBehaviour {
 										data.bezierParam [3] / 100, 
 										-1 * Camera.main.transform.position.z)	//カメラの高さを合わせないとずれる
 								);
-								stopY = tmpPos.y
+								stopY = tmpPos.y;
 						}
 						break;
 				case "GravityRandom":
@@ -129,7 +129,7 @@ public class enemy : MonoBehaviour {
 				}
 				//単位ベクトルからの角度計算
 				Vector2 vec = new Vector2 (x, y).normalized;
-				float rot = new Common ().vectorToAngle (vec);
+				float rot = common.vectorToAngle (vec);
 
 				if((rot >= -45 ) && (rot < 45)){
 						this.GetComponent<Animator>().SetTrigger("rightTrigger");

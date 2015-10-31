@@ -18,10 +18,13 @@ public class EffectManager : MonoBehaviour {
 		string fadeType = "black";
 		Vector3 prefabPos;
 
+		Common common;
+
 		// Use this for initialization
 		void Start () {
 				//inspectorのデータからdictionaryを作る
 				effectDictionary = makeEffectDictionary(labels, effects);
+				common = GameObject.Find("Common").GetComponent<Common>();
 		}
 
 		/// <summary>
@@ -59,9 +62,9 @@ public class EffectManager : MonoBehaviour {
 				fadeType = type;
 				prefabPos = pos;
 				if (fadeType == "white") {
-						fadein = new Common ().makeFade (fadePrefab, this.gameObject, 1, 60, 255.0f, 255.0f, 255.0f);
+						fadein = common.makeFade (fadePrefab, this.gameObject, 1, 60, 255.0f, 255.0f, 255.0f);
 				} else {
-						fadein = new Common ().makeFade (fadePrefab, this.gameObject, 1, 60, 0.0f, 0.0f, 0.0f);
+						fadein = common.makeFade (fadePrefab, this.gameObject, 1, 60, 0.0f, 0.0f, 0.0f);
 				}
 				nextPrefab = nextScene;
 				Invoke ("changeNextScene", 1f);
@@ -74,9 +77,9 @@ public class EffectManager : MonoBehaviour {
 				scene.transform.parent = GameObject.Find ("Canvas").transform;	//Canvasを親にする
 				scene.GetComponent<RectTransform>().localScale = new Vector3 (1, 1, 1);	//スケールを元に戻す
 				if (fadeType == "white") {
-						fadein = new Common ().makeFade (fadePrefab, this.gameObject, 0, 60, 255.0f, 255.0f, 255.0f);
+						fadein = common.makeFade (fadePrefab, this.gameObject, 0, 60, 255.0f, 255.0f, 255.0f);
 				} else {
-						fadein = new Common ().makeFade (fadePrefab, this.gameObject, 0, 60, 0.0f, 0.0f, 0.0f);
+						fadein = common.makeFade (fadePrefab, this.gameObject, 0, 60, 0.0f, 0.0f, 0.0f);
 				}
 		}
 

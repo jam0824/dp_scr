@@ -22,26 +22,28 @@ public class RankingLocal : MonoBehaviour {
 		GameObject fadein;
 		EffectManager effectManager;
 		SoundManager soundManager;
+		Common common;
 
 		// Use this for initialization
 		void Start () {
 				savePosition = getSavePosition ();	//セーブポジションを選択する
 				effectManager = GameObject.Find("EffectManager").GetComponent<EffectManager>();
 				soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
+				common = GameObject.Find("Common").GetComponent<Common>();
 
 				//セーブデータロード
 				string json = loadPlayerPrefs ();
 				//DictionaryのListに変換
-				List<Dictionary<string, string>> dic = new Common().decodeJson(json);
+				List<Dictionary<string, string>> dic = common.decodeJson(json);
 
 				//自分のデータをリストの最後に追加
 				myScore = GameObject.Find ("ResultBase").GetComponent<Result> ().stat.score;
 				myName = GameObject.Find ("ResultBase").GetComponent<Result> ().stat.userName;
 				dic.Add (makeMyProfile(myName, myScore));
 				//並び替え
-				dic = new Common().sortDictionaryList (dic, "score");
+				dic = common.sortDictionaryList (dic, "score");
 				//保存
-				savePlayerPrefs (new Common ().encodeDictionaryToJson (dic, rank));
+				savePlayerPrefs (common.encodeDictionaryToJson (dic, rank));
 
 				//表示
 				redrawMessage (makeMsgLeft(dic, rank), makeMsgRight(dic, rank));
@@ -91,7 +93,7 @@ public class RankingLocal : MonoBehaviour {
 				Dictionary<string, string> dic = new Dictionary<string, string> ();
 				dic.Add ("name", name);
 				dic.Add ("score", score.ToString());
-				dic.Add ("date", new Common().getDate());
+				dic.Add ("date", common.getDate());
 				return dic;
 		}
 		//***************************************************************************
@@ -153,9 +155,9 @@ public class RankingLocal : MonoBehaviour {
 				//セーブデータロード
 				string json = loadPlayerPrefs ();
 				//DictionaryのListに変換
-				List<Dictionary<string, string>> dic = new Common().decodeJson(json);
+				List<Dictionary<string, string>> dic = common.decodeJson(json);
 				//並び替え
-				dic = new Common().sortDictionaryList (dic, "score");
+				dic = common.sortDictionaryList (dic, "score");
 				//表示
 				redrawMessage (makeMsgLeft(dic, rank), makeMsgRight(dic, rank));
 		}

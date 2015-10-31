@@ -30,7 +30,7 @@ public class MiddleBoss : MonoBehaviour {
 				gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
 				soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
 				effectManager = GameObject.Find("EffectManager").GetComponent<EffectManager>();
-				common = new Common ();
+				common = GameObject.Find("Common").GetComponent<Common>();
 				HP = MAX_HP;
 				makeLifeBar ();
 				//コールチンスタート

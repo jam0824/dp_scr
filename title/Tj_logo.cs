@@ -9,6 +9,7 @@ public class Tj_logo : MonoBehaviour {
 		GameObject fadein;
 		SoundManager soundManager;
 		EffectManager effectManager;
+		Common common;
 
 		int gameCount = 0;
 		int viewTitleTime = 60 * 4;
@@ -18,8 +19,9 @@ public class Tj_logo : MonoBehaviour {
 		void Start () {
 				effectManager = GameObject.Find("EffectManager").GetComponent<EffectManager>();
 				soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
+				common = GameObject.Find("Common").GetComponent<Common>();
 				BGMplay bgm = soundManager.playBGM ("opening");
-				fadein = new Common ().makeFade (fadePrefab, this.gameObject, 0, 60, 255.0f, 255.0f, 255.0f);
+				fadein = common.makeFade (fadePrefab, this.gameObject, 0, 60, 255.0f, 255.0f, 255.0f);
 		}
 	
 		// Update is called once per frame

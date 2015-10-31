@@ -7,8 +7,18 @@ using MiniJSON;
 
 public class Common : MonoBehaviour {
 
+		const int GAME_FPS = 60;
 		bool debugMode = true;
 
+		void Awake () {
+				// ターゲットフレームレートを60に設定
+				Application.targetFrameRate = GAME_FPS; 
+
+				//Androidで戻るキーでアプリを終了させる
+				if(Input.GetKey(KeyCode.Escape)){
+						Application.Quit();
+				}
+		}
 		//***************************************************************数学系
 		/// <summary>
 		/// 単位ベクトルから角度を返す。0~180 / 0~ -180

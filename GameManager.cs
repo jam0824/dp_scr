@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.IO;
 
 public class GameManager : MonoBehaviour {
-
 		const int START_TIME = 5;
 
 		public int gameFrame = 0;
@@ -66,7 +65,7 @@ public class GameManager : MonoBehaviour {
 		void Start () {
 				effectManager = GameObject.Find("EffectManager").GetComponent<EffectManager>();
 				soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
-				common = new Common ();
+				common = GameObject.Find("Common").GetComponent<Common>();
 
 				ScenarioLoader loader = new ScenarioLoader ();
 				scenario = loader.fileRead (scenarioFile);

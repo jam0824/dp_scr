@@ -14,6 +14,7 @@ public class StaffRoleScroll : MonoBehaviour {
 
 		bool mouseFlag = true;
 		SoundManager soundManager;
+		Common common;
 		BGMplay bgm;
 
 		// Use this for initialization
@@ -21,6 +22,7 @@ public class StaffRoleScroll : MonoBehaviour {
 				openR18 ();
 				rect = this.GetComponent<RectTransform> ();
 				soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
+				common = GameObject.Find("Common").GetComponent<Common>();
 				bgm = soundManager.playBGM ("ending");
 		}
 	
@@ -57,7 +59,7 @@ public class StaffRoleScroll : MonoBehaviour {
 		//タイトルに戻る
 		void preChange(){
 				soundManager.fadeOutBGM (bgm, 0.04f, 0.1f);
-				GameObject fadein = new Common ().makeFade (fadePrefab, this.gameObject, 1, 60, 255.0f, 255.0f, 255.0f);
+				GameObject fadein = common.makeFade (fadePrefab, this.gameObject, 1, 60, 255.0f, 255.0f, 255.0f);
 				Invoke ("changeLevel",1f);
 		}
 

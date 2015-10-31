@@ -8,10 +8,11 @@ public class EnterName : MonoBehaviour {
 
 		bool isClick = false;
 		bool isSent = false;
+		Common common;
 
 		// Use this for initialization
 		void Start () {
-
+				common = GameObject.Find("Common").GetComponent<Common>();
 		}
 	
 		// Update is called once per frame
@@ -72,7 +73,7 @@ public class EnterName : MonoBehaviour {
 				ConnectAPI w = GameObject.Find("ConnectAPI").GetComponent<ConnectAPI>();
 				Dictionary<string,string> dic = new Dictionary<string,string>();
 				string query = "insert into ANGEL_BEATS_RANKING (type,name,score,date) values (" + getMode() + ",'" + name + "'," + score + ",CURDATE());";
-				dic.Add ("md5", new Common().calcMd5(query + word));
+				dic.Add ("md5", common.calcMd5(query + word));
 				dic.Add ("query", query);
 				isSent = true;
 				WWW results = w.POST(w.apiUrl, dic);
