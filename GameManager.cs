@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 
 public class GameManager : MonoBehaviour {
-		const int GAME_FPS = 60;
+
 		const int START_TIME = 5;
 
 		public int gameFrame = 0;
@@ -38,6 +38,7 @@ public class GameManager : MonoBehaviour {
 		public GameObject warningMsgPrefab;
 		public GameObject hitodamaPrefab;
 
+
 		public List<GameObject> formaitonManager = new List<GameObject>();
 
 		public bool bombFlag = false;
@@ -58,9 +59,7 @@ public class GameManager : MonoBehaviour {
 		void Awake(){
 				//破棄しないようにする
 				DontDestroyOnLoad(this.gameObject);
-				//Time.captureFramerate = 30;
-				//QualitySettings.vSyncCount = 0; // VSyncをOFFにする
-				Application.targetFrameRate = GAME_FPS; // ターゲットフレームレートを60に設定
+
 		}
 
 		// Use this for initialization
@@ -330,6 +329,8 @@ public class GameManager : MonoBehaviour {
 		public void goResult(){
 				Application.LoadLevel ("SceneResult");
 		}
+
+
 
 
 }

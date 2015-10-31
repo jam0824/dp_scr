@@ -7,6 +7,7 @@ using MiniJSON;
 
 public class Common : MonoBehaviour {
 
+		bool debugMode = true;
 
 		//***************************************************************数学系
 		/// <summary>
@@ -227,5 +228,28 @@ public class Common : MonoBehaviour {
 				return destStrBuilder.ToString();
 		}
 
+		/// <summary>
+		/// ビュー座標からワールド座標を返す
+		/// </summary>
+		/// <returns>The world position from view position.</returns>
+		/// <param name="worldPos">World position.</param>
+		public Vector3 getWorldPosFromViewPos(Vector3 worldPos){
+				Vector3 tmpPos = Camera.main.ViewportToWorldPoint (new Vector3(
+						worldPos.x, 
+						worldPos.y,
+						-1 * Camera.main.transform.position.z)	//カメラの高さを合わせないとずれる
+				);
+				return tmpPos;
+		}
+
+		/// <summary>
+		/// デバッグメッセージ表示
+		/// </summary>
+		/// <param name="s">S.</param>
+		/// <typeparam name="Type">The 1st type parameter.</typeparam>
+		public void debug<Type>(Type s){
+				if(debugMode == true)
+				Debug.Log (s);
+		}
 
 }

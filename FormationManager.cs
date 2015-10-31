@@ -42,9 +42,13 @@ public class FormationManager : MonoBehaviour {
 				if (enemyData.enemyNo == 9999) {
 						delete ();
 				} else {
-						Vector3 pos = this.transform.position;
-						pos.x += enemyData.x;
-						pos.y += enemyData.y;
+						//viewport座標で指定
+						Vector3 pos = Camera.main.ViewportToWorldPoint (new Vector3(
+								enemyData.x / 100, 
+								enemyData.y / 100, 
+								-1 * Camera.main.transform.position.z)	//カメラの高さを合わせないとずれる
+						);
+						//Debug.Log ("(x,y) = (" + pos.x + "," + pos.y + ")");
 						GameObject enemy = Instantiate (enemyPrefab[enemyData.enemyNo], pos, this.transform.rotation) as GameObject;
 						enemy.GetComponent<enemy> ().initEnemy (enemyData);
 				}

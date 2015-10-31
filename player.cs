@@ -11,9 +11,11 @@ public class player : MonoBehaviour {
 		public GameObject missilePrefab;
 		public GameObject smokePrefab;
 
+
 		int speed = 150;
 		float moveOffset = 0.04f;
 		float shotDelay = 0.05f;
+		float cameraZ = 5.4f;
 		Vector3 oldPos;
 
 		int gameCount = 0;
@@ -25,12 +27,14 @@ public class player : MonoBehaviour {
 		SoundManager soundManager;
 		EffectManager effectManager;
 
+
 		//******************************************************
 		// Use this for initialization
 		void Start () {
 				soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
 				gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
 				effectManager = GameObject.Find("EffectManager").GetComponent<EffectManager>();
+				cameraZ = -1 * Camera.main.transform.position.z;
 		}
 
 		//******************************************************
@@ -116,7 +120,7 @@ public class player : MonoBehaviour {
 		void movePlayerToTouch(){
 			if (Input.GetMouseButton(0)){
 				Vector3 screen_vec = Input.mousePosition;	//Get toch points (screen)
-				screen_vec.z = 5.4f;
+						screen_vec.z = cameraZ;
 				
 				//Exchange screenPotison to world position
 				Vector3 world_vec = Camera.main.ScreenToWorldPoint(screen_vec);
@@ -333,5 +337,15 @@ public class player : MonoBehaviour {
 
 
 			
+		}
+
+		/// <summary>
+		/// マウスカーソル変更
+		/// </summary>
+		void OnMouseEnter() {
+				Cursor.visible = false; //OSカーソル非表示
+		}
+		void OnMouseExit() {
+				Cursor.visible = true; //OSカーソル表示
 		}
 }

@@ -63,7 +63,13 @@ public class enemy : MonoBehaviour {
 						this.GetComponent<Rigidbody2D>().AddForce(vec * data.speed);
 						//２番目のx,yのyをストップ座標としてセットする。
 						if(data.bezierParam[3] != 0){
-								stopY = data.bezierParam [3];
+								//viewport座標で指定
+								Vector3 tmpPos = Camera.main.ViewportToWorldPoint (new Vector3(
+										0f, 
+										data.bezierParam [3] / 100, 
+										-1 * Camera.main.transform.position.z)	//カメラの高さを合わせないとずれる
+								);
+								stopY = tmpPos.y
 						}
 						break;
 				case "GravityRandom":
