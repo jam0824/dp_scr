@@ -23,12 +23,16 @@ public class RankingNet : MonoBehaviour {
 		Common common;
 		BGMplay bgm;
 
-		// Use this for initialization
-		void Start () {
-				readMySql ();
+		void Awake(){
 				effectManager = GameObject.Find("EffectManager").GetComponent<EffectManager>();
 				soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
 				common = GameObject.Find("Common").GetComponent<Common>();
+		}
+
+		// Use this for initialization
+		void Start () {
+				readMySql ();
+
 				GameObject rs = GameObject.Find ("ResultBase");
 
 				if (rs != null) {

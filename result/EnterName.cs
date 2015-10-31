@@ -11,7 +11,7 @@ public class EnterName : MonoBehaviour {
 		Common common;
 
 		// Use this for initialization
-		void Start () {
+		void Awake() {
 				common = GameObject.Find("Common").GetComponent<Common>();
 		}
 	

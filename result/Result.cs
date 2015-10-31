@@ -10,7 +10,7 @@ public class Result : MonoBehaviour {
 				public bool isR18Mode = false;
 				public string userName = "YOU";
 				public int playTime = 60 * 60 * 1;
-				public int score = 1234;
+				public int score = 10000;
 				public int life = 2;
 				public int graze = 256;
 				public int power = 256;
@@ -51,6 +51,9 @@ public class Result : MonoBehaviour {
 				soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
 				effectManager = GameObject.Find("EffectManager").GetComponent<EffectManager>();
 
+				//マウスカーソルが消えていたら復帰
+				if (!Cursor.visible)
+						Cursor.visible = true;
 
 				//gameObjectからデータを引き継ぐ
 				GameObject gm = GameObject.Find ("GameManager");
