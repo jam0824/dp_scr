@@ -25,6 +25,10 @@ public class enemy : MonoBehaviour {
 		Vector3 prevPos = new Vector3 (0,0,0);	//前回位置
 		float stopY = 0;
 
+		void Awake(){
+				common = GameObject.Find("Common").GetComponent<Common>();
+		}
+
 		// Use this for initialization
 		void Start () {
 				maxHP = HP;
@@ -32,7 +36,7 @@ public class enemy : MonoBehaviour {
 				gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
 				soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
 				effectManager = GameObject.Find("EffectManager").GetComponent<EffectManager>();
-				common = GameObject.Find("Common").GetComponent<Common>();
+
 
 				//弾を打つ場合指定時間で発射
 				if(startBulletTime != 0){
@@ -64,11 +68,7 @@ public class enemy : MonoBehaviour {
 						//２番目のx,yのyをストップ座標としてセットする。
 						if(data.bezierParam[3] != 0){
 								//viewport座標で指定
-								Vector3 tmpPos = Camera.main.ViewportToWorldPoint (new Vector3(
-										0f, 
-										data.bezierParam [3] / 100, 
-										-1 * Camera.main.transform.position.z)	//カメラの高さを合わせないとずれる
-								);
+								Vector3 tmpPos = common.getWorldPosFromViewPos (new Vector3(0f,data.bezierParam [3] / 100, 0f));
 								stopY = tmpPos.y;
 						}
 						break;
@@ -78,12 +78,11 @@ public class enemy : MonoBehaviour {
 						this.transform.position = pos;
 						break;
 				case "Bezier":
-						//Debug.Log ("bezier_x=" + transform.position.x);
-
-						myBezier = new Bezier( new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z), 
-								new Vector3( this.transform.position.x + data.bezierParam[0], this.transform.position.y + data.bezierParam[1], 0f ), 
-								new Vector3( this.transform.position.x + data.bezierParam[2], this.transform.position.y + data.bezierParam[3], 0f ), 
-								new Vector3( this.transform.position.x + data.bezierParam[4], this.transform.position.y + data.bezierParam[5], 0f ) );
+						myBezier = new Bezier(new Vector3 (this.transform.position.x, this.transform.position.y, this.transform.position.z),
+								common.getWorldPosFromViewPos (new Vector3 (data.bezierParam [0] / 100, data.bezierParam [1] / 100, 0f)),
+								common.getWorldPosFromViewPos (new Vector3 (data.bezierParam [2] / 100, data.bezierParam [3] / 100, 0f)),
+								common.getWorldPosFromViewPos (new Vector3 (data.bezierParam [4] / 100, data.bezierParam [5] / 100, 0f))
+						);
 
 						break;
 
