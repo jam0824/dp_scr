@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 
-public class ScenarioLoader : MonoBehaviour {
+public class ScenarioLoader{
 
 
 

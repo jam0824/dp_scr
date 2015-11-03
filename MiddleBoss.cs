@@ -30,6 +30,7 @@ public class MiddleBoss : MonoBehaviour {
 				soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
 				effectManager = GameObject.Find("EffectManager").GetComponent<EffectManager>();
 				common = GameObject.Find("Common").GetComponent<Common>();
+				Resources.UnloadUnusedAssets();
 		}
 
 		// Use this for initialization
@@ -43,6 +44,9 @@ public class MiddleBoss : MonoBehaviour {
 	
 		// Update is called once per frame
 		void Update () {
+				if (Time.timeScale == 0)
+						return;	//時間停止時
+
 				//HPを残して逃げる時
 				if((!isRunAway) && (gameFrame > runAwayTime) && (HP > 0)){
 						moveStatus ();	//ステータスの移動

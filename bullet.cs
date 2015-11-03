@@ -26,6 +26,9 @@ public class bullet : MonoBehaviour {
 
 
 		void Update(){
+				if (Time.timeScale == 0)
+						return;	//時間停止時
+
 				//もしボムが発動中だったら削除
 				if (gameCount > deleteFrame){
 						delete ();

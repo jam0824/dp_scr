@@ -63,6 +63,9 @@ public class Boss : MonoBehaviour {
 		
 		// Update is called once per frame
 		void Update () {
+				if (Time.timeScale == 0)
+						return;	//時間停止時
+
 				if((setStartPosition) && (!isDefeated)) checkHP ();
 				drawLifeBar ();
 				gameFrame++;

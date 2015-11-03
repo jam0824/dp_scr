@@ -61,6 +61,7 @@ public class GameManager : MonoBehaviour {
 				common = GameObject.Find("Common").GetComponent<Common>();
 				//破棄しないようにする
 				DontDestroyOnLoad(this.gameObject);
+				Resources.UnloadUnusedAssets();
 
 		}
 
@@ -138,6 +139,7 @@ public class GameManager : MonoBehaviour {
 								break;
 						}
 						scenario.RemoveAt(0);//先頭要素削除。常に先頭を参照
+						Resources.UnloadUnusedAssets();
 				}
 		}
 
