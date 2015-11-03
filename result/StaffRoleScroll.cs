@@ -17,12 +17,16 @@ public class StaffRoleScroll : MonoBehaviour {
 		Common common;
 		BGMplay bgm;
 
+		void Awake(){
+				soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
+				common = GameObject.Find("Common").GetComponent<Common>();
+		}
+
 		// Use this for initialization
 		void Start () {
 				openR18 ();
 				rect = this.GetComponent<RectTransform> ();
-				soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
-				common = GameObject.Find("Common").GetComponent<Common>();
+
 				bgm = soundManager.playBGM ("ending");
 		}
 	

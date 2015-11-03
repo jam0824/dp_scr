@@ -20,13 +20,16 @@ public class CastOff : MonoBehaviour {
 		EffectManager effectManager;
 		Common common;
 
-		// Use this for initialization
-		void Start () {
+		void Awake(){
 				gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
-				bossScript = GameObject.FindWithTag("boss").GetComponent<Boss>();
 				soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
 				effectManager = GameObject.Find("EffectManager").GetComponent<EffectManager>();
 				common = GameObject.Find("Common").GetComponent<Common>();
+		}
+
+		// Use this for initialization
+		void Start () {
+				bossScript = GameObject.FindWithTag("boss").GetComponent<Boss>();
 				MaxHP = HP;
 				bossScript.HP += HP;
 				bossScript.MAX_HP += HP;

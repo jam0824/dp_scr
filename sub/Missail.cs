@@ -12,9 +12,12 @@ public class Missail : MonoBehaviour {
 		int damage = 20;
 		Common common;
 
+		void Awake(){
+				common = GameObject.Find("Common").GetComponent<Common>();
+		}
 		// Use this for initialization
 		void Start () {
-				common = GameObject.Find("Common").GetComponent<Common>();
+
 				damage = GetComponent<WeponStatBean> ().damage;
 		}
 

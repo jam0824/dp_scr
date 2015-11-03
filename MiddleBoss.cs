@@ -25,12 +25,16 @@ public class MiddleBoss : MonoBehaviour {
 		bool setStartPosition = false;
 		bool isRunAway = false;
 
-		// Use this for initialization
-		void Start () {
+		void Awake(){
 				gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
 				soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
 				effectManager = GameObject.Find("EffectManager").GetComponent<EffectManager>();
 				common = GameObject.Find("Common").GetComponent<Common>();
+		}
+
+		// Use this for initialization
+		void Start () {
+
 				HP = MAX_HP;
 				makeLifeBar ();
 				//コールチンスタート

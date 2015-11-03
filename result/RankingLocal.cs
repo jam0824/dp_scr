@@ -24,12 +24,16 @@ public class RankingLocal : MonoBehaviour {
 		SoundManager soundManager;
 		Common common;
 
-		// Use this for initialization
-		void Start () {
-				savePosition = getSavePosition ();	//セーブポジションを選択する
+		void Awake(){
 				effectManager = GameObject.Find("EffectManager").GetComponent<EffectManager>();
 				soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
 				common = GameObject.Find("Common").GetComponent<Common>();
+		}
+
+		// Use this for initialization
+		void Start () {
+				savePosition = getSavePosition ();	//セーブポジションを選択する
+
 
 				//セーブデータロード
 				string json = loadPlayerPrefs ();

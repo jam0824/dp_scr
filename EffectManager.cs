@@ -20,11 +20,15 @@ public class EffectManager : MonoBehaviour {
 
 		Common common;
 
+		void Awake(){
+				common = GameObject.Find("Common").GetComponent<Common>();
+		}
+
 		// Use this for initialization
 		void Start () {
 				//inspectorのデータからdictionaryを作る
 				effectDictionary = makeEffectDictionary(labels, effects);
-				common = GameObject.Find("Common").GetComponent<Common>();
+
 		}
 
 		/// <summary>

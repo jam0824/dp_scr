@@ -15,11 +15,15 @@ public class Tj_logo : MonoBehaviour {
 		int viewTitleTime = 60 * 4;
 		public bool isClick = false;
 
-		// Use this for initialization
-		void Start () {
+		void Awake(){
 				effectManager = GameObject.Find("EffectManager").GetComponent<EffectManager>();
 				soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
 				common = GameObject.Find("Common").GetComponent<Common>();
+		}
+
+		// Use this for initialization
+		void Start () {
+
 				BGMplay bgm = soundManager.playBGM ("opening");
 				fadein = common.makeFade (fadePrefab, this.gameObject, 0, 60, 255.0f, 255.0f, 255.0f);
 		}

@@ -42,6 +42,8 @@ public class player : MonoBehaviour {
 		void Update () {
 				if (gameManager.life == 0)
 						return;
+				if (Time.timeScale == 0)
+						return;	//時間停止時
 
 				movePlayerToTouch ();
 				keyBoardMove ();

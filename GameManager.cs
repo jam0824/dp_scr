@@ -56,6 +56,9 @@ public class GameManager : MonoBehaviour {
 
 
 		void Awake(){
+				effectManager = GameObject.Find("EffectManager").GetComponent<EffectManager>();
+				soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
+				common = GameObject.Find("Common").GetComponent<Common>();
 				//破棄しないようにする
 				DontDestroyOnLoad(this.gameObject);
 
@@ -63,9 +66,7 @@ public class GameManager : MonoBehaviour {
 
 		// Use this for initialization
 		void Start () {
-				effectManager = GameObject.Find("EffectManager").GetComponent<EffectManager>();
-				soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
-				common = GameObject.Find("Common").GetComponent<Common>();
+
 
 				ScenarioLoader loader = new ScenarioLoader ();
 				scenario = loader.fileRead (scenarioFile);
@@ -88,7 +89,9 @@ public class GameManager : MonoBehaviour {
 		void Update () {
 				if (!playingFlag)
 						return;
-
+				if (Time.timeScale == 0)
+						return;	//時間停止時
+				
 				gameFrame++;
 				//カウントは１秒で
 				if(Mathf.Floor(gameFrame % frameRate) == 0){
@@ -328,8 +331,7 @@ public class GameManager : MonoBehaviour {
 		public void goResult(){
 				Application.LoadLevel ("SceneResult");
 		}
-
-
+				
 
 
 }

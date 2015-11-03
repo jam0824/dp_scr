@@ -26,6 +26,9 @@ public class enemy : MonoBehaviour {
 		float stopY = 0;
 
 		void Awake(){
+				gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+				soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
+				effectManager = GameObject.Find("EffectManager").GetComponent<EffectManager>();
 				common = GameObject.Find("Common").GetComponent<Common>();
 		}
 
@@ -33,9 +36,7 @@ public class enemy : MonoBehaviour {
 		void Start () {
 				maxHP = HP;
 				//initEnemy (MoveMode);
-				gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
-				soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
-				effectManager = GameObject.Find("EffectManager").GetComponent<EffectManager>();
+
 
 
 				//弾を打つ場合指定時間で発射

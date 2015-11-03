@@ -45,15 +45,19 @@ public class Boss : MonoBehaviour {
 		}
 
 
+		void Awake(){
+				gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+				soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
+				effectManager = GameObject.Find("EffectManager").GetComponent<EffectManager>();
+				common = GameObject.Find("Common").GetComponent<Common>();
+		}
+
 
 		//*******************************************************************************
 		// Use this for initialization
 		void Start () {
 				bossData = fileRead (textAset);
-				gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
-				soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
-				effectManager = GameObject.Find("EffectManager").GetComponent<EffectManager>();
-				common = GameObject.Find("Common").GetComponent<Common>();
+
 				makeLifeBar ();
 		}
 		

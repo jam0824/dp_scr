@@ -22,6 +22,9 @@ public class background : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+				if (Time.timeScale == 0)
+						return;	//時間停止時
+
 				Vector3 pos = this.transform.position;
 				pos.y -= speedY;
 				pos.z -= speedZ;
