@@ -14,9 +14,10 @@ public class player : MonoBehaviour {
 
 		int speed = 150;
 		float moveOffset = 0.04f;
-		float shotDelay = 0.05f;
 		float cameraZ = 5.4f;
 		Vector3 oldPos;
+
+		Vector3 firstTapPos;	//最初にタップした場所
 
 		int gameCount = 0;
 		int bulletWaitTime = 5;	//弾を打つまでの待ちフレーム
@@ -45,14 +46,19 @@ public class player : MonoBehaviour {
 				if (Time.timeScale == 0)
 						return;	//時間停止時
 
-				movePlayerToTouch ();
+				//android操作とその他の操作
+				if (Application.platform == RuntimePlatform.Android) {
+						movePlayerToTapScreen ();
+				} else {
+						movePlayerToTouch ();
+				}
+						
 				keyBoardMove ();
+				keyCheck (gameCount);
 
-				//定期フレームごとに弾発射
-				if(gameCount % bulletWaitTime == 0){
-						keyCheck ();
-						//ダメージの際の処理
-						if(noDamageCount > 0)
+		
+				//ダメージの際の処理
+				if((noDamageCount > 0)&&(gameCount % bulletWaitTime == 0)){
 							noDamageCount = DamageCheck (noDamageCount);
 				}
 						
@@ -63,9 +69,13 @@ public class player : MonoBehaviour {
 		/// <summary>
 		/// Keies the check.
 		/// </summary>
-		void keyCheck(){
+		void keyCheck(int gameCount){
 				if ((Input.GetButton ("Fire1")) || (Input.GetMouseButton (0))) {
-						Shot ();
+						//shotは定時おき
+						if (gameCount % bulletWaitTime == 0) {
+								Shot ();
+						}
+						//ミサイルは３秒おき
 						if(gameCount % 180 == 0){
 								makeMissile ();
 						}
@@ -74,6 +84,11 @@ public class player : MonoBehaviour {
 				if (Input.GetButton ("Fire2")) {
 						bool b = makeBomb ();
 				}
+				//２本指検知でもボム
+				if(Input.touchCount == 2){
+						bool b = makeBomb ();
+				}
+						
 		}
 
 		//******************************************************
@@ -142,6 +157,41 @@ public class player : MonoBehaviour {
 				
 			}
 			return;
+		}
+
+		void movePlayerToTapScreen(){
+				float speed = 0.1f;
+				float limit = 0.3f;
+				//最初にタップされた位置を基準にする。
+				if(Input.GetMouseButtonDown(0)){
+						firstTapPos = Input.mousePosition;	//Get toch points (screen)
+						firstTapPos.z = cameraZ;
+						firstTapPos = Camera.main.ScreenToWorldPoint(firstTapPos);
+						Debug.Log ("firstPos = " + firstTapPos.x + "," + firstTapPos.y + "," + firstTapPos.z);
+						//return;
+				}
+
+				if (Input.GetMouseButton (0)) {
+						Vector3 screen_vec = Input.mousePosition;	//Get toch points (screen)
+						screen_vec.z = cameraZ;
+						screen_vec = Camera.main.ScreenToWorldPoint(screen_vec);
+
+						float x = (screen_vec.x - firstTapPos.x) * speed;
+						x = (x < -1 * limit) ? -1 * limit : x;
+						x = (x > limit) ? limit : x;
+						float y = (screen_vec.y - firstTapPos.y) * speed;
+						y = (y < -1 * limit) ? -1 * limit : y;
+						y = (y > limit) ? limit : y;
+
+						Vector3 myPos = transform.position;
+						myPos.x += x;
+						myPos.y += y;
+						transform.position = myPos;
+						//画面外に出そうになった時の処理
+						oldPos = checkOutOfScreen (Camera.main.WorldToViewportPoint (myPos), oldPos, x, y);
+						//firstTapPos = screen_vec;
+				}
+
 		}
 
 		/// <summary>

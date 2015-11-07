@@ -14,6 +14,8 @@ public class Common : MonoBehaviour {
 				// ターゲットフレームレートを60に設定
 				Application.targetFrameRate = GAME_FPS; 
 
+		}
+		void Update () {
 				//Androidで戻るキーでアプリを終了させる
 				if(Input.GetKey(KeyCode.Escape)){
 						Application.Quit();
