@@ -47,11 +47,9 @@ public class player : MonoBehaviour {
 						return;	//時間停止時
 
 				//android操作とその他の操作
-				if (Application.platform == RuntimePlatform.Android) {
-						movePlayerToTapScreen ();
-				} else {
-						movePlayerToTouch ();
-				}
+				//movePlayerToTapScreen ();
+				movePlayerToTouch ();
+
 						
 				keyBoardMove ();
 				keyCheck (gameCount);
@@ -135,12 +133,19 @@ public class player : MonoBehaviour {
 		//******************************************************
 		//player movement to use touching
 		void movePlayerToTouch(){
+				//2箇所タッチしていたら動かさない
+			if (Input.touchCount == 2)
+						return;
+
+			float spAddY = 0.7f;
 			if (Input.GetMouseButton(0)){
 				Vector3 screen_vec = Input.mousePosition;	//Get toch points (screen)
 						screen_vec.z = cameraZ;
 				
 				//Exchange screenPotison to world position
 				Vector3 world_vec = Camera.main.ScreenToWorldPoint(screen_vec);
+						if (Application.platform == RuntimePlatform.Android) world_vec.y += spAddY;	//指で見えなくなるのを回避
+
 				Vector3 nVec = Vector3.Normalize(world_vec - this.transform.position);
 
 

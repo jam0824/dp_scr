@@ -5,6 +5,8 @@ using UnityEngine.UI;
 public class StartNormalGame : MonoBehaviour {
 
 		public GameObject fadePrefab;
+		public Sprite howToPlaySpImage;
+
 		SoundManager soundManager;
 		EffectManager effectManager;
 
@@ -15,6 +17,11 @@ public class StartNormalGame : MonoBehaviour {
 		void Start () {
 				effectManager = GameObject.Find("EffectManager").GetComponent<EffectManager>();
 				soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
+				//SPだった時は操作方法表示を変える
+				if (Application.platform == RuntimePlatform.Android) {
+						Image screen = GetComponent<Image> ();
+						screen.sprite = howToPlaySpImage;
+				}
 		}
 
 		// Update is called once per frame
