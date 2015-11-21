@@ -5,6 +5,13 @@ public class Option : MonoBehaviour {
 
 		public GameObject optionViewPrefab;
 		GameObject optionView;
+		GameManager gameManager;
+		Common common;
+
+		void Awake(){
+				common = GameObject.Find("Common").GetComponent<Common>();
+				gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+		}
 
 		/// <summary>
 		/// 停止/再生
@@ -19,7 +26,11 @@ public class Option : MonoBehaviour {
 						RectTransform rt = optionView.GetComponent<RectTransform>();
 						rt.localScale = new Vector3 (1, 1, 1);
 						optionView.transform.position = canvasTransform.position;
+						//広告作成
+						common.makeAdMobManager ();
 				} else {
+						//広告削除
+						common.deleteAdMobManager ();
 						Time.timeScale = 1;	//復旧
 						Destroy (GameObject.Find("OptionView"));
 				}
@@ -38,9 +49,11 @@ public class Option : MonoBehaviour {
 		/// タイトルに戻る
 		/// </summary>
 		public void onClickGoToTheTitle(){
+
 				Destroy (GameObject.Find("GameManager"));
 				Time.timeScale = 1;	//復旧
 				Application.LoadLevel ("title");
+
 		}
 
 		/// <summary>

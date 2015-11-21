@@ -142,6 +142,7 @@ public class RankingNet : MonoBehaviour {
 
 		//staffロール開始
 		void changeLevel(){
+
 				Destroy (fadein);
 				GameObject prefab = Instantiate (staffRolePrefab) as GameObject;
 				prefab.transform.parent = GameObject.Find ("Canvas").transform;	//Canvasを親にする

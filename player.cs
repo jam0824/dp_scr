@@ -12,6 +12,7 @@ public class player : MonoBehaviour {
 		public GameObject smokePrefab;
 
 
+
 		int speed = 150;
 		float moveOffset = 0.04f;
 		float cameraZ = 5.4f;

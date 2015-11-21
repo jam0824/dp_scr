@@ -28,6 +28,8 @@ public class StaffRoleScroll : MonoBehaviour {
 				rect = this.GetComponent<RectTransform> ();
 
 				bgm = soundManager.playBGM ("ending");
+				//広告削除
+				//common.makeAdMobManager ();
 		}
 	
 		// Update is called once per frame

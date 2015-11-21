@@ -12,6 +12,7 @@ public class StartButton : MonoBehaviour {
 
 		EffectManager effectManager;
 		SoundManager soundManager;
+		Common common;
 
 		int gameCount = 0;
 		int selectItem = 0;	//０がノーマルモード選択時、１がR18モード選択時
@@ -20,12 +21,16 @@ public class StartButton : MonoBehaviour {
 		bool isClick = false;
 		bool isR18Mode = false;
 
-		// Use this for initialization
-		void Start () {
+		void Awake(){
 				soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
 				effectManager = GameObject.Find("EffectManager").GetComponent<EffectManager>();
 				selecter = GameObject.Find("selecter").GetComponent<RectTransform>();
+				common = GameObject.Find("Common").GetComponent<Common>();
+		}
 
+		// Use this for initialization
+		void Start () {
+				common.makeAdMobManager ();	//広告作成
 				isR18Mode = getR18mode ();
 				//isR18Mode = false;
 				changeR18String (r18StringSprite);
@@ -80,6 +85,8 @@ public class StartButton : MonoBehaviour {
 
 						//位置取得にタイトルを利用しているだけ
 						effectManager.changeScene ("black", prefab, GameObject.Find("TJ_logo").transform.position);
+						//広告削除
+						common.deleteAdMobManager ();
 				}
 		}
 

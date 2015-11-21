@@ -32,6 +32,9 @@ public class RankingLocal : MonoBehaviour {
 
 		// Use this for initialization
 		void Start () {
+				//広告作成
+				common.makeAdMobManager ();
+
 				savePosition = getSavePosition ();	//セーブポジションを選択する
 
 

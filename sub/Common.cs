@@ -9,6 +9,7 @@ public class Common : MonoBehaviour {
 
 		const int GAME_FPS = 60;
 		bool debugMode = true;
+		public GameObject adMobPrefab;
 
 		void Awake () {
 				// ターゲットフレームレートを60に設定
@@ -262,6 +263,29 @@ public class Common : MonoBehaviour {
 		public void debug<Type>(Type s){
 				if(debugMode == true)
 				Debug.Log (s);
+		}
+
+
+		/// <summary>
+		/// AdMobを作成
+		/// </summary>
+		public void makeAdMobManager(){
+				if (Application.platform != RuntimePlatform.Android)
+						return;
+
+				GameObject adMob = Instantiate (adMobPrefab) as GameObject;
+				adMob.name = adMobPrefab.name;
+		}
+
+		/// <summary>
+		/// Admobを削除
+		/// </summary>
+		public void deleteAdMobManager(){
+				if (Application.platform != RuntimePlatform.Android)
+						return;
+
+				GameObject adMob = GameObject.Find ("AdMobManager");
+				if(adMob != null) Destroy (adMob);
 		}
 
 }
